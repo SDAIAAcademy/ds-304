@@ -1,0 +1,2 @@
+# Colab already ships numpy, pandas, matplotlib, statsmodels and lightgbm.
+statsforecast>=2.0
