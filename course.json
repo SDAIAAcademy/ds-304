@@ -1,0 +1,437 @@
+{
+  "$schema": "https://sdaiaacademy.github.io/engine/schemas/course.schema.json",
+  "engine": "1",
+  "id": "forecasting",
+  "code": "DS-304",
+  "version": "2027.1.0",
+  "lang": "en",
+  "title": {
+    "en": "Forecasting and Time Series",
+    "ar": "التنبؤ والسلاسل الزمنية"
+  },
+  "tagline": "REPLACE: one line under the title: what participants can do after the course",
+  "description": "Participants forecast with the discipline of a backtest. On synthetic daily electricity demand from Shams Power, a fictional distributor with 12 regions and 400 feeders, they decompose series, set a seasonal-naive benchmark floor, fit exponential smoothing and ARIMA-family models with weather and Hijri holidays, train one boosted model across many series, reconcile feeder and regional forecasts and run pretrained zero-shot forecasters as baselines. Every method is scored by rolling-origin cross-validation with point and probabilistic measures and reaches the planner as a fan chart.",
+  "track": "data-science",
+  "level": 300,
+  "badge": {
+    "name": "Data Science",
+    "level": "Associate"
+  },
+  "audience": "Specialists. Analysts and data scientists who have completed the level 200 set or can show equivalent work: an analysis or model they built, validated and can explain.",
+  "prerequisites": [
+    "DS-201 Statistical Inference by Simulation",
+    "DS-204 Machine Learning for Tabular Data: Baselines and Validation",
+    "Resamples and reshapes time-indexed data in a dataframe"
+  ],
+  "site": {
+    "url": "https://sdaiaacademy.github.io/forecasting/",
+    "repo": "SDAIAAcademy/forecasting"
+  },
+  "outcomes": [
+    {
+      "id": "LO1",
+      "text": "Apply decomposition and a seasonal-naive benchmark floor scored by rolling-origin cross-validation, given regional daily demand with weekly and annual seasonality",
+      "level": "Applied",
+      "evidence": "a backtest table of scaled errors by horizon"
+    },
+    {
+      "id": "LO2",
+      "text": "Implement exponential smoothing, ARIMA-family and dynamic regression models with temperature and moving-holiday terms, given the regional series and a Hijri and Gregorian calendar",
+      "level": "Applied",
+      "evidence": "residual diagnostics and scores against the floor"
+    },
+    {
+      "id": "LO3",
+      "text": "Measure point and quantile accuracy of a global boosted model and a pretrained zero-shot forecaster against statistical models, given 400 feeder series with eight weeks held out",
+      "level": "Applied",
+      "evidence": "a scorecard of scaled error, pinball loss, coverage, run time and licence terms"
+    },
+    {
+      "id": "LO4",
+      "text": "Review a forecast evaluation for leakage across time and selection on the test window, and correct it, given a notebook with three seeded faults",
+      "level": "Performance",
+      "evidence": "a review memo and a corrected backtest"
+    },
+    {
+      "id": "LO5",
+      "text": "Build a forecasting analysis for new series and defend method, horizon and uncertainty to a planner, given a supplied dataset and a planner's request",
+      "level": "Performance",
+      "evidence": "a repository and a two-page note with fan charts, defended live"
+    }
+  ],
+  "case_study": {
+    "name": "REPLACE: the name of the fictional organisation every lab works on",
+    "summary": "REPLACE: two sentences on the case study and its synthetic data"
+  },
+  "format": "intensive",
+  "format_note": "Intensive: 4 teaching days of four sessions and a capstone day, with guided pre-work and a tracked follow-up task",
+  "hours": {
+    "instruction": 6,
+    "lab": 7,
+    "guided_self_study": 6,
+    "assessment": 1,
+    "capstone": 6
+  },
+  "unit": "day",
+  "days": [
+    {
+      "id": "day1",
+      "kind": "day",
+      "title": "Look, frame and set the floor",
+      "deck": "slides/day1.html",
+      "sessions": [
+        {
+          "title": "What is forecast, and why",
+          "outcomes": [
+            "REPLACE: what a participant can do after this session"
+          ],
+          "lo": [
+            "LO5"
+          ],
+          "lab": {
+            "id": "1.1",
+            "title": "Write horizon, error measure and decision for three planner requests",
+            "summary": "REPLACE: one line on what participants build and take away; then list the steps of the lab in course.json, their minutes adding up to 25",
+            "minutes": 25,
+            "href": "D1_1_write_horizon_error.ipynb"
+          }
+        },
+        {
+          "title": "Seeing structure",
+          "outcomes": [
+            "REPLACE: what a participant can do after this session"
+          ],
+          "lo": [
+            "LO1"
+          ],
+          "lab": {
+            "id": "1.2",
+            "title": "Plot one region at three time scales and mark Ramadan and Eid",
+            "summary": "REPLACE: one line on what participants build and take away; then list the steps of the lab in course.json, their minutes adding up to 25",
+            "minutes": 25,
+            "href": "D1_2_plot_one_region.ipynb"
+          }
+        },
+        {
+          "title": "Decomposition",
+          "outcomes": [
+            "REPLACE: what a participant can do after this session"
+          ],
+          "lo": [
+            "LO1"
+          ],
+          "lab": {
+            "id": "1.3",
+            "title": "Decompose regional demand and quantify trend and seasonal strength",
+            "summary": "REPLACE: one line on what participants build and take away; then list the steps of the lab in course.json, their minutes adding up to 25",
+            "minutes": 25,
+            "href": "D1_3_decompose_regional_demand.ipynb"
+          }
+        },
+        {
+          "title": "The benchmark floor",
+          "outcomes": [
+            "REPLACE: what a participant can do after this session"
+          ],
+          "lo": [
+            "LO1"
+          ],
+          "lab": {
+            "id": "1.4",
+            "title": "Backtest naive and seasonal-naive forecasts over 28-day horizons",
+            "summary": "REPLACE: one line on what participants build and take away; then list the steps of the lab in course.json, their minutes adding up to 25",
+            "minutes": 25,
+            "href": "D1_4_backtest_naive_seasonal.ipynb"
+          }
+        }
+      ]
+    },
+    {
+      "id": "day2",
+      "kind": "day",
+      "title": "Statistical forecasters",
+      "deck": "slides/day2.html",
+      "sessions": [
+        {
+          "title": "Exponential smoothing",
+          "outcomes": [
+            "REPLACE: what a participant can do after this session"
+          ],
+          "lo": [
+            "LO2"
+          ],
+          "lab": {
+            "id": "2.1",
+            "title": "Fit exponential smoothing models and score them against the floor",
+            "summary": "REPLACE: one line on what participants build and take away; then list the steps of the lab in course.json, their minutes adding up to 25",
+            "minutes": 25,
+            "href": "D2_1_fit_exponential_smoothing.ipynb"
+          }
+        },
+        {
+          "title": "ARIMA-family models",
+          "outcomes": [
+            "REPLACE: what a participant can do after this session"
+          ],
+          "lo": [
+            "LO2"
+          ],
+          "lab": {
+            "id": "2.2",
+            "title": "Fit a seasonal ARIMA model, check residuals and score it",
+            "summary": "REPLACE: one line on what participants build and take away; then list the steps of the lab in course.json, their minutes adding up to 25",
+            "minutes": 25,
+            "href": "D2_2_fit_seasonal_arima.ipynb"
+          }
+        },
+        {
+          "title": "Weather and moving holidays",
+          "outcomes": [
+            "REPLACE: what a participant can do after this session"
+          ],
+          "lo": [
+            "LO2"
+          ],
+          "lab": {
+            "id": "2.3",
+            "title": "Add temperature and Hijri holiday regressors and measure the gain around Eid",
+            "summary": "REPLACE: one line on what participants build and take away; then list the steps of the lab in course.json, their minutes adding up to 25",
+            "minutes": 25,
+            "href": "D2_3_add_temperature_hijri.ipynb"
+          }
+        },
+        {
+          "title": "Intervals that hold",
+          "outcomes": [
+            "REPLACE: what a participant can do after this session"
+          ],
+          "lo": [
+            "LO3"
+          ],
+          "lab": {
+            "id": "2.4",
+            "title": "Measure 80% and 95% interval coverage in the backtest",
+            "summary": "REPLACE: one line on what participants build and take away; then list the steps of the lab in course.json, their minutes adding up to 25",
+            "minutes": 25,
+            "href": "D2_4_measure_80_95.ipynb"
+          }
+        }
+      ]
+    },
+    {
+      "id": "day3",
+      "kind": "day",
+      "title": "Many series and pretrained models",
+      "deck": "slides/day3.html",
+      "sessions": [
+        {
+          "title": "Many series and hierarchies",
+          "outcomes": [
+            "REPLACE: what a participant can do after this session"
+          ],
+          "lo": [
+            "LO2"
+          ],
+          "lab": {
+            "id": "3.1",
+            "title": "Fit per-feeder models, reconcile them with regional totals and compare errors at both levels",
+            "summary": "REPLACE: one line on what participants build and take away; then list the steps of the lab in course.json, their minutes adding up to 25",
+            "minutes": 25,
+            "href": "D3_1_fit_per_feeder.ipynb"
+          }
+        },
+        {
+          "title": "Global boosted forecasters",
+          "outcomes": [
+            "REPLACE: what a participant can do after this session"
+          ],
+          "lo": [
+            "LO3"
+          ],
+          "lab": {
+            "id": "3.2",
+            "title": "Backtest one boosted model on lag and calendar features across feeders",
+            "summary": "REPLACE: one line on what participants build and take away; then list the steps of the lab in course.json, their minutes adding up to 25",
+            "minutes": 25,
+            "href": "D3_2_backtest_one_boosted.ipynb"
+          }
+        },
+        {
+          "title": "Pretrained zero-shot forecasters",
+          "outcomes": [
+            "REPLACE: what a participant can do after this session"
+          ],
+          "lo": [
+            "LO3"
+          ],
+          "lab": {
+            "id": "3.3",
+            "title": "Run a pretrained forecaster zero-shot and record accuracy, run time and licence",
+            "summary": "REPLACE: one line on what participants build and take away; then list the steps of the lab in course.json, their minutes adding up to 25",
+            "minutes": 25,
+            "href": "D3_3_run_pretrained_forecaster.ipynb"
+          }
+        },
+        {
+          "title": "Choosing among families",
+          "outcomes": [
+            "REPLACE: what a participant can do after this session"
+          ],
+          "lo": [
+            "LO3"
+          ],
+          "lab": {
+            "id": "3.4",
+            "title": "Fill a scorecard of accuracy, cost and licence per method family",
+            "summary": "REPLACE: one line on what participants build and take away; then list the steps of the lab in course.json, their minutes adding up to 25",
+            "minutes": 25,
+            "href": "D3_4_fill_scorecard_accuracy.ipynb"
+          }
+        }
+      ]
+    },
+    {
+      "id": "day4",
+      "kind": "day",
+      "title": "Review and communicate",
+      "deck": "slides/day4.html",
+      "sessions": [
+        {
+          "title": "Leakage across time",
+          "outcomes": [
+            "REPLACE: what a participant can do after this session"
+          ],
+          "lo": [
+            "LO4"
+          ],
+          "lab": {
+            "id": "4.1",
+            "title": "Find three seeded leaks in a notebook and correct the backtest",
+            "summary": "REPLACE: one line on what participants build and take away; then list the steps of the lab in course.json, their minutes adding up to 25",
+            "minutes": 25,
+            "href": "D4_1_find_three_seeded.ipynb"
+          }
+        },
+        {
+          "title": "New and short series",
+          "outcomes": [
+            "REPLACE: what a participant can do after this session"
+          ],
+          "lo": [
+            "LO5"
+          ],
+          "lab": {
+            "id": "4.2",
+            "title": "Forecast a feeder with eight weeks of history using pooled and pretrained methods",
+            "summary": "REPLACE: one line on what participants build and take away; then list the steps of the lab in course.json, their minutes adding up to 25",
+            "minutes": 25,
+            "href": "D4_2_forecast_feeder_eight.ipynb"
+          }
+        },
+        {
+          "title": "Combining forecasts",
+          "outcomes": [
+            "REPLACE: what a participant can do after this session"
+          ],
+          "lo": [
+            "LO3"
+          ],
+          "lab": {
+            "id": "4.3",
+            "title": "Test whether an average of three methods beats the best single one",
+            "summary": "REPLACE: one line on what participants build and take away; then list the steps of the lab in course.json, their minutes adding up to 25",
+            "minutes": 25,
+            "href": "D4_3_test_whether_average.ipynb"
+          }
+        },
+        {
+          "title": "Fan charts and forecast notes",
+          "outcomes": [
+            "REPLACE: what a participant can do after this session"
+          ],
+          "lo": [
+            "LO5"
+          ],
+          "lab": {
+            "id": "4.4",
+            "title": "Draw a fan chart, write a planner's note and choose the capstone dataset",
+            "summary": "REPLACE: one line on what participants build and take away; then list the steps of the lab in course.json, their minutes adding up to 25",
+            "minutes": 25,
+            "href": "D4_4_draw_fan_chart.ipynb"
+          }
+        }
+      ]
+    },
+    {
+      "id": "capstone",
+      "kind": "capstone",
+      "title": "Capstone project presentations",
+      "deck": "slides/capstone.html",
+      "subtitle": "REPLACE: the catalog gives 8 minutes for each presentation and nothing about questions; decide whether the questions are inside those minutes, set capstone.talk_minutes and capstone.qa_minutes in course.json and the timers of the now-presenting slide, and remove this line"
+    }
+  ],
+  "capstone": {
+    "summary": "A forecasting analysis on a supplied or public dataset with three method families backtested against the floor, in a public repository whose README reports point and probabilistic accuracy, plus a two-page planner's note; eight-minute defence plus questions",
+    "submission": "REPLACE: what participants submit and how: a public repository link, or a shared folder for a course without code",
+    "talk_minutes": 8,
+    "rubric": [
+      {
+        "criterion": "Framing and floor",
+        "weight": 15
+      },
+      {
+        "criterion": "Methods",
+        "weight": 25
+      },
+      {
+        "criterion": "Backtest design",
+        "weight": 25
+      },
+      {
+        "criterion": "Uncertainty and communication",
+        "weight": 25
+      },
+      {
+        "criterion": "Reproducibility",
+        "weight": 10
+      }
+    ]
+  },
+  "labs": {
+    "kind": "notebooks",
+    "base": "labs/"
+  },
+  "tools": [
+    {
+      "slot": "Analysis language and notebooks",
+      "examples": [
+        "Python with Jupyter or marimo",
+        "R with Quarto"
+      ]
+    },
+    {
+      "slot": "Statistical forecasting",
+      "examples": [
+        "statsforecast",
+        "fable for R",
+        "statsmodels"
+      ]
+    },
+    {
+      "slot": "Machine learning forecasting",
+      "examples": [
+        "LightGBM with lag features",
+        "sktime",
+        "Darts"
+      ]
+    },
+    {
+      "slot": "Pretrained forecaster as a baseline",
+      "examples": [
+        "the Chronos family of open-weight forecasters",
+        "TimesFM (non-commercial weights)",
+        "AutoGluon time series"
+      ]
+    }
+  ]
+}
