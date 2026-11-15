@@ -1,0 +1,42 @@
+{
+ "checked": "2026-11-15",
+ "note": "Read from each model card on the Hugging Face Hub on the date above. Licences and model names change: read the card again before you rely on a row.",
+ "models": [
+  {
+   "family": "Chronos-Bolt",
+   "model": "amazon/chronos-bolt-tiny",
+   "publisher": "Amazon",
+   "parameters_millions": 8.7,
+   "licence": "apache-2.0",
+   "card": "https://huggingface.co/amazon/chronos-bolt-tiny",
+   "used_in_lab": true
+  },
+  {
+   "family": "Chronos-2",
+   "model": "amazon/chronos-2",
+   "publisher": "Amazon",
+   "parameters_millions": 119.5,
+   "licence": "apache-2.0",
+   "card": "https://huggingface.co/amazon/chronos-2",
+   "used_in_lab": false
+  },
+  {
+   "family": "TimesFM",
+   "model": "google/timesfm-2.5-200m-pytorch",
+   "publisher": "Google",
+   "parameters_millions": 231.3,
+   "licence": "apache-2.0",
+   "card": "https://huggingface.co/google/timesfm-2.5-200m-pytorch",
+   "used_in_lab": false
+  },
+  {
+   "family": "Moirai",
+   "model": "Salesforce/moirai-2.0-R-small",
+   "publisher": "Salesforce",
+   "parameters_millions": 11.4,
+   "licence": "cc-by-nc-4.0",
+   "card": "https://huggingface.co/Salesforce/moirai-2.0-R-small",
+   "used_in_lab": false
+  }
+ ]
+}

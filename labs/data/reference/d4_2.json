@@ -1,0 +1,51 @@
+{
+ "table": {
+  "last week repeated": {
+   "mase": 1.103,
+   "pinball": NaN,
+   "cover80": NaN,
+   "measured": true
+  },
+  "ETS, weekly, own history": {
+   "mase": 0.949,
+   "pinball": NaN,
+   "cover80": NaN,
+   "measured": true
+  },
+  "pooled shape of similar feeders": {
+   "mase": 0.919,
+   "pinball": NaN,
+   "cover80": NaN,
+   "measured": true
+  },
+  "global boosted model": {
+   "mase": 0.747,
+   "pinball": 0.251,
+   "cover80": 0.604,
+   "measured": true
+  },
+  "pretrained, zero-shot": {
+   "mase": 1.394,
+   "pinball": 0.423,
+   "cover80": 0.622,
+   "measured": false
+  }
+ },
+ "best": "global boosted model",
+ "n_similar": {
+  "F034": 7,
+  "F070": 14,
+  "F104": 18,
+  "F134": 21,
+  "F161": 15,
+  "F194": 29,
+  "F215": 10,
+  "F263": 8,
+  "F282": 17,
+  "F313": 16,
+  "F347": 12,
+  "F376": 16
+ },
+ "live": false,
+ "missing_year_ago": 1.0
+}

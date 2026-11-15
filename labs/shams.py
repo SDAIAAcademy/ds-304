@@ -229,11 +229,18 @@ def coverage(bt: pd.DataFrame, level: int = 80) -> float:
     return float(((bt.y >= bt[lo]) & (bt.y <= bt[hi])).mean())
 
 
-def scores(bt: pd.DataFrame) -> dict:
+PQS = (0.1, 0.5, 0.9)                    # the quantiles every method of Day 3 can deliver (see Lab 3.3)
+
+
+def scores(bt: pd.DataFrame, qs=None) -> dict:
+    """Scaled error and, when the table has quantile columns, scaled pinball loss and coverage.
+    qs=U.PQS scores the three quantiles 0.1, 0.5, 0.9 and the 80% interval only."""
     out = {"mase": round(mase(bt), 3)}
     if "q0.1" in bt:
-        out.update(pinball=round(scaled_pinball(bt), 3), cover80=round(coverage(bt, 80), 3),
-                   cover95=round(coverage(bt, 95), 3))
+        five = qs is None and "q0.025" in bt
+        out.update(pinball=round(scaled_pinball(bt, QS if five else (qs or PQS)), 3), cover80=round(coverage(bt, 80), 3))
+        if five:
+            out["cover95"] = round(coverage(bt, 95), 3)
     return out
 
 
@@ -262,15 +269,37 @@ def sf(model, train: pd.Series, h: int = H, X: pd.DataFrame | None = None, Xf: p
     return out
 
 
-def sf_many(model, wide_train: pd.DataFrame, h: int = H) -> pd.DataFrame:
-    """Fit the same statsforecast model on every column of a wide table; returns h rows, one column per series."""
+def sf_many(model, wide_train: pd.DataFrame, h: int = H, quantiles: bool = False, log: bool = False):
+    """Fit the same statsforecast model on every column of a wide table.
+
+    Returns the point forecasts as a wide table (h rows, one column per series). With quantiles=True returns
+    (points, {"q0.025": wide, ..., "q0.975": wide}). With log=True the model is fitted on the logarithm and
+    everything is turned back with the exponential.
+    """
     from statsforecast import StatsForecast
-    long = wide_train.reset_index(names="ds").melt("ds", var_name="unique_id", value_name="y").dropna()
+    cols = list(wide_train.columns)
+    src = np.log(wide_train) if log else wide_train
+    long = src.reset_index(names="ds").melt("ds", var_name="unique_id", value_name="y").dropna()
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
-        fc = StatsForecast(models=[model], freq="D", n_jobs=1).forecast(df=long, h=h)
-    a = [c for c in fc.columns if c not in ("unique_id", "ds")][0]
-    return fc.pivot(index="ds", columns="unique_id", values=a)[list(wide_train.columns)]
+        fc = StatsForecast(models=[model], freq="D", n_jobs=1).forecast(df=long, h=h, level=[80, 95] if quantiles else None)
+    a = [c for c in fc.columns if c not in ("unique_id", "ds") and "-lo-" not in c and "-hi-" not in c][0]
+    back = np.exp if log else (lambda t: t)
+    wide = lambda c: back(fc.pivot(index="ds", columns="unique_id", values=c)[cols])
+    points = wide(a)
+    if not quantiles:
+        return points
+    return points, {"q0.025": wide(f"{a}-lo-95"), "q0.1": wide(f"{a}-lo-80"), "q0.5": points,
+                    "q0.9": wide(f"{a}-hi-80"), "q0.975": wide(f"{a}-hi-95")}
+
+
+def dynreg(rid: str, train: pd.Series, h: int, origin) -> pd.DataFrame:
+    """The regression with ARIMA errors of Lab 2.3 (weather known at the origin, plus the calendar) for a
+    series of region `rid`: forecast and quantiles for the h days after the origin."""
+    from statsforecast.models import ARIMA
+    future = pd.date_range(pd.Timestamp(origin) + pd.Timedelta(days=1), periods=h, freq="D")
+    model = ARIMA(order=(1, 0, 1), seasonal_order=(0, 1, 1), season_length=7)
+    return sf(model, train, h, exog(rid, train.index), exog(rid, future, origin=origin))
 
 
 # ------------------------------------------------------------------ regressors
@@ -343,6 +372,7 @@ def make_frame(wide: pd.DataFrame, origin_list, h: int = H, min_history: int = 2
         block = Y[i - 27: i + 1]                                   # the last 28 days, per feeder
         ok = (~np.isnan(block)).sum(axis=0) >= min_history
         level = np.nanmean(block, axis=0)
+        sc = feeder_scale(wide, o).to_numpy()
         last7 = block[-7:].mean(axis=0) / level
         prof = block.reshape(4, 7, -1).mean(axis=0) / level        # weekday profile; row k is day o-6+k
         prof_dow = np.array([(o - pd.Timedelta(days=6 - k)).dayofweek for k in range(7)])
@@ -368,7 +398,7 @@ def make_frame(wide: pd.DataFrame, origin_list, h: int = H, min_history: int = 2
                     "last7": last7[cols], "dow_profile": p, "year_ago": ya,
                     "cdd_change": cdd_known[k] - cdd_recent,
                     "kind": mt.kind.map(kinds).to_numpy()[cols], "region": int(r[1:]),
-                    "level": level[cols], "y": y}))
+                    "level": level[cols], "scale": sc[cols], "y": y}))
     return pd.concat(parts, ignore_index=True)
 
 
@@ -383,11 +413,53 @@ def score_wide(actual: pd.DataFrame, fc: pd.DataFrame, sc: pd.Series) -> float:
     return float(((actual - fc.to_numpy()).abs() / sc).mean().mean())
 
 
+FEEDER_ORIGINS = origins(2)              # the eight held-out weeks of the feeders: two folds of 28 days
+LGB = dict(learning_rate=0.05, num_leaves=31, min_data_in_leaf=50, bagging_fraction=0.8, bagging_freq=1,
+           feature_fraction=0.8, verbose=-1, seed=304, num_threads=4)   # settings of the boosted model
+
+
+def established() -> list:
+    """The 388 feeders commissioned before 2025: three years of history or more."""
+    m = meta()
+    return list(m.feeder[m.commissioned < "2025-01-01"])
+
+
+def new_feeders() -> list:
+    """The 12 feeders commissioned on 2025-09-11: eight weeks of history at the first held-out origin."""
+    m = meta()
+    return list(m.feeder[m.commissioned >= "2025-01-01"])
+
+
+def feeder_floor(wide: pd.DataFrame, origin, h: int = H) -> pd.DataFrame:
+    """The floor for every feeder: the same weekdays 52 weeks before each of the h days after the origin."""
+    days = pd.date_range(pd.Timestamp(origin) + pd.Timedelta(days=1), periods=h, freq="D")
+    out = wide.reindex(days - pd.Timedelta(days=364))
+    out.index = days
+    return out
+
+
+def feeder_long(wide: pd.DataFrame, origin, yhat, quantiles: dict | None = None, h: int = H) -> pd.DataFrame:
+    """One fold of feeder forecasts as a long table with the columns of a regional backtest plus `feeder`:
+    feeder, origin, date, h, y, yhat, the quantile columns when given, scale. `yhat` and each quantile are
+    h rows by one column per feeder (a wide table or an array, columns in the order of `wide`).
+    U.mase, U.scores, U.coverage and U.by_week work on the result."""
+    origin = pd.Timestamp(origin)
+    days = pd.date_range(origin + pd.Timedelta(days=1), periods=h, freq="D")
+    n = wide.shape[1]
+    out = pd.DataFrame({"feeder": np.tile(wide.columns, h), "origin": origin, "date": np.repeat(days, n),
+                        "h": np.repeat(np.arange(1, h + 1), n), "y": wide.reindex(days).to_numpy().ravel(),
+                        "yhat": np.asarray(yhat, float).ravel()})
+    for q, table in (quantiles or {}).items():
+        out[q] = np.asarray(table, float).ravel()
+    out["scale"] = np.tile(feeder_scale(wide, origin).to_numpy(), h)
+    return out
+
+
 # ------------------------------------------------------------------ a pretrained forecaster, or its stand-in
 PRETRAINED = "amazon/chronos-bolt-tiny"
 
 
-def pretrained(contexts: list, h: int = H, qs=QS) -> tuple:
+def pretrained(contexts: list, h: int = H, qs=PQS) -> tuple:
     """Zero-shot quantile forecasts for a list of series (each a 1-D array of history).
 
     Uses the pretrained forecaster named in PRETRAINED when the package `chronos-forecasting` is installed
@@ -395,6 +467,9 @@ def pretrained(contexts: list, h: int = H, qs=QS) -> tuple:
     the Colab runtime). Otherwise a STAND-IN answers, so the notebook runs anywhere: it repeats each series'
     weekday profile and widens with the horizon. The stand-in is not a pretrained model, and the info it
     returns says so. Returns (array of shape [series, quantiles, h], info).
+
+    The default quantiles are 0.1, 0.5 and 0.9: this model family was trained on the quantiles 0.1 to 0.9,
+    and its package returns the 0.1 and 0.9 values for anything further out.
     """
     t0 = time.perf_counter()
     if not QUICK and os.getenv("SHAMS_PRETRAINED", "on") != "off":
@@ -449,7 +524,8 @@ def shade_events(ax, start, end) -> None:
 def fan(ax, history: pd.Series, fc: pd.DataFrame, title: str = "") -> None:
     """A fan chart: the history, the median, and the 80% and 95% bands (fc has date and the quantile columns)."""
     ax.plot(history.index, history.to_numpy(), color="#16324f", lw=1.2, label="measured")
-    ax.fill_between(fc.date, fc["q0.025"], fc["q0.975"], color="#00a19a", alpha=0.18, lw=0, label="95 in 100")
+    if "q0.025" in fc:
+        ax.fill_between(fc.date, fc["q0.025"], fc["q0.975"], color="#00a19a", alpha=0.18, lw=0, label="95 in 100")
     ax.fill_between(fc.date, fc["q0.1"], fc["q0.9"], color="#00a19a", alpha=0.35, lw=0, label="80 in 100")
     ax.plot(fc.date, fc["q0.5"], color="#00776f", lw=1.6, label="median forecast")
     if "y" in fc and fc.y.notna().any():

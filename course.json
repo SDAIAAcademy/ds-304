@@ -600,7 +600,7 @@
                 "minutes": 5
               }
             ],
-            "stretch": "Add a row for the average of the two best methods"
+            "stretch": "Change one weight until the ranking flips, and say what that weight would mean"
           },
           "summary": "Accuracy is one column: choose a method family on accuracy, cost, licence and upkeep together"
         }

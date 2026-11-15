@@ -511,6 +511,576 @@
       "level": "analyse",
       "pool": "practice",
       "weight": 1
+    },
+    {
+      "id": "q-bottom-up-total-01",
+      "type": "single",
+      "prompt": "A district has three substations. Their forecasts for tomorrow are 40, 25 and 15 MWh. A separate model for the district forecasts 90 MWh. Under bottom-up reconciliation, what are the reconciled forecasts?",
+      "options": [
+        "Substations 40, 25 and 15; district 80",
+        "Substations 45, 28.1 and 16.9; district 90",
+        "Substations 40, 25 and 15; district 90",
+        "Substations 42.5, 27.5 and 17.5; district 87.5"
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": "Bottom-up keeps the lowest level and sums it: 40 + 25 + 15 = 80. The district model is not used.",
+      "misconceptions": [
+        "",
+        "Applies top-down: scales the substations to the district forecast, which bottom-up discards",
+        "Leaves the base forecasts as they are: they do not add up, so nothing was reconciled",
+        "Applies least squares: spreads the gap over all four forecasts"
+      ],
+      "lo": [
+        "LO3"
+      ],
+      "day": "day3",
+      "session": 1,
+      "slide": "bottom-up-top-down",
+      "level": "apply",
+      "pool": "practice",
+      "weight": 1
+    },
+    {
+      "id": "q-least-squares-gap-01",
+      "type": "single",
+      "prompt": "A region has 4 feeders. The feeder forecasts for one day add up to 190 MWh and the regional model forecasts 200 MWh. Ordinary least squares reconciliation gives every feeder an equal part of the gap, gap / (n + 1). What is the reconciled regional total?",
+      "options": [
+        "200 MWh",
+        "190 MWh",
+        "198 MWh",
+        "195 MWh"
+      ],
+      "correct": [
+        2
+      ],
+      "explanation": "The gap is 10. Each feeder moves by 10 / 5 = 2 MWh, so the total moves by 8 to 198. The more feeders, the closer the total comes to the regional forecast.",
+      "misconceptions": [
+        "Assumes the total moves all the way to the regional forecast: that is top-down",
+        "Assumes the feeders do not move: that is bottom-up",
+        "",
+        "Splits the gap in half between the levels, whatever the number of feeders"
+      ],
+      "lo": [
+        "LO3"
+      ],
+      "day": "day3",
+      "session": 1,
+      "slide": "least-squares-reconciliation",
+      "level": "apply",
+      "pool": "practice",
+      "weight": 1
+    },
+    {
+      "id": "q-reconcile-which-level-01",
+      "type": "single",
+      "prompt": "In a backtest of one hierarchy, top-down reconciliation raised the error of the lowest level from 0.65 to 0.88. The upper-level model scored 0.89 against the total, and the sum of the lower-level forecasts scored 0.58 against the same total. What explains the result?",
+      "options": [
+        "Top-down always loses information about the lower level",
+        "The upper-level model was the weaker one, and top-down spread its error downwards",
+        "The lower-level forecasts were not coherent before reconciliation",
+        "The scaled error cannot be compared across levels"
+      ],
+      "correct": [
+        1
+      ],
+      "explanation": "Top-down trusts the upper level. Here the sum of the lower-level forecasts was the better forecast of the total (0.58 against 0.89), so forcing the lower level to follow the upper-level model made it worse.",
+      "misconceptions": [
+        "States a rule the data do not support: in other hierarchies top-down lowers the error",
+        "",
+        "Describes every set of base forecasts: that is why reconciliation is needed, not why it hurt",
+        "Blames the measure: both figures quoted for the total are on the same scale"
+      ],
+      "lo": [
+        "LO3"
+      ],
+      "day": "day3",
+      "session": 1,
+      "slide": "reconciliation-twelve-regions",
+      "level": "analyse",
+      "pool": "practice",
+      "weight": 1
+    },
+    {
+      "id": "q-global-scaling-01",
+      "type": "single",
+      "prompt": "One boosted model is trained across 300 series whose daily means range from 20 to 4,000 units. Trained on the raw values, its scaled error is six times worse than when each series is divided by its own recent mean first. Why does the division help so much?",
+      "options": [
+        "Boosted trees cannot handle values above 1,000",
+        "Dividing removes the weekly season from each series",
+        "The division shortens the training time",
+        "Without it the trees spend their splits on the size of a series, not on its pattern"
+      ],
+      "correct": [
+        3
+      ],
+      "explanation": "With raw targets the largest differences between rows are differences of size between series. After dividing by each series’ own level, all series look alike and the trees can learn patterns shared across them.",
+      "misconceptions": [
+        "Invents a limit: trees split on any numeric range",
+        "Confuses scaling with seasonal adjustment: a constant divisor leaves the pattern in place",
+        "Names a side effect at most: it does not explain the change in accuracy",
+        ""
+      ],
+      "lo": [
+        "LO3"
+      ],
+      "day": "day3",
+      "session": 2,
+      "slide": "scale-the-target",
+      "level": "understand",
+      "pool": "practice",
+      "weight": 1
+    },
+    {
+      "id": "q-quantile-objective-01",
+      "type": "single",
+      "prompt": "Three boosted models are trained with the quantile objective for 0.1, 0.5 and 0.9. On held-out days, actual demand falls between the 0.1 and 0.9 forecasts on 71% of days. Which statement is right?",
+      "options": [
+        "The interval is too narrow: it claims 8 days in 10 and holds on about 7",
+        "The interval is well calibrated, because 71% is close to 0.9 minus 0.1",
+        "The median model is biased",
+        "The quantile models crossed"
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": "The 0.1 to 0.9 interval should contain 80% of outcomes. Holding on 71% means the edges are too close together, and a buyer at the 0.9 edge is exceeded more often than 1 day in 10.",
+      "misconceptions": [
+        "",
+        "Accepts a gap of nine points as close: over a year that is a month of extra misses",
+        "Reads coverage as a statement about the centre: the 0.5 forecast is not measured by it",
+        "Names another fault: crossing is quantiles out of order, and is measured separately"
+      ],
+      "lo": [
+        "LO3"
+      ],
+      "day": "day3",
+      "session": 2,
+      "slide": "boosted-quantiles",
+      "level": "apply",
+      "pool": "practice",
+      "weight": 1
+    },
+    {
+      "id": "q-zero-shot-meaning-01",
+      "type": "single",
+      "prompt": "A team runs a pretrained forecaster \"zero-shot\" on its 500 sales series. What does zero-shot mean here?",
+      "options": [
+        "The model was trained on the 500 series for zero epochs after loading",
+        "The model needs no history of a series to forecast it",
+        "The model forecasts each series from its history without being trained on the team’s data",
+        "The model gives point forecasts only"
+      ],
+      "correct": [
+        2
+      ],
+      "explanation": "Zero-shot use means no fitting or fine-tuning on your series. The publisher pretrained the model on other data; you pass each series’ recent history as context and read the forecast.",
+      "misconceptions": [
+        "Describes a training run of no length: zero-shot involves no training step on the data at all",
+        "Removes the context: the recent history of the series is the input the model forecasts from",
+        "",
+        "Confuses the way of use with the kind of output: these models return quantiles"
+      ],
+      "lo": [
+        "LO3"
+      ],
+      "day": "day3",
+      "session": 3,
+      "slide": "what-pretraining-buys",
+      "level": "understand",
+      "pool": "practice",
+      "weight": 1
+    },
+    {
+      "id": "q-licence-gate-01",
+      "type": "single",
+      "prompt": "A utility compares two pretrained forecasters for its weekly operations. Model X: skill 0.18, weights under CC BY-NC 4.0. Model Y: skill 0.15, weights under Apache-2.0. The licences were read from the model cards today. What should the scorecard record?",
+      "options": [
+        "X is chosen: it is more accurate, and licences only matter when a model is sold",
+        "Both are usable, because both sets of weights can be downloaded freely",
+        "Neither: a pretrained model cannot be used without a paid contract",
+        "Y is the candidate: the licence of X does not permit this use, whatever X scores"
+      ],
+      "correct": [
+        3
+      ],
+      "explanation": "A non-commercial licence rules the model out for a company’s operations. The licence is a gate applied before accuracy is compared, and the scorecard records the licence with the date it was read.",
+      "misconceptions": [
+        "Narrows \"commercial use\" to selling the model: running a company’s operations on it is commercial use",
+        "Confuses being able to download with being permitted to use",
+        "Invents a requirement: Apache-2.0 permits commercial use without a contract",
+        ""
+      ],
+      "lo": [
+        "LO3"
+      ],
+      "day": "day3",
+      "session": 3,
+      "slide": "read-the-model-card",
+      "level": "analyse",
+      "pool": "practice",
+      "weight": 1
+    },
+    {
+      "id": "q-centred-average-01",
+      "type": "single",
+      "prompt": "A notebook forecasts daily sales 14 days ahead. One feature is \"the 7-day centred moving average of sales on the target day\". The backtest score is far better than any other model’s. What is the fault?",
+      "options": [
+        "A 7-day average is too short to be a useful feature",
+        "The average includes the target day and the three days after it",
+        "Moving averages should not be used with tree models",
+        "The feature should be scaled before training"
+      ],
+      "correct": [
+        1
+      ],
+      "explanation": "A centred average of day t uses days t-3 to t+3. It contains the value being forecast. A feature built from the target must end at least one horizon before the day it describes.",
+      "misconceptions": [
+        "Judges the usefulness of the feature: the problem is what it contains, not its length",
+        "",
+        "Invents a rule about model families: the fault would be the same in any model",
+        "Proposes a transformation: scaling a leaking feature leaves the leak in place"
+      ],
+      "lo": [
+        "LO4"
+      ],
+      "day": "day4",
+      "session": 1,
+      "slide": "feature-sees-the-future",
+      "level": "analyse",
+      "pool": "practice",
+      "weight": 1
+    },
+    {
+      "id": "q-lag-shorter-than-horizon-01",
+      "type": "single",
+      "prompt": "A model forecasts every one of the next 28 days from a single origin. Which lag of the target can be used as a feature for all 28 days without leakage?",
+      "options": [
+        "Lag 1: the value of the day before the target day",
+        "Lag 7: the value one week before the target day",
+        "Lag 14: the value two weeks before the target day",
+        "Lag 28: the value four weeks before the target day"
+      ],
+      "correct": [
+        3
+      ],
+      "explanation": "For the last target, 28 days after the origin, a lag of 28 points at the origin day itself: the latest value that is known. Any shorter lag points past the origin for some of the 28 targets.",
+      "misconceptions": [
+        "For the second day ahead, the day before lies after the origin",
+        "For targets more than 7 days ahead, one week before lies after the origin",
+        "For targets more than 14 days ahead, two weeks before lies after the origin",
+        ""
+      ],
+      "lo": [
+        "LO4"
+      ],
+      "day": "day4",
+      "session": 1,
+      "slide": "feature-sees-the-future",
+      "level": "apply",
+      "pool": "practice",
+      "weight": 1
+    },
+    {
+      "id": "q-regressor-archive-01",
+      "type": "single",
+      "prompt": "A backtest of a demand model uses the temperature measured on each test day as a regressor. In production the model will receive a weather forecast. What does the backtest score measure?",
+      "options": [
+        "The accuracy the model would have with a perfect weather forecast",
+        "The accuracy the model will have in production",
+        "Nothing: a backtest with a regressor is never valid",
+        "The accuracy of the weather forecast"
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": "With measured temperature the model is handed information nobody had on the origin day. The score is an upper bound on what the model could do with perfect weather knowledge, not an estimate of its performance.",
+      "misconceptions": [
+        "",
+        "Takes the backtest for production: there the temperature is a forecast with its own error",
+        "Rejects all regressors: those known at the origin, such as the calendar, are valid",
+        "Reverses the roles: no weather forecast was used in the backtest at all"
+      ],
+      "lo": [
+        "LO4"
+      ],
+      "day": "day4",
+      "session": 1,
+      "slide": "regressor-from-the-future",
+      "level": "analyse",
+      "pool": "practice",
+      "weight": 1
+    },
+    {
+      "id": "q-selection-tuning-01",
+      "type": "single",
+      "prompt": "An analyst tries 30 settings of a model. For each she computes the scaled error on the 13 test folds and reports the lowest: 0.62. All features pass a known-at-the-origin test. Which statement about the 0.62 is right?",
+      "options": [
+        "It is honest, because no feature uses the future",
+        "It is too high, because the best setting was not tuned further",
+        "It is likely too low: the best of 30 on the test folds is partly luck",
+        "It cannot be judged without the pinball loss"
+      ],
+      "correct": [
+        2
+      ],
+      "explanation": "Among 30 settings some score well on these folds by chance. Reporting the minimum counts that luck as skill. Choose the setting on folds before the test period, then score it once on the test folds.",
+      "misconceptions": [
+        "Checks the columns only: the setting was chosen with the test results",
+        "Asks for more tuning on the same folds, which would flatter the score more",
+        "",
+        "Changes the measure: the same fault applies to any score"
+      ],
+      "lo": [
+        "LO4"
+      ],
+      "day": "day4",
+      "session": 1,
+      "slide": "selection-on-the-test-window",
+      "level": "analyse",
+      "pool": "practice",
+      "weight": 1
+    },
+    {
+      "id": "q-memo-content-01",
+      "type": "single",
+      "prompt": "You reviewed a colleague’s backtest and found two faults. After fixing both, the score moved from 0.30 to 0.74 against a floor of 1.05. What should the review memo report?",
+      "options": [
+        "That the model does not work, since its true score is more than twice the claimed one",
+        "Each fault, where it was, its fix and the score after it, and 0.74 against the floor as the result",
+        "The corrected score of 0.74 only, to avoid embarrassing the colleague",
+        "The original score of 0.30 with a footnote that it may be optimistic"
+      ],
+      "correct": [
+        1
+      ],
+      "explanation": "A review memo names each fault, its location and fix, and the score before and after, and ends with the one number to report. Here the corrected model still beats the floor by about 30%.",
+      "misconceptions": [
+        "Judges the model by the size of the correction: 0.74 still beats the floor of 1.05",
+        "",
+        "Hides the findings: the next notebook will repeat faults nobody was told about",
+        "Keeps a number known to be wrong as the headline"
+      ],
+      "lo": [
+        "LO4"
+      ],
+      "day": "day4",
+      "session": 1,
+      "slide": "the-review-memo",
+      "level": "apply",
+      "pool": "practice",
+      "weight": 1
+    },
+    {
+      "id": "q-leak-test-limits-01",
+      "type": "single",
+      "prompt": "A repository has an automated test: it changes every value after the forecast origin and checks that no feature column changes. The test passes. Which fault can still be present?",
+      "options": [
+        "The best of several models was picked using the test folds",
+        "A feature that is a centred moving average of the target",
+        "A regressor that uses measured weather of the target days",
+        "A lag of 7 days used for a 28-day horizon"
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": "The test inspects columns. Selection on the test window is a fault in how results were used to make a choice; no column shows it. It is found by asking how each setting or model was chosen.",
+      "misconceptions": [
+        "",
+        "Would be caught: its values near the origin change when later values change",
+        "Would be caught: the regressor changes when values after the origin change",
+        "Would be caught: for later targets the lag reads days after the origin"
+      ],
+      "lo": [
+        "LO4"
+      ],
+      "day": "day4",
+      "session": 1,
+      "slide": "a-test-for-leaking-columns",
+      "level": "understand",
+      "pool": "practice",
+      "weight": 1
+    },
+    {
+      "id": "q-pooling-level-01",
+      "type": "single",
+      "prompt": "A new site has averaged 50 units a day over its first four weeks. Similar older sites, at this time last year, ran at 0.90 of their own recent level in the following week. What is the pooled forecast for the new site’s next week, per day?",
+      "options": [
+        "50 units",
+        "The average of the older sites’ demand",
+        "55.6 units",
+        "45 units"
+      ],
+      "correct": [
+        3
+      ],
+      "explanation": "Pooling borrows the shape (0.90 of the recent level) from similar series and applies it to the new series’ own level: 0.90 × 50 = 45.",
+      "misconceptions": [
+        "Repeats the level: ignores the seasonal change the older sites went through",
+        "Uses the wrong level: the older sites’ size says nothing about this site",
+        "Divides by the ratio where it should multiply",
+        ""
+      ],
+      "lo": [
+        "LO5"
+      ],
+      "day": "day4",
+      "session": 2,
+      "slide": "borrow-the-shape",
+      "level": "apply",
+      "pool": "practice",
+      "weight": 1
+    },
+    {
+      "id": "q-short-series-evidence-01",
+      "type": "single",
+      "prompt": "On 12 new series and one fold of 28 days, method P scores 0.92 and method Q scores 0.95. With half the history, Q scores 0.85. What is the soundest conclusion for the planner’s note?",
+      "options": [
+        "Q with half the history is the best method and should be used",
+        "P is better than Q by 3%",
+        "P and Q cannot be told apart on this evidence; say so, and review as data arrives",
+        "Neither method works on short series"
+      ],
+      "correct": [
+        2
+      ],
+      "explanation": "One fold of 12 series is thin. A method that improves when given less data signals noise in the sample. The note should state the evidence as it is and name a review date.",
+      "misconceptions": [
+        "Takes a noisy improvement as real: a method does not gain from less data",
+        "Reads a small gap on 336 values as a ranking",
+        "",
+        "Dismisses both: each has a measured error that the note can report"
+      ],
+      "lo": [
+        "LO5"
+      ],
+      "day": "day4",
+      "session": 2,
+      "slide": "short-history-comparison",
+      "level": "analyse",
+      "pool": "practice",
+      "weight": 1
+    },
+    {
+      "id": "q-fan-chart-reading-01",
+      "type": "single",
+      "prompt": "A fan chart shows a median line, a dark band labelled \"8 days in 10\" and a light band labelled \"19 days in 20\". A buyer must rarely be short of energy. Which part of the chart should the buyer plan on?",
+      "options": [
+        "The median line, because it is the most likely value",
+        "The upper edge of a band, chosen by how rarely being short is acceptable",
+        "The lower edge of the dark band, to avoid buying too much",
+        "The middle of the light band"
+      ],
+      "correct": [
+        1
+      ],
+      "explanation": "The upper edge of the dark band is exceeded on about 1 day in 10, that of the light band on about 1 in 40. The buyer picks the edge that matches the cost of being short.",
+      "misconceptions": [
+        "Plans on the centre: demand is above the median on half of the days",
+        "",
+        "Protects against the cheaper error: being short is the costly one here",
+        "Returns to the centre by another name"
+      ],
+      "lo": [
+        "LO5"
+      ],
+      "day": "day4",
+      "session": 4,
+      "slide": "the-fan-chart",
+      "level": "understand",
+      "pool": "practice",
+      "weight": 1
+    },
+    {
+      "id": "q-note-limits-01",
+      "type": "single",
+      "prompt": "A forecast note covers the regional daily demand of the next 28 days. Its backtest used ordinary weather and the announced holiday calendar. Which sentence is a correct entry for the \"limits\" part?",
+      "options": [
+        "\"The forecast is accurate to within 5%.\"",
+        "\"The model uses ARIMA errors and Fourier terms.\"",
+        "\"Use with caution.\"",
+        "\"In a declared heat wave, ask for a rerun; do not use it for a single feeder.\""
+      ],
+      "correct": [
+        3
+      ],
+      "explanation": "A limit names a situation in which the forecast should not be used, or should be rerun, and tells the reader what to do. Each limit should trace back to something the backtest did or did not measure.",
+      "misconceptions": [
+        "States an accuracy claim: that belongs to the evidence part, and it is not a limit",
+        "Describes the method: that belongs to the source part",
+        "Names no situation and no action: the reader cannot act on it",
+        ""
+      ],
+      "lo": [
+        "LO5"
+      ],
+      "day": "day4",
+      "session": 4,
+      "slide": "when-not-to-use-it",
+      "level": "apply",
+      "pool": "practice",
+      "weight": 1
+    },
+    {
+      "id": "q-origin-moves-01",
+      "type": "single",
+      "prompt": "In a defence, the assessor says: \"Your backtest scored the 14-day horizon. The planner now needs 56 days. What changes?\" Which answer is the strongest?",
+      "options": [
+        "\"The backtest is rerun at 56 days: the floor, the scores and the width of the bands are measured again, and the features must be known 56 days ahead.\"",
+        "\"Nothing: the same model forecasts 56 days by running it four times.\"",
+        "\"The bands are multiplied by four.\"",
+        "\"A more complex model is needed for long horizons.\""
+      ],
+      "correct": [
+        0
+      ],
+      "explanation": "Evidence holds for the horizon it was measured at. A new horizon changes which features are known at the origin, what the floor scores, and how wide the bands must be: all are measured by rerunning the backtest.",
+      "misconceptions": [
+        "",
+        "Assumes the evidence carries over: no score was measured at 56 days",
+        "Scales the uncertainty by a guess: error growth with the horizon is measured, not assumed",
+        "Changes the model before measuring whether the present one fails"
+      ],
+      "lo": [
+        "LO5"
+      ],
+      "day": "day4",
+      "session": 4,
+      "slide": "capstone-brief",
+      "level": "analyse",
+      "pool": "practice",
+      "weight": 1
+    },
+    {
+      "id": "q-average-quantiles-01",
+      "type": "single",
+      "prompt": "Three methods have 80% intervals that cover 84%, 79% and 64% of days. The method with 64% coverage has the best point forecast. The three are averaged quantile by quantile, and the average covers 82% with the lowest pinball loss of all four. What explains this?",
+      "options": [
+        "Averaging always improves coverage",
+        "The pinball loss does not depend on the point forecast",
+        "The average keeps most of the good centre and takes its width from the wider intervals",
+        "The average covers 82% because 82 is close to the mean of 84, 79 and 64"
+      ],
+      "correct": [
+        2
+      ],
+      "explanation": "The pinball loss rewards a good centre and edges at the right distance. The average inherits a centre close to the best method’s and edges widened by the two better-calibrated methods.",
+      "misconceptions": [
+        "States a rule: three intervals that are all too narrow would average to one that is too narrow",
+        "Separates what the measure joins: the median is one of the scored quantiles",
+        "",
+        "Treats coverage as something that averages: the mean of the three is about 76"
+      ],
+      "lo": [
+        "LO3"
+      ],
+      "day": "day4",
+      "session": 3,
+      "slide": "average-the-quantiles",
+      "level": "analyse",
+      "pool": "practice",
+      "weight": 1
     }
   ]
 }

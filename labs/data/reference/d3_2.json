@@ -1,0 +1,47 @@
+{
+ "scores": {
+  "mase": 0.622,
+  "pinball": 0.196,
+  "cover80": 0.721
+ },
+ "by_fold": {
+  "floor": [
+   0.878,
+   0.628
+  ],
+  "boosted": [
+   0.73,
+   0.515
+  ]
+ },
+ "floor": 0.753,
+ "skill": 0.173,
+ "crossing": 0.0,
+ "seconds": {
+  "frame": 35.5,
+  "fit": 4.0,
+  "quantiles": 9.1
+ },
+ "rows": {
+  "train": 287896,
+  "test": 21728,
+  "leaky": 5432
+ },
+ "fits": 4,
+ "forecasts": 776,
+ "importance": {
+  "cdd_change": 0.496,
+  "year_ago": 0.124,
+  "dow_profile": 0.108,
+  "kind": 0.073,
+  "region": 0.039,
+  "weekend": 0.039,
+  "last7": 0.039,
+  "eid": 0.032,
+  "h": 0.021,
+  "ramadan": 0.015,
+  "dow": 0.008,
+  "national": 0.006
+ },
+ "unscaled": 3.749
+}

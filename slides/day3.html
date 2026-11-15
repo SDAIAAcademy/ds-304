@@ -1,158 +1,508 @@
+<!-- ======================= OPENING ======================= -->
 <section class="slide title" id="title" data-auto="title">
-  <aside class="notes">REPLACE: welcome; introduce yourself; one question to the room that calibrates the pace; the rhythm of the day</aside>
+  <aside class="notes"><p>Open with a change of customer. For two days the reader was Omar in energy purchasing: one region, one number a day. Today Hamad Al-Dawsari of network operations asks for all 400 feeders, every week. Ask the room: would you fit yesterday's regression 400 times? Collect the objections; each session answers one.</p></aside>
 </section>
 
 <section class="slide" id="agenda" data-auto="agenda"></section>
 
-<!-- Session 1 -->
-
-<section class="slide section" id="s1" data-auto="section" data-session="1"></section>
-
-<section class="slide" id="s1-idea" data-lo="LO2">
-  <div class="kicker">REPLACE: the question this slide answers</div>
-  <h2>REPLACE: one idea, stated as a sentence</h2>
-  <div class="cols cols-2">
-    <ul class="bullets">
-      <li>REPLACE: at most six bullets, each a complete thought</li>
-      <li>REPLACE: bold the key phrase; numbers come from the lab run, not from memory</li>
-    </ul>
-    <div class="card c-teal"><h4>In the case study</h4><p class="small mb0">REPLACE: tie the idea to the case study and its data</p></div>
+<section class="slide" id="review-day-2" data-lo="LO2">
+  <div class="kicker">Review · Day 2</div>
+  <h2>Which regressor may use its future values?</h2>
+  <div class="quiz" data-type="single" data-lo="LO2">
+    <p class="lead">A regression forecasts daily demand 28 days ahead. Its backtest scores 0.55 with four regressors. Which one makes that score dishonest?</p>
+    <div class="opts">
+      <div class="opt" data-why="Depends on the date only: the announced Hijri calendar is known at the origin">A column that is 1 on the days of Eid al-Fitr</div>
+      <div class="opt" data-why="Depends on the date only: every future weekday is known">The day of the week of the target day</div>
+      <div class="opt" data-ok>The temperature measured on the target day</div>
+      <div class="opt" data-why="Uses days up to the origin only: a lag of 28 or more is known for every horizon day">Mean demand of the 28 days before the origin</div>
+    </div>
+    <div class="callout tip why"><b>Why.</b> A regressor may use its future values only when they are known at the origin. The measured temperature is not: in Lab 2.3 it flattered the score from 0.77 to 0.55.</div>
   </div>
-  <div class="callout warn mt"><b>What goes wrong.</b> REPLACE: the failure participants will hit, and how to recognise it</div>
-  <aside class="notes">REPLACE: what to say, the demo to run, the question to ask the room, the common failure and its fix</aside>
+  <aside class="notes"><p>Answer: C. Today the same rule is applied to hundreds of thousands of rows at once in Lab 3.2, and tomorrow's first lab hides three violations of it in a notebook.</p></aside>
 </section>
 
-<section class="slide" id="s1-steps" data-lo="LO2">
-  <div class="kicker">Step by step</div>
-  <h2>REPLACE: a process, shown one step per key press</h2>
-  <div class="flow">
-    <div class="step c-teal"><b>1 · REPLACE: name</b>REPLACE: what happens first</div>
-    <div class="arrow frag" data-frag="b">→</div><div class="step c-cyan frag" data-frag="b"><b>2 · REPLACE: name</b>REPLACE: the next piece</div>
-    <div class="arrow frag" data-frag="c">→</div><div class="step c-coral frag" data-frag="c"><b>3 · REPLACE: name</b>REPLACE: the result</div>
+<!-- ======================= SESSION 1 ======================= -->
+<section class="slide section" id="s1" data-auto="section" data-session="1"></section>
+
+<section class="slide" data-label="400 feeders" id="from-one-to-many" data-lo="LO3">
+  <div class="kicker">The case grows</div>
+  <h2>Four hundred feeders, and every one of them adds up to a region</h2>
+  <div class="cols cols-3">
+    <div class="stat"><div class="big">400</div><div class="lbl">feeders in 12 regions, daily energy since 2017</div></div>
+    <div class="stat"><div class="big">388</div><div class="lbl">established: three years of history or more</div></div>
+    <div class="stat"><div class="big">12</div><div class="lbl">new: commissioned in September 2025. They wait for Day 4</div></div>
   </div>
-  <div class="callout tip mt frag"><b>Takeaway.</b> REPLACE: the one sentence to remember</div>
-  <aside class="notes">Press once per step and say what each step adds before the next one appears. REPLACE: the example to walk through</aside>
+  <div class="callout note mt"><b>The frame for today.</b> Eight weeks held out: two folds of 28 days, with origins on 5 November and 3 December 2025. Every method is scored on the same feeders and the same days.</div>
+  <aside class="notes"><p>Three kinds of feeder: residential, commercial, industrial. A region's demand is the sum of its feeders. Say the limit of the evidence now: two folds, both in the mild season. The scores of today are not comparable with the 13-fold year of the regional labs, and a difference of a few hundredths between two methods is inside the spread between the folds.</p></aside>
+</section>
+
+<section class="slide" data-label="Two readers" id="two-readers-two-levels" data-lo="LO3">
+  <div class="kicker">Why two levels</div>
+  <h2>Purchasing reads the region; operations read the feeders</h2>
+  <div class="cols cols-2">
+    <div class="card c-teal"><h4>Omar Al-Khuzaim · energy purchasing</h4><p class="small mb0">Nominates energy by region. He needs the regional total and its upper quantile.</p></div>
+    <div class="card c-coral"><h4>Hamad Al-Dawsari · network operations</h4><p class="small mb0">Plans maintenance and switching by feeder. He needs each feeder's next four weeks.</p></div>
+  </div>
+  <div class="callout warn mt"><b>The problem.</b> If the feeder forecasts of a region do not add up to the regional forecast, two departments plan on two different futures.</div>
+  <aside class="notes"><p>Forecasts that add up across a hierarchy are called coherent. The data are coherent by construction: the meters add up. Forecasts are not, unless something makes them so. Ask the room which of the two numbers they would trust if they disagreed; do not settle it yet.</p></aside>
+</section>
+
+<section class="slide" data-label="They disagree" id="base-forecasts-disagree" data-lo="LO3">
+  <div class="kicker">Lab 3.1 · steps 1 and 2 · Al-Dana, 37 feeders</div>
+  <h2>Forecast each level with its best model, and the two disagree</h2>
+  <div class="cols cols-2">
+    <pre class="code s" data-file="Lab 3.1 · step 1"><code class="language-python"># 37 feeders: ETS with a weekly season, each
+feeders_fc = U.sf_many(
+    AutoETS(season_length=7, model="ANA"),
+    W.loc[:origin].iloc[-1096:])
+# the region: the regression of Lab 2.3
+region_fc = U.dynreg(rid, region_train, 28, origin)</code></pre>
+    <div class="stack">
+      <div class="stat"><div class="big">3.0%</div><div class="lbl">mean gap between the regional forecast and the sum of feeders, first fold</div></div>
+      <div class="stat"><div class="big">2.4%</div><div class="lbl">second fold</div></div>
+    </div>
+  </div>
+  <aside class="notes"><p>These are called base forecasts. The feeder models see a weekly pattern only; the regional model sees temperature and the calendar. A gap of 3% of a region's demand is larger than the margin purchasing works with. U.sf_many fits one statsforecast model to every column of a wide table.</p></aside>
+</section>
+
+<section class="slide" data-label="Two simple ways" id="bottom-up-top-down" data-lo="LO3">
+  <div class="kicker">Reconciliation</div>
+  <h2>Two simple ways to make them add up</h2>
+  <div class="cols cols-2">
+    <div class="card c-teal"><h4>Bottom-up</h4><p class="small">Keep the feeder forecasts. The region is their sum.</p><p class="small mb0"><b>Throws away</b> the regional model, with its temperature and calendar.</p></div>
+    <div class="card c-coral"><h4>Top-down</h4><p class="small">Keep the regional forecast. Split it by each feeder's share of the feeder forecasts, day by day.</p><p class="small mb0"><b>Throws away</b> the level of every feeder model, and keeps its share.</p></div>
+  </div>
+  <pre class="code s mt-s" data-file="Lab 3.1 · step 3"><code class="language-python">share = feeders_fc.div(feeders_fc.sum(axis=1), axis=0)
+top_down = share.mul(region_fc, axis=0)</code></pre>
+  <aside class="notes"><p>Textbook top-down uses historical shares. The lab uses the shares of the forecasts themselves, which keeps each feeder's weekday pattern: an industrial feeder that rests on Friday still rests on Friday. Each way keeps one level and discards the other: ask what a method that keeps both would look like.</p></aside>
+</section>
+
+<section class="slide" data-label="Least squares" id="least-squares-reconciliation" data-lo="LO3">
+  <div class="kicker">Use both levels</div>
+  <h2>Least squares: move every forecast as little as possible</h2>
+  <div class="cols cols-2">
+    <ul class="bullets small">
+      <li>Find the coherent set of forecasts closest to the base forecasts, in squared distance.</li>
+      <li>For one region with n feeders the answer is closed: every feeder takes an equal part of the gap.</li>
+      <li>With 37 feeders the total lands almost on the regional forecast.</li>
+    </ul>
+    <pre class="code s" data-file="Lab 3.1 · step 4"><code class="language-python">n = feeders_fc.shape[1]
+gap = region_fc - feeders_fc.sum(axis=1)
+least_sq = feeders_fc.add(gap / (n + 1), axis=0)</code></pre>
+  </div>
+  <div class="callout note small mt-s"><b>The equal share is the weakness.</b> A feeder of 30 MWh and one of 175 MWh receive the same correction in MWh.</div>
+  <aside class="notes"><p>This is ordinary least squares reconciliation. Weighted variants (by the variance of each series' errors, known as MinT) correct the equal share; they are in Forecasting: Principles and Practice, chapter 11, and in the hierarchicalforecast package. The course stops at the closed form because it can be written in three lines and checked by hand.</p><p>Sources: Hyndman and Athanasopoulos, Forecasting: Principles and Practice, 3rd edition, chapter 11; Wickramasuriya, Athanasopoulos and Hyndman (2019).</p></aside>
+</section>
+
+<section class="slide" data-label="Both levels" id="errors-at-both-levels" data-lo="LO3">
+  <div class="kicker">Lab 3.1 · step 5 · Al-Dana, two folds</div>
+  <h2>Reconciling made the feeder forecasts better, not only coherent</h2>
+  <table class="t small">
+    <tr><th>Forecasts</th><th class="num">Scaled error, feeders</th><th class="num">Scaled error, region</th><th>Coherent</th></tr>
+    <tr><td>Base: each level by its own model</td><td class="num">0.722</td><td class="num">0.463</td><td>no</td></tr>
+    <tr><td>Bottom-up</td><td class="num">0.722</td><td class="num">0.634</td><td>yes</td></tr>
+    <tr class="hl"><td>Top-down</td><td class="num">0.650</td><td class="num">0.463</td><td>yes</td></tr>
+    <tr><td>Least squares</td><td class="num">0.651</td><td class="num">0.465</td><td>yes</td></tr>
+  </table>
+  <div class="callout tip small mt-s"><b>Why.</b> The regional model knows the temperature and the calendar. Reconciliation passes that knowledge down to feeder models that have neither.</div>
+  <aside class="notes"><p>Bottom-up leaves the feeders unchanged and makes the region worse: 0.634 against 0.463. Top-down and least squares take a tenth off the feeder error. The stretch task shows this is not a law: next slide.</p></aside>
+</section>
+
+<section class="slide" data-label="Not a law" id="reconciliation-twelve-regions" data-lo="LO3">
+  <div class="kicker">Lab 3.1 · stretch · all 12 regions</div>
+  <h2>Top-down helps where the regional model is the better one</h2>
+  <div class="cols cols-2">
+    <table class="t small">
+      <tr><th>Region</th><th class="num">Feeders, bottom-up</th><th class="num">Feeders, top-down</th></tr>
+      <tr><td>Al-Rimal</td><td class="num">1.216</td><td class="num">0.692</td></tr>
+      <tr><td>Al-Badia</td><td class="num">1.319</td><td class="num">0.592</td></tr>
+      <tr><td>Al-Dana</td><td class="num">0.722</td><td class="num">0.650</td></tr>
+      <tr><td>Al-Wadi</td><td class="num">0.744</td><td class="num">0.879</td></tr>
+      <tr><td>Al-Marjan</td><td class="num">0.654</td><td class="num">0.881</td></tr>
+    </table>
+    <div class="stack">
+      <div class="stat"><div class="big">8 of 12</div><div class="lbl">regions where top-down lowers the feeder error</div></div>
+      <div class="callout warn small"><b>In the other four</b> the regional model lost to the sum of its feeders, and top-down spread its error over every feeder.</div>
+    </div>
+  </div>
+  <aside class="notes"><p>The rule to keep: a reconciliation method is as good as the level it trusts. Measure both levels before choosing, and choose per hierarchy. In Al-Wadi and Al-Marjan the regional model scored 0.89 where the bottom-up total scored 0.73 and 0.58.</p></aside>
+</section>
+
+<section class="slide" id="check-reconciliation" data-lo="LO3">
+  <div class="kicker">Checkpoint</div>
+  <h2>Which reconciliation, and on what evidence?</h2>
+  <div class="quiz" data-type="single" data-lo="LO3">
+    <p class="lead">In one region the regional model scores 0.89 on the held-out weeks and the sum of the feeder forecasts scores 0.58 against the regional total. Purchasing and operations need one coherent set. Which is the defensible choice?</p>
+    <div class="opts">
+      <div class="opt" data-ok>Bottom-up: here the feeder models carry the better information</div>
+      <div class="opt" data-why="Applies the result of another region as a rule: top-down spreads the error of the weaker regional model over every feeder">Top-down, because it won in Al-Dana</div>
+      <div class="opt" data-why="Leaves two departments planning on different totals: coherence is the requirement">Keep both base forecasts and let each department use its own</div>
+      <div class="opt" data-why="Assumes the more complex method must win: least squares moves the feeders towards a regional forecast that is worse">Least squares, because it uses both levels</div>
+    </div>
+    <div class="callout tip why"><b>Why.</b> Reconciliation moves forecasts towards the level it trusts. Trust the level that measured better on held-out data.</div>
+  </div>
+  <aside class="notes"><p>Answer: A. This is Al-Marjan in the stretch table. Least squares is not wrong in general: with weights by error variance it would lean on the feeders here. The plain version does not know which level is better.</p></aside>
 </section>
 
 <section class="slide lab" id="lab-3-1" data-auto="lab" data-lab="3.1">
-  <aside class="notes">REPLACE: what to watch for while participants work, the typical problems, and the fallback for anyone who did not finish an earlier lab</aside>
+  <aside class="notes"><p>Walk the room. The 37 fits take a few seconds. Usual problems: summing over the wrong axis (a forecast per feeder instead of per day); dividing the gap by n, which makes the feeders add up to the regional forecast exactly and is top-down by another name; forgetting that the reconciled region is the sum of the reconciled feeders. The lab starts from the data files only.</p></aside>
 </section>
 
-<!-- Session 2 -->
-
+<!-- ======================= SESSION 2 ======================= -->
 <section class="slide section" id="s2" data-auto="section" data-session="2"></section>
 
-<section class="slide" id="s2-idea" data-lo="LO3">
-  <div class="kicker">REPLACE: the question this slide answers</div>
-  <h2>REPLACE: one idea, stated as a sentence</h2>
+<section class="slide" data-label="Local, global" id="local-and-global-models" data-lo="LO3">
+  <div class="kicker">One model for many series</div>
+  <h2>A local model learns one series; a global model learns from all of them</h2>
   <div class="cols cols-2">
-    <ul class="bullets">
-      <li>REPLACE: at most six bullets, each a complete thought</li>
-      <li>REPLACE: bold the key phrase; numbers come from the lab run, not from memory</li>
-    </ul>
-    <div class="card c-teal"><h4>In the case study</h4><p class="small mb0">REPLACE: tie the idea to the case study and its data</p></div>
+    <div class="card c-navy"><h4>Local: one model per feeder</h4><p class="small mb0">388 fits. Each knows three years of one feeder. It cannot learn what Eid does from the feeder next door.</p></div>
+    <div class="card c-teal"><h4>Global: one model, all feeders</h4><p class="small mb0">One fit on every feeder's rows. An Eid seen on 388 feeders over eight years is thousands of examples.</p></div>
   </div>
-  <div class="callout warn mt"><b>What goes wrong.</b> REPLACE: the failure participants will hit, and how to recognise it</div>
-  <aside class="notes">REPLACE: what to say, the demo to run, the question to ask the room, the common failure and its fix</aside>
+  <div class="callout note mt"><b>The price.</b> A global model needs a table: one row per forecast to make, with columns that describe it. Building that table is where the work and the risk are.</div>
+  <aside class="notes"><p>The winning entries of the M5 competition (30,490 retail series) were global boosted-tree models; that result is why this family is in the entry. The statistical models of Day 2 are local. Ask: what would a new feeder with eight weeks of history get from each kind? That is Lab 4.2.</p><p>Source: Makridakis, Spiliotis and Assimakopoulos (2022), the M5 accuracy competition.</p></aside>
 </section>
 
-<section class="slide" id="s2-steps" data-lo="LO3">
-  <div class="kicker">Step by step</div>
-  <h2>REPLACE: a process, shown one step per key press</h2>
-  <div class="flow">
-    <div class="step c-teal"><b>1 · REPLACE: name</b>REPLACE: what happens first</div>
-    <div class="arrow frag" data-frag="b">→</div><div class="step c-cyan frag" data-frag="b"><b>2 · REPLACE: name</b>REPLACE: the next piece</div>
-    <div class="arrow frag" data-frag="c">→</div><div class="step c-coral frag" data-frag="c"><b>3 · REPLACE: name</b>REPLACE: the result</div>
+<section class="slide" data-label="The frame" id="one-row-per-forecast" data-lo="LO3">
+  <div class="kicker">Lab 3.2 · step 1</div>
+  <h2>One row per feeder, origin and horizon day</h2>
+  <table class="t small">
+    <tr><th>Column</th><th>What it holds</th><th>Known at the origin because</th></tr>
+    <tr><td><code>last7</code>, <code>dow_profile</code></td><td>the feeder's last week and weekday shape</td><td>the last 28 days up to the origin</td></tr>
+    <tr><td><code>year_ago</code></td><td>the same weekday 52 weeks before the target</td><td>364 days back is before any origin</td></tr>
+    <tr><td><code>dow</code>, <code>eid</code>, <code>ramadan</code>, <code>national</code></td><td>the calendar of the target day</td><td>a function of the date</td></tr>
+    <tr><td><code>cdd_change</code></td><td>cooling degrees expected, less the recent mean</td><td>the temperature rule of Lab 2.3</td></tr>
+    <tr><td><code>h</code>, <code>kind</code>, <code>region</code></td><td>days ahead; what the feeder is</td><td>fixed facts</td></tr>
+  </table>
+  <div class="callout tip small mt-s"><b>315,056 rows</b> for 388 feeders and 29 origins, built by <code>U.make_frame</code> in half a minute.</div>
+  <aside class="notes"><p>Twelve features. Every one is argued in the third column: that argument, written down, is the leakage review of this model. One model serves all 28 horizon days because h is a feature. The frame is supplied by the helper so the lab's time goes to the split and the model; the function is 50 lines and worth reading afterwards.</p></aside>
+</section>
+
+<section class="slide" data-label="Scale" id="scale-the-target" data-lo="LO3">
+  <div class="kicker">Why the target is scaled</div>
+  <h2>Divide each feeder by its own recent level, and the series look alike</h2>
+  <div class="cols cols-2">
+    <div class="figure">
+      <svg viewBox="0 0 560 320" role="img" aria-label="Three feeders of Al-Dana from August to early November 2025 in MWh a day: the largest is many times the smallest" xmlns="http://www.w3.org/2000/svg"><line x1="62" x2="548" y1="276.0" y2="276.0" stroke="#d9dee5" stroke-width="1"/><text x="54" y="281.0" text-anchor="end" font-size="15" fill="#5b6675">12</text><line x1="62" x2="548" y1="192.7" y2="192.7" stroke="#d9dee5" stroke-width="1"/><text x="54" y="197.7" text-anchor="end" font-size="15" fill="#5b6675">78</text><line x1="62" x2="548" y1="109.3" y2="109.3" stroke="#d9dee5" stroke-width="1"/><text x="54" y="114.3" text-anchor="end" font-size="15" fill="#5b6675">143</text><line x1="62" x2="548" y1="26.0" y2="26.0" stroke="#d9dee5" stroke-width="1"/><text x="54" y="31.0" text-anchor="end" font-size="15" fill="#5b6675">208</text><text x="62.0" y="313" text-anchor="middle" font-size="15" fill="#5b6675">01 Aug</text><text x="224.0" y="313" text-anchor="middle" font-size="15" fill="#5b6675">02 Sep</text><text x="386.0" y="313" text-anchor="middle" font-size="15" fill="#5b6675">04 Oct</text><text x="548.0" y="313" text-anchor="middle" font-size="15" fill="#5b6675">05 Nov</text><polyline points="62.0,254.9 67.1,246.6 72.1,241.9 77.2,237.1 82.3,240.6 87.3,236.5 92.4,240.9 97.4,254.0 102.5,249.8 107.6,246.4 112.6,248.6 117.7,245.2 122.8,250.2 127.8,250.4 132.9,257.9 137.9,252.6 143.0,245.1 148.1,245.1 153.1,245.1 158.2,246.1 163.3,244.9 168.3,253.1 173.4,244.1 178.4,242.5 183.5,247.3 188.6,250.3 193.6,247.4 198.7,241.4 203.8,253.3 208.8,248.3 213.9,241.3 218.9,241.8 224.0,245.2 229.1,250.0 234.1,248.5 239.2,257.7 244.3,248.9 249.3,240.5 254.4,243.2 259.4,240.7 264.5,241.2 269.6,245.2 274.6,253.0 279.7,249.2 284.8,247.9 289.8,245.9 294.9,245.4 299.9,242.8 305.0,237.9 310.1,253.2 315.1,249.7 320.2,248.9 325.3,251.3 330.3,259.1 335.4,249.8 340.4,247.1 345.5,257.6 350.6,253.4 355.6,251.3 360.7,249.5 365.8,251.0 370.8,250.1 375.9,248.8 380.9,260.1 386.0,251.3 391.1,248.7 396.1,243.5 401.2,247.2 406.3,249.5 411.3,251.3 416.4,258.8 421.4,256.5 426.5,253.4 431.6,253.4 436.6,255.6 441.7,253.0 446.8,255.6 451.8,262.7 456.9,257.7 461.9,256.8 467.0,256.2 472.1,251.8 477.1,247.1 482.2,249.9 487.3,261.8 492.3,256.0 497.4,252.2 502.4,254.5 507.5,256.7 512.6,256.1 517.6,255.8 522.7,266.3 527.8,257.4 532.8,256.9 537.9,257.4 542.9,259.1 548.0,257.4" fill="none" stroke="#00a19a" stroke-width="2" stroke-linejoin="round"/><polyline points="62.0,179.5 67.1,172.3 72.1,180.7 77.2,167.6 82.3,172.7 87.3,169.9 92.4,178.6 97.4,194.6 102.5,199.5 107.6,204.0 112.6,194.8 117.7,194.5 122.8,200.4 127.8,197.5 132.9,205.3 137.9,198.4 143.0,186.8 148.1,178.7 153.1,188.1 158.2,184.1 163.3,178.5 168.3,169.6 173.4,157.9 178.4,168.7 183.5,176.7 188.6,188.0 193.6,188.1 198.7,166.0 203.8,183.6 208.8,186.6 213.9,172.1 218.9,176.2 224.0,186.8 229.1,194.0 234.1,199.5 239.2,188.6 244.3,179.5 249.3,176.6 254.4,187.5 259.4,184.6 264.5,183.3 269.6,179.3 274.6,175.8 279.7,172.8 284.8,170.5 289.8,164.1 294.9,167.4 299.9,172.2 305.0,177.3 310.1,193.4 315.1,188.8 320.2,195.6 325.3,208.8 330.3,207.5 335.4,201.3 340.4,202.4 345.5,206.9 350.6,206.6 355.6,197.2 360.7,188.1 365.8,196.7 370.8,183.9 375.9,188.7 380.9,192.6 386.0,192.2 391.1,192.3 396.1,190.2 401.2,188.3 406.3,189.0 411.3,197.6 416.4,210.3 421.4,201.7 426.5,209.6 431.6,203.6 436.6,195.7 441.7,195.2 446.8,194.3 451.8,203.3 456.9,213.2 461.9,214.8 467.0,212.6 472.1,208.4 477.1,197.9 482.2,201.9 487.3,219.6 492.3,217.0 497.4,216.7 502.4,218.5 507.5,218.5 512.6,216.3 517.6,214.5 522.7,222.1 527.8,208.5 532.8,211.7 537.9,219.8 542.9,223.0 548.0,224.2" fill="none" stroke="#16324f" stroke-width="2" stroke-linejoin="round"/><polyline points="62.0,74.4 67.1,43.9 72.1,28.4 77.2,56.3 82.3,40.7 87.3,43.8 92.4,85.5 97.4,130.9 102.5,108.2 107.6,68.3 112.6,53.6 117.7,28.0 122.8,57.8 127.8,59.4 132.9,113.2 137.9,88.0 143.0,30.8 148.1,27.2 153.1,32.1 158.2,52.0 163.3,70.0 168.3,108.0 173.4,77.5 178.4,65.3 183.5,52.9 188.6,72.3 193.6,62.2 198.7,54.0 203.8,122.7 208.8,80.3 213.9,58.9 218.9,55.9 224.0,53.5 229.1,42.9 234.1,42.2 239.2,92.4 244.3,64.5 249.3,33.9 254.4,47.4 259.4,47.5 264.5,45.5 269.6,74.3 274.6,121.9 279.7,69.5 284.8,53.3 289.8,36.5 294.9,51.6 299.9,58.3 305.0,26.0 310.1,107.5 315.1,82.2 320.2,54.2 325.3,44.4 330.3,105.7 335.4,58.5 340.4,83.4 345.5,116.4 350.6,72.9 355.6,45.7 360.7,44.0 365.8,48.6 370.8,64.7 375.9,49.0 380.9,132.5 386.0,85.9 391.1,49.8 396.1,47.6 401.2,40.0 406.3,40.8 411.3,41.6 416.4,126.2 421.4,90.2 426.5,72.8 431.6,91.2 436.6,56.4 441.7,54.4 446.8,58.5 451.8,123.3 456.9,113.7 461.9,90.6 467.0,70.5 472.1,56.5 477.1,58.6 482.2,48.3 487.3,128.8 492.3,115.4 497.4,56.2 502.4,54.5 507.5,45.8 512.6,59.0 517.6,61.2 522.7,136.4 527.8,95.9 532.8,49.2 537.9,64.4 542.9,91.5 548.0,76.2" fill="none" stroke="#e4572e" stroke-width="2" stroke-linejoin="round"/></svg>
+      <div class="caption">Three feeders of Al-Dana, MWh a day: means of 33, 78 and 175.</div>
+    </div>
+    <div class="figure">
+      <svg viewBox="0 0 560 320" role="img" aria-label="The same three feeders, each divided by its own mean: the three lines now share one axis and one seasonal decline" xmlns="http://www.w3.org/2000/svg"><line x1="62" x2="548" y1="276.9" y2="276.9" stroke="#d9dee5" stroke-width="1"/><text x="54" y="281.9" text-anchor="end" font-size="15" fill="#5b6675">0.61</text><line x1="62" x2="548" y1="193.0" y2="193.0" stroke="#d9dee5" stroke-width="1"/><text x="54" y="198.0" text-anchor="end" font-size="15" fill="#5b6675">0.86</text><line x1="62" x2="548" y1="109.0" y2="109.0" stroke="#d9dee5" stroke-width="1"/><text x="54" y="114.0" text-anchor="end" font-size="15" fill="#5b6675">1.11</text><line x1="62" x2="548" y1="25.1" y2="25.1" stroke="#d9dee5" stroke-width="1"/><text x="54" y="30.1" text-anchor="end" font-size="15" fill="#5b6675">1.35</text><text x="62.0" y="313" text-anchor="middle" font-size="15" fill="#5b6675">01 Aug</text><text x="224.0" y="313" text-anchor="middle" font-size="15" fill="#5b6675">02 Sep</text><text x="386.0" y="313" text-anchor="middle" font-size="15" fill="#5b6675">04 Oct</text><text x="548.0" y="313" text-anchor="middle" font-size="15" fill="#5b6675">05 Nov</text><polyline points="62.0,184.5 67.1,116.7 72.1,78.5 77.2,39.6 82.3,68.4 87.3,35.1 92.4,70.7 97.4,177.5 102.5,143.3 107.6,115.0 112.6,132.9 117.7,105.8 122.8,146.0 127.8,148.3 132.9,208.7 137.9,165.7 143.0,105.0 148.1,105.2 153.1,105.1 158.2,113.3 163.3,102.8 168.3,169.5 173.4,96.5 178.4,83.6 183.5,122.3 188.6,147.4 193.6,123.9 198.7,75.0 203.8,171.2 208.8,131.0 213.9,74.1 218.9,78.1 224.0,106.0 229.1,145.0 234.1,132.8 239.2,206.9 244.3,136.0 249.3,67.5 254.4,89.2 259.4,69.3 264.5,73.3 269.6,105.3 274.6,168.7 279.7,138.0 284.8,127.8 289.8,111.5 294.9,107.0 299.9,85.9 305.0,46.2 310.1,170.9 315.1,142.2 320.2,135.8 325.3,155.4 330.3,218.8 335.4,143.0 340.4,121.0 345.5,206.4 350.6,172.4 355.6,155.0 360.7,140.9 365.8,152.4 370.8,145.1 375.9,135.1 380.9,227.1 386.0,155.3 391.1,133.7 396.1,91.9 401.2,122.2 406.3,140.6 411.3,155.5 416.4,216.1 421.4,197.6 426.5,172.4 431.6,172.7 436.6,189.9 441.7,168.9 446.8,190.0 451.8,247.9 456.9,207.0 461.9,200.1 467.0,194.8 472.1,159.4 477.1,121.3 482.2,143.7 487.3,240.7 492.3,193.3 497.4,162.3 502.4,181.2 507.5,199.3 512.6,194.4 517.6,192.1 522.7,276.9 527.8,204.7 532.8,200.7 537.9,204.9 542.9,218.4 548.0,204.4" fill="none" stroke="#00a19a" stroke-width="2" stroke-linejoin="round"/><polyline points="62.0,99.3 67.1,74.5 72.1,103.5 77.2,58.5 82.3,75.8 87.3,66.4 92.4,96.2 97.4,151.1 102.5,167.9 107.6,183.7 112.6,152.0 117.7,150.8 122.8,171.1 127.8,161.2 132.9,188.0 137.9,164.1 143.0,124.3 148.1,96.6 153.1,129.0 158.2,115.2 163.3,95.9 168.3,65.4 173.4,25.1 178.4,62.3 183.5,89.7 188.6,128.7 193.6,128.7 198.7,52.9 203.8,113.4 208.8,123.6 213.9,73.8 218.9,87.9 224.0,124.3 229.1,149.1 234.1,168.2 239.2,130.6 244.3,99.2 249.3,89.3 254.4,126.8 259.4,116.8 264.5,112.4 269.6,98.7 274.6,86.5 279.7,76.2 284.8,68.3 289.8,46.2 294.9,57.6 299.9,74.3 305.0,91.7 310.1,147.2 315.1,131.2 320.2,154.7 325.3,200.1 330.3,195.6 335.4,174.4 340.4,178.2 345.5,193.4 350.6,192.6 355.6,160.2 360.7,128.9 365.8,158.4 370.8,114.3 375.9,131.0 380.9,144.2 386.0,143.1 391.1,143.3 396.1,136.0 401.2,129.6 406.3,131.8 411.3,161.4 416.4,205.1 421.4,175.7 426.5,202.8 431.6,182.1 436.6,154.9 441.7,153.1 446.8,150.2 451.8,181.3 456.9,215.0 461.9,220.7 467.0,213.3 472.1,198.6 477.1,162.6 482.2,176.2 487.3,237.1 492.3,228.1 497.4,227.2 502.4,233.4 507.5,233.3 512.6,225.8 517.6,219.5 522.7,245.8 527.8,199.1 532.8,209.9 537.9,237.8 542.9,248.7 548.0,253.1" fill="none" stroke="#16324f" stroke-width="2" stroke-linejoin="round"/><polyline points="62.0,154.9 67.1,108.6 72.1,85.0 77.2,127.4 82.3,103.7 87.3,108.4 92.4,171.9 97.4,241.0 102.5,206.4 107.6,145.7 112.6,123.4 117.7,84.3 122.8,129.7 127.8,132.2 132.9,214.0 137.9,175.7 143.0,88.6 148.1,83.2 153.1,90.7 158.2,120.8 163.3,148.2 168.3,206.1 173.4,159.7 178.4,141.1 183.5,122.3 188.6,151.9 193.6,136.4 198.7,124.0 203.8,228.5 208.8,164.0 213.9,131.4 218.9,126.8 224.0,123.2 229.1,107.0 234.1,106.0 239.2,182.4 244.3,140.0 249.3,93.3 254.4,113.9 259.4,114.0 264.5,111.1 269.6,154.8 274.6,227.2 279.7,147.5 284.8,122.9 289.8,97.4 294.9,120.3 299.9,130.4 305.0,81.3 310.1,205.3 315.1,166.9 320.2,124.2 325.3,109.3 330.3,202.6 335.4,130.8 340.4,168.6 345.5,219.0 350.6,152.7 355.6,111.3 360.7,108.7 365.8,115.8 370.8,140.3 375.9,116.3 380.9,243.3 386.0,172.5 391.1,117.6 396.1,114.3 401.2,102.6 406.3,103.9 411.3,105.1 416.4,233.8 421.4,179.1 426.5,152.6 431.6,180.5 436.6,127.6 441.7,124.6 446.8,130.8 451.8,229.4 456.9,214.8 461.9,179.7 467.0,149.1 472.1,127.7 477.1,131.0 482.2,115.2 487.3,237.7 492.3,217.3 497.4,127.3 502.4,124.6 507.5,111.4 512.6,131.5 517.6,134.8 522.7,249.3 527.8,187.7 532.8,116.7 537.9,139.8 542.9,181.0 548.0,157.7" fill="none" stroke="#e4572e" stroke-width="2" stroke-linejoin="round"/></svg>
+      <div class="caption">The same three, each divided by its mean.</div>
+    </div>
   </div>
-  <div class="callout tip mt frag"><b>Takeaway.</b> REPLACE: the one sentence to remember</div>
-  <aside class="notes">Press once per step and say what each step adds before the next one appears. REPLACE: the example to walk through</aside>
+  <aside class="notes"><p>The model predicts demand divided by the mean of the 28 days before the origin, and the forecast is multiplied back. Lagged features are scaled the same way. The stretch task trains on raw MWh: the score goes from 0.62 to 3.75, because no feature says how large a feeder is and the trees spend their splits on size.</p></aside>
+</section>
+
+<section class="slide" data-label="The split" id="split-by-target-date" data-lo="LO3 LO4">
+  <div class="kicker">Lab 3.2 · step 1</div>
+  <h2>Split by the date of the target, not by the origin</h2>
+  <div class="cols cols-2">
+    <pre class="code s" data-file="Lab 3.2 · step 1"><code class="language-python"># leaks: a row with an earlier origin can
+# have a target day inside the test weeks
+frame[frame.origin &lt; first_test_origin]
+
+# honest: the target is known by then
+frame[frame.date &lt;= first_test_origin]</code></pre>
+    <div class="stack">
+      <div class="stat"><div class="big">5,432</div><div class="lbl">rows whose origin is before the first test origin and whose target day is inside the held-out weeks</div></div>
+      <div class="callout warn small"><b>Every one of them</b> is a label from the test period, handed to the model as training data.</div>
+    </div>
+  </div>
+  <aside class="notes"><p>The training origins are 14 days apart, so the last ones before the test origin have targets up to 14 days into the first held-out fold. A row is a training row only when its target was already observed on the day of the forecast. This is the same rule as on Day 2, in a new place.</p></aside>
+</section>
+
+<section class="slide" data-label="Train" id="one-boosted-model" data-lo="LO3">
+  <div class="kicker">Lab 3.2 · steps 2 and 3</div>
+  <h2>One model, 300 trees, four seconds</h2>
+  <pre class="code s" data-file="Lab 3.2 · step 2"><code class="language-python">params = {**U.LGB, "objective": "l1"}                 # absolute error: the measure we score
+model = lgb.train(params, lgb.Dataset(rows[U.FEATURES], rows.y), num_boost_round=300)
+forecast_mwh = model.predict(test[U.FEATURES]) * test.level</code></pre>
+  <div class="cols cols-3 mt-s">
+    <div class="stat"><div class="big">0.753</div><div class="lbl">the floor on 388 feeders: 0.878 and 0.628 by fold</div></div>
+    <div class="stat"><div class="big">0.622</div><div class="lbl">one boosted model: 0.730 and 0.515</div></div>
+    <div class="stat"><div class="big">0.17</div><div class="lbl">skill against the floor</div></div>
+  </div>
+  <aside class="notes"><p>The model is trained once, before the first held-out fold, and serves both folds: the second fold is forecast by a model 28 days old. The objective is the absolute error because the score is. The settings in U.LGB are plain defaults with a fixed seed; nothing was tuned, and tuning on these two folds would be selection on the test window. LightGBM is used through its own interface; it runs on a laptop processor.</p><p>Source: LightGBM documentation, Parameters.</p></aside>
+</section>
+
+<section class="slide" data-label="Quantiles" id="boosted-quantiles" data-lo="LO3">
+  <div class="kicker">Lab 3.2 · step 4</div>
+  <h2>A quantile is one more model, with the pinball loss as its objective</h2>
+  <div class="cols cols-2">
+    <pre class="code s" data-file="Lab 3.2 · step 4"><code class="language-python">for tau in (0.1, 0.5, 0.9):
+    q[tau] = train_model(rows,
+        objective="quantile", alpha=tau)</code></pre>
+    <table class="t small">
+      <tr><th>Measure, 388 feeders</th><th class="num">Value</th></tr>
+      <tr><td>Pinball loss, scaled</td><td class="num">0.196</td></tr>
+      <tr><td>80% interval covers</td><td class="num">72.1%</td></tr>
+      <tr><td>Quantiles out of order</td><td class="num">0.00%</td></tr>
+    </table>
+  </div>
+  <div class="callout warn small mt-s"><b>72 is not 80.</b> The interval is too narrow, like every model's own interval on Day 2. The repair is the same: rebuild it from backtest errors.</div>
+  <aside class="notes"><p>Three models, nine seconds. Nothing forces separately trained quantile models to keep their order; here they did, and the lab measures it because on other data they do not. Day 3 scores three quantiles, 0.1, 0.5 and 0.9, and the 80% interval only: the pretrained model of the next session delivers nothing further out, and a scorecard needs the same columns for every row.</p></aside>
+</section>
+
+<section class="slide" data-label="Importance" id="what-the-model-uses" data-lo="LO3">
+  <div class="kicker">Lab 3.2 · step 5</div>
+  <h2>Half of the model's gain comes from one feature</h2>
+  <div class="bars">
+    <div class="row"><span>cdd_change</span><div class="bar c-coral" style="--w:100%"></div><span class="val">50%</span></div>
+    <div class="row"><span>year_ago</span><div class="bar c-teal" style="--w:25%"></div><span class="val">12%</span></div>
+    <div class="row"><span>dow_profile</span><div class="bar c-teal" style="--w:22%"></div><span class="val">11%</span></div>
+    <div class="row"><span>kind</span><div class="bar c-cyan" style="--w:15%"></div><span class="val">7%</span></div>
+    <div class="row"><span>eight others</span><div class="bar c-navy" style="--w:40%"></div><span class="val">20%</span></div>
+  </div>
+  <div class="callout tip small mt"><b>Read it as a review.</b> The model leans on the expected change in cooling demand. If that column leaked, half the model would be built on it.</div>
+  <aside class="notes"><p>Importance by gain: the share of the total reduction in loss owed to splits on each feature. It says what the model uses, not what causes demand. A feature with a very large share is the first to audit for leakage. The floor is inside the model as year_ago: a global model can learn when to trust it.</p></aside>
+</section>
+
+<section class="slide" id="check-global-split" data-lo="LO3">
+  <div class="kicker">Checkpoint</div>
+  <h2>What is wrong with this training table?</h2>
+  <div class="quiz" data-type="single" data-lo="LO3">
+    <p class="lead">A global model forecasts 28 days ahead from a table with one row per series, origin and horizon day. The analyst trains on all rows whose origin is before 1 June and tests at the origin of 1 June. The score is far better than any other's. What should be checked first?</p>
+    <div class="opts">
+      <div class="opt" data-why="Looks at the amount of data: more rows do not explain a score that is too good">Whether the training table has enough rows per series</div>
+      <div class="opt" data-why="Looks at tuning: the number of trees changes the score a little, not a lot">Whether the number of trees was tuned</div>
+      <div class="opt" data-why="Looks at a transformation: scaling changes accuracy but hands the model no future values">Whether the target was scaled per series</div>
+      <div class="opt" data-ok>Whether training rows have target days after 1 June</div>
+    </div>
+    <div class="callout tip why"><b>Why.</b> A row with an origin of 25 May and a horizon of 28 days has a target on 22 June. Split by the date of the target.</div>
+  </div>
+  <aside class="notes"><p>Answer: D. With origins 7 days apart, the last three origins before 1 June put up to 21 days of test-period labels into training.</p></aside>
 </section>
 
 <section class="slide lab" id="lab-3-2" data-auto="lab" data-lab="3.2">
-  <aside class="notes">REPLACE: what to watch for while participants work, the typical problems, and the fallback for anyone who did not finish an earlier lab</aside>
+  <aside class="notes"><p>Walk the room. Building the frame takes about half a minute; training takes seconds. Usual problems: splitting by origin (the check names the 5,432 rows); forgetting to multiply the prediction by the level; passing alpha with the l1 objective. Colab and a laptop give the same numbers to the third decimal because the seed and the thread count are fixed. The lab starts from the data files only.</p></aside>
 </section>
 
-<!-- Session 3 -->
-
+<!-- ======================= SESSION 3 ======================= -->
 <section class="slide section" id="s3" data-auto="section" data-session="3"></section>
 
-<section class="slide" id="s3-idea" data-lo="LO3">
-  <div class="kicker">REPLACE: the question this slide answers</div>
-  <h2>REPLACE: one idea, stated as a sentence</h2>
-  <div class="cols cols-2">
-    <ul class="bullets">
-      <li>REPLACE: at most six bullets, each a complete thought</li>
-      <li>REPLACE: bold the key phrase; numbers come from the lab run, not from memory</li>
-    </ul>
-    <div class="card c-teal"><h4>In the case study</h4><p class="small mb0">REPLACE: tie the idea to the case study and its data</p></div>
+<section class="slide" data-label="Pretrained" id="what-pretraining-buys" data-lo="LO3">
+  <div class="kicker">A third family</div>
+  <h2>A forecaster trained on other people's series, used on yours as it is</h2>
+  <div class="flow">
+    <div class="step c-navy"><b>Pretraining</b>a large collection of real and synthetic series, done once by the publisher</div>
+    <div class="arrow">→</div>
+    <div class="step c-teal"><b>Context</b>you pass the recent history of one series</div>
+    <div class="arrow">→</div>
+    <div class="step c-coral"><b>Forecast</b>quantiles for the next days. No training on your data</div>
   </div>
-  <div class="callout warn mt"><b>What goes wrong.</b> REPLACE: the failure participants will hit, and how to recognise it</div>
-  <aside class="notes">REPLACE: what to say, the demo to run, the question to ask the room, the common failure and its fix</aside>
+  <div class="callout note mt"><b>Zero-shot</b> means the model has never seen this series or any series like it from you. What it knows of your data is the context you pass in.</div>
+  <aside class="notes"><p>These models are often called time series foundation models. Families named in the entry: Chronos, TimesFM, Moirai. They differ in architecture and in what they accept; the lab uses the smallest member of one family because it runs on a processor. Treat the model as one more baseline: it enters the same backtest and gets the same columns as every other method.</p><p>Sources: Ansari et al. (2024), Chronos: Learning the Language of Time Series; Das et al. (2024), A decoder-only foundation model for time-series forecasting; Woo et al. (2024), Unified Training of Universal Time Series Forecasting Transformers.</p></aside>
 </section>
 
-<section class="slide" id="s3-steps" data-lo="LO3">
-  <div class="kicker">Step by step</div>
-  <h2>REPLACE: a process, shown one step per key press</h2>
-  <div class="flow">
-    <div class="step c-teal"><b>1 · REPLACE: name</b>REPLACE: what happens first</div>
-    <div class="arrow frag" data-frag="b">→</div><div class="step c-cyan frag" data-frag="b"><b>2 · REPLACE: name</b>REPLACE: the next piece</div>
-    <div class="arrow frag" data-frag="c">→</div><div class="step c-coral frag" data-frag="c"><b>3 · REPLACE: name</b>REPLACE: the result</div>
+<section class="slide" data-label="What it sees" id="what-the-model-sees" data-lo="LO3">
+  <div class="kicker">Read the interface before the scores</div>
+  <h2>The model in the lab sees one thing: the series' own past</h2>
+  <div class="cols cols-2">
+    <div class="card c-teal"><h4>It can use</h4><p class="small mb0">Level, trend and repeating patterns inside the context: the week, and the year when the context is long enough to hold one.</p></div>
+    <div class="card c-coral"><h4>It cannot know</h4><p class="small mb0">That Eid falls in the horizon. That a heat wave is expected. What kind of feeder this is. No calendar and no weather are passed in.</p></div>
   </div>
-  <div class="callout tip mt frag"><b>Takeaway.</b> REPLACE: the one sentence to remember</div>
-  <aside class="notes">Press once per step and say what each step adds before the next one appears. REPLACE: the example to walk through</aside>
+  <div class="callout tip mt"><b>Predict before you run.</b> Where should a model like this do well against the floor, and where should it lose?</div>
+  <aside class="notes"><p>Take predictions from the room and write them down; the lab's by-fold scores test them. Newer members of these families accept covariates (Chronos-2 does); the small model of the lab does not. The context in the lab is the last 512 days, which holds one full year.</p></aside>
+</section>
+
+<section class="slide" data-label="Run it" id="run-zero-shot" data-lo="LO3">
+  <div class="kicker">Lab 3.3 · steps 1 and 2</div>
+  <h2>Three lines, no training, and a clock</h2>
+  <pre class="code s" data-file="Lab 3.3 · step 2"><code class="language-python">contexts = [context_of(W, f, origin, 512) for f in W.columns]   # 388 arrays of history
+q, info = U.pretrained(contexts)        # shape: series x quantiles (0.1, 0.5, 0.9) x 28 days
+print(info["model"], info["seconds"])</code></pre>
+  <div class="cols cols-2 mt-s">
+    <div class="card c-teal flat"><h4>In Colab</h4><p class="small mb0">The setup cell installs the package and the weights (9 million parameters) load into the Colab runtime. Runs on its processor.</p></div>
+    <div class="card c-coral flat"><h4>Anywhere else</h4><p class="small mb0">A stand-in answers and says so in capital letters. Its numbers are not a pretrained model's result.</p></div>
+  </div>
+  <aside class="notes"><p>Trainer: this is the one lab of the course that needs Colab for its real result. On a laptop without the package the notebook runs end to end with the stand-in, which repeats each feeder's weekday profile, and every output it produces is labelled STAND-IN. Do not let a stand-in row into anyone's scorecard. info reports the model that answered and the seconds it took; the run time goes into the scorecard.</p></aside>
+</section>
+
+<section class="slide" data-label="Same columns" id="score-it-like-any-method" data-lo="LO3">
+  <div class="kicker">Lab 3.3 · step 3</div>
+  <h2>Score it like any other method: the same feeders, days and columns</h2>
+  <table class="t small">
+    <tr><th>Method, 388 feeders, two folds</th><th class="num">Scaled error</th><th class="num">Pinball</th><th class="num">80% covers</th><th class="num">Seconds</th></tr>
+    <tr><td>Floor: same weekday last year</td><td class="num">0.753</td><td class="num">none</td><td class="num">none</td><td class="num">0</td></tr>
+    <tr><td>One boosted model</td><td class="num">0.622</td><td class="num">0.196</td><td class="num">72.1%</td><td class="num">49</td></tr>
+    <tr class="hl"><td>Pretrained, zero-shot</td><td class="num">your run</td><td class="num">your run</td><td class="num">your run</td><td class="num">your run</td></tr>
+  </table>
+  <div class="callout note small mt-s"><b>Fill the last row from your own Colab run.</b> Then compare the two folds: which one did the model find harder, and what did it not know?</div>
+  <aside class="notes"><p>The row is left open on purpose: the course's own build ran this lab with the stand-in only, so no measured number for the pretrained model is printed in these slides. Ask three participants to read out their Colab rows; they should agree to the second decimal. The 49 seconds of the boosted model are the frame, the training and the three quantile models together.</p></aside>
+</section>
+
+<section class="slide" data-label="Context" id="context-length" data-lo="LO3">
+  <div class="kicker">Lab 3.3 · stretch</div>
+  <h2>The context is the model's only knowledge of your series</h2>
+  <div class="cols cols-2">
+    <div class="card c-navy"><h4>512 days</h4><p class="small mb0">Holds a full year. The model can see that demand fell at this time last year.</p></div>
+    <div class="card c-purple"><h4>56 days</h4><p class="small mb0">Holds eight weeks. The model sees a weekly pattern and a short trend, and no year.</p></div>
+  </div>
+  <div class="callout tip mt"><b>Measure the difference.</b> It tells you what the model would do for a feeder that is eight weeks old. That feeder exists: Lab 4.2.</div>
+  <aside class="notes"><p>The stretch scores both context lengths on the same folds. This is the pretrained model's version of a question asked of every method: how much history does it need? For local statistical models the answer was three years for an annual season. A pretrained model degrades more gently, because it brings patterns learned elsewhere.</p></aside>
+</section>
+
+<section class="slide" data-label="Licences" id="read-the-model-card" data-lo="LO3">
+  <div class="kicker">Lab 3.3 · step 4 · model cards read on 15 November 2026</div>
+  <h2>The licence is on the model card, and it is not the same for every family</h2>
+  <table class="t small">
+    <tr><th>Family</th><th>Model</th><th class="num">Parameters</th><th>Licence</th><th>Use by a company</th></tr>
+    <tr><td>Chronos-Bolt</td><td>amazon/chronos-bolt-tiny</td><td class="num">8.7 M</td><td>Apache-2.0</td><td>yes</td></tr>
+    <tr><td>Chronos-2</td><td>amazon/chronos-2</td><td class="num">119.5 M</td><td>Apache-2.0</td><td>yes</td></tr>
+    <tr><td>TimesFM</td><td>google/timesfm-2.5-200m-pytorch</td><td class="num">231.3 M</td><td>Apache-2.0</td><td>yes</td></tr>
+    <tr class="hl"><td>Moirai</td><td>Salesforce/moirai-2.0-R-small</td><td class="num">11.4 M</td><td>CC BY-NC 4.0</td><td>no: non-commercial</td></tr>
+  </table>
+  <div class="callout warn small mt-s"><b>A licence is a fact with a date.</b> Read the card again on the day you decide, and record the date beside the licence.</div>
+  <aside class="notes"><p>The table is the file data/model_cards.json, read from the Hugging Face Hub on the date shown. The code and the weights of a model can carry different licences; the weights' licence governs use of the model. A non-commercial licence rules a model out for Shams Power's operations whatever it scores. Licences changed between versions of these families: never copy a licence from a slide, this one included.</p><p>Sources: the four model cards on the Hugging Face Hub; Apache License 2.0; Creative Commons BY-NC 4.0.</p></aside>
+</section>
+
+<section class="slide" id="check-pretrained-baseline" data-lo="LO3">
+  <div class="kicker">Checkpoint</div>
+  <h2>What does this result allow you to say?</h2>
+  <div class="quiz" data-type="single" data-lo="LO3">
+    <p class="lead">A pretrained forecaster, zero-shot, has a skill of 0.10 on a fold of ordinary weeks and of -0.30 on a fold with a moving holiday. It was given 512 days of history and nothing else. Which conclusion is supported?</p>
+    <div class="opts">
+      <div class="opt" data-why="Generalises from one family and one size: the result is about this model with this input">Pretrained forecasters do not work on energy demand</div>
+      <div class="opt" data-ok>It lacks the calendar: a baseline for ordinary weeks, not for holidays</div>
+      <div class="opt" data-why="Averages away the finding: the mean hides that the loss sits in one kind of week">Its skill is -0.10 on average, so it is slightly worse than the floor</div>
+      <div class="opt" data-why="Blames the amount of history: a moving holiday is at a different date in any context of past days">It needs a longer context to learn the holiday</div>
+    </div>
+    <div class="callout tip why"><b>Why.</b> Read a score against what the method was given. A model that sees only past values cannot place a holiday that moves 11 days a year.</div>
+  </div>
+  <aside class="notes"><p>Answer: B. The numbers in this question are invented for the question; they are not the lab's result. The reasoning is what the lab's by-fold comparison asks for.</p></aside>
 </section>
 
 <section class="slide lab" id="lab-3-3" data-auto="lab" data-lab="3.3">
-  <aside class="notes">REPLACE: what to watch for while participants work, the typical problems, and the fallback for anyone who did not finish an earlier lab</aside>
+  <aside class="notes"><p>Walk the room. Ask everyone to open the notebook in Colab from the course page. The first run installs the package and loads the weights: allow a few minutes on a slow connection, and pair participants whose Colab is blocked with a neighbour. Check that the first output says the model's name and not STAND-IN. The licence step and the scorecard row can be done while the forecasts run. Ask participants to copy the printed row: Lab 3.4 takes it.</p></aside>
 </section>
 
-<!-- Session 4 -->
-
+<!-- ======================= SESSION 4 ======================= -->
 <section class="slide section" id="s4" data-auto="section" data-session="4"></section>
 
-<section class="slide" id="s4-idea" data-lo="LO3">
-  <div class="kicker">REPLACE: the question this slide answers</div>
-  <h2>REPLACE: one idea, stated as a sentence</h2>
-  <div class="cols cols-2">
-    <ul class="bullets">
-      <li>REPLACE: at most six bullets, each a complete thought</li>
-      <li>REPLACE: bold the key phrase; numbers come from the lab run, not from memory</li>
-    </ul>
-    <div class="card c-teal"><h4>In the case study</h4><p class="small mb0">REPLACE: tie the idea to the case study and its data</p></div>
+<section class="slide" data-label="One column" id="accuracy-is-one-column" data-lo="LO3">
+  <div class="kicker">Choosing among families</div>
+  <h2>Accuracy is one column of the decision</h2>
+  <div class="cols cols-4 gap-s">
+    <div class="card c-navy"><h4>Accuracy</h4><p class="small mb0">Skill against the floor, pinball loss, coverage. On the same series and days.</p></div>
+    <div class="card c-teal"><h4>Run time</h4><p class="small mb0">Seconds per 1,000 forecasts. Every week, for 400 feeders.</p></div>
+    <div class="card c-coral"><h4>Upkeep</h4><p class="small mb0">What must be kept working: fits, a feature pipeline, a pinned model.</p></div>
+    <div class="card c-purple"><h4>Licence</h4><p class="small mb0">Of the software and of the weights, with the date it was read.</p></div>
   </div>
-  <div class="callout warn mt"><b>What goes wrong.</b> REPLACE: the failure participants will hit, and how to recognise it</div>
-  <aside class="notes">REPLACE: what to say, the demo to run, the question to ask the room, the common failure and its fix</aside>
+  <div class="callout note mt"><b>The question of this session.</b> Which family would you run every week for a year, and what would make you change your mind?</div>
+  <aside class="notes"><p>Three days of labs produced numbers for five families on the same 388 feeders and the same eight weeks. A forecasting method that nobody can keep running has an accuracy of nothing. The scorecard puts the costs beside the scores so that the choice can be argued, written down and revisited.</p></aside>
 </section>
 
-<section class="slide" id="s4-steps" data-lo="LO3">
-  <div class="kicker">Step by step</div>
-  <h2>REPLACE: a process, shown one step per key press</h2>
-  <div class="flow">
-    <div class="step c-teal"><b>1 · REPLACE: name</b>REPLACE: what happens first</div>
-    <div class="arrow frag" data-frag="b">→</div><div class="step c-cyan frag" data-frag="b"><b>2 · REPLACE: name</b>REPLACE: the next piece</div>
-    <div class="arrow frag" data-frag="c">→</div><div class="step c-coral frag" data-frag="c"><b>3 · REPLACE: name</b>REPLACE: the result</div>
+<section class="slide" data-label="Skill" id="skill-against-the-floor" data-lo="LO3">
+  <div class="kicker">Lab 3.4 · steps 1 and 2 · 388 feeders, two folds</div>
+  <h2>388 fitted models can lose to a table lookup</h2>
+  <table class="t small">
+    <tr><th>Family</th><th class="num">Scaled error</th><th class="num">By fold</th><th class="num">Skill</th></tr>
+    <tr><td>Floor: same weekday last year</td><td class="num">0.753</td><td class="num">0.878, 0.628</td><td class="num">0</td></tr>
+    <tr><td>ETS, weekly season, per feeder</td><td class="num">0.898</td><td class="num">1.071, 0.725</td><td class="num">-0.19</td></tr>
+    <tr><td>Decompose then ETS, per feeder</td><td class="num">0.726</td><td class="num">0.840, 0.612</td><td class="num">0.04</td></tr>
+    <tr class="hl"><td>One boosted model, all feeders</td><td class="num">0.622</td><td class="num">0.730, 0.515</td><td class="num">0.17</td></tr>
+    <tr><td>Pretrained, zero-shot</td><td class="num">your run</td><td class="num">your run</td><td class="num">your run</td></tr>
+  </table>
+  <div class="callout tip small mt-s"><b>Read the folds.</b> Every method moves by 0.2 or more from one fold to the next. A skill of 0.04 is inside that spread; 0.17, ahead in both folds, is not.</div>
+  <aside class="notes"><p>Skill is 1 minus the method's error over the floor's. The weekly ETS repeats Day 2's finding on 388 series: without the annual season it loses to the floor. Decomposing first brings it level with the floor. The global model is the only family clearly ahead. The pretrained row comes from each participant's Colab run of Lab 3.3; the supplied file holds a stand-in, which the notebook shows and leaves out of the ranking.</p></aside>
+</section>
+
+<section class="slide" data-label="Cost" id="run-time-upkeep-licence" data-lo="LO3">
+  <div class="kicker">Lab 3.4 · step 3</div>
+  <h2>The same five rows, by what they cost to run and to keep</h2>
+  <table class="t small">
+    <tr><th>Family</th><th class="num">Seconds per 1,000 forecasts</th><th>What must be kept working</th><th>Licence</th></tr>
+    <tr><td>Floor</td><td class="num">0</td><td>nothing to fit; one year of history</td><td>none needed</td></tr>
+    <tr><td>ETS, weekly, per feeder</td><td class="num">181</td><td>a fit per feeder at every run</td><td>Apache-2.0</td></tr>
+    <tr><td>Decompose then ETS</td><td class="num">1,884</td><td>a slow fit per feeder; three years of history</td><td>Apache-2.0</td></tr>
+    <tr><td>One boosted model</td><td class="num">63</td><td>a feature pipeline and one training job</td><td>MIT</td></tr>
+    <tr><td>Pretrained, zero-shot</td><td class="num">your run</td><td>a pinned model version and its runtime</td><td>Apache-2.0</td></tr>
+  </table>
+  <div class="callout warn small mt-s"><b>One machine's seconds.</b> Read the ratios: the per-feeder decomposition costs 30 times the one boosted model, for a skill of 0.04 against 0.17.</div>
+  <aside class="notes"><p>Run times were measured on the laptop that built the course: 776 forecasts of 28 days each. The boosted model's time includes building the frame and training three quantile models. Upkeep is the course's judgment on a scale from 1 to 4, printed in the lab; participants may change it and must say why. Licences: statsforecast is Apache-2.0, LightGBM is MIT, the Chronos-Bolt weights are Apache-2.0 on the card read for Lab 3.3.</p><p>Sources: the licence files of the statsforecast and LightGBM repositories; the model card of amazon/chronos-bolt-tiny.</p></aside>
+</section>
+
+<section class="slide" data-label="Weights" id="two-planners-two-weightings" data-lo="LO3">
+  <div class="kicker">Lab 3.4 · step 4</div>
+  <h2>Two readers weigh the same scorecard differently</h2>
+  <table class="t small">
+    <tr><th>Criterion, each scored 0 to 1</th><th class="num">Purchasing · Omar</th><th class="num">Operations · Hamad</th></tr>
+    <tr><td>Skill against the floor</td><td class="num">0.20</td><td class="num">0.25</td></tr>
+    <tr><td>Pinball loss</td><td class="num">0.40</td><td class="num">0.15</td></tr>
+    <tr><td>Distance of coverage from 80%</td><td class="num">0.20</td><td class="num">0.10</td></tr>
+    <tr><td>Run time, on a logarithm</td><td class="num">0.10</td><td class="num">0.20</td></tr>
+    <tr><td>Upkeep</td><td class="num">0.10</td><td class="num">0.30</td></tr>
+  </table>
+  <div class="callout note small mt-s"><b>Where the weights come from.</b> Omar buys on a quantile, so a method without quantiles is of little use to him. Hamad has 400 feeders and a small team.</div>
+  <aside class="notes"><p>Each criterion is rescaled so the worst measured row is 0 and the best is 1; a method with no quantiles scores 0 on the two quantile criteria. The weights are the course's reading of the two requests of Lab 1.1. They are an argument, not a measurement: the lab asks participants to defend or change them, and the stretch shows how little it takes to change the outcome.</p></aside>
+</section>
+
+<section class="slide" data-label="Ranking" id="the-ranking-flips" data-lo="LO3">
+  <div class="kicker">Lab 3.4 · step 4 · four measured rows</div>
+  <h2>The two weightings do not agree on the first place</h2>
+  <table class="t small">
+    <tr><th>Family</th><th class="num">Purchasing</th><th class="num">Operations</th></tr>
+    <tr><td>Floor: same weekday last year</td><td class="num">0.31</td><td class="num"><b>0.63</b></td></tr>
+    <tr><td>ETS, weekly season, per feeder</td><td class="num">0.07</td><td class="num">0.20</td></tr>
+    <tr><td>Decompose then ETS, per feeder</td><td class="num">0.58</td><td class="num">0.35</td></tr>
+    <tr><td>One boosted model, all feeders</td><td class="num"><b>0.83</b></td><td class="num">0.57</td></tr>
+  </table>
+  <div class="callout warn small mt-s"><b>Stretch.</b> Lower the weight of upkeep for operations from 0.30 to 0.25 and the boosted model takes first place. A choice that turns on 0.05 of a weight is a choice to discuss with Hamad, not to compute.</div>
+  <aside class="notes"><p>For purchasing the boosted model wins by a wide margin: best skill, best pinball loss. For operations the floor wins: it costs nothing to run or to keep, and its point error is within 0.03 of the best per-feeder statistical method. Neither result is wrong. The scorecard has done its work when the disagreement is on the table with its reasons.</p></aside>
+</section>
+
+<section class="slide" data-label="Decide" id="write-the-choice" data-lo="LO3">
+  <div class="kicker">Lab 3.4 · step 5</div>
+  <h2>A scorecard does not decide: you do, and you write down why</h2>
+  <div class="cols cols-2">
+    <div class="card c-teal"><h4>The decision-log entry</h4>
+      <ul class="bullets small">
+        <li><b>Chosen:</b> a row of the scorecard.</li>
+        <li><b>Why:</b> the criteria and the numbers, and for whom.</li>
+        <li><b>Simplest within noise:</b> is a simpler method inside the fold-to-fold spread of the winner?</li>
+        <li><b>Would change it:</b> one result or one change of terms.</li>
+      </ul>
+    </div>
+    <div class="card c-coral"><h4>One defensible answer</h4><p class="small mb0">The desk runs one method for both readers: the boosted model, ahead of the floor in both folds by more than a tenth, with the floor kept as the fallback. If operations were the only reader, the floor would stay.</p></div>
   </div>
-  <div class="callout tip mt frag"><b>Takeaway.</b> REPLACE: the one sentence to remember</div>
-  <aside class="notes">Press once per step and say what each step adds before the next one appears. REPLACE: the example to walk through</aside>
+  <aside class="notes"><p>The solution notebook holds this answer and labels it as one of several. An entry that chooses the floor for operations and the boosted model for purchasing is as defensible if it says who pays for two methods. What is not defensible: an entry without numbers, or one that does not say what would reopen the choice. The capstone README needs the same table for the participant's three families.</p></aside>
+</section>
+
+<section class="slide" id="check-scorecard-choice" data-lo="LO3">
+  <div class="kicker">Checkpoint</div>
+  <h2>Which choice can be defended?</h2>
+  <div class="quiz" data-type="single" data-lo="LO3">
+    <p class="lead">Skill against the floor on 200 series: X 0.21, Y 0.20, Z 0.05. X is a pretrained model under a non-commercial licence. Y is a boosted model under a permissive licence. Z is the fastest. The forecasts will run a utility's weekly purchasing. Which family?</p>
+    <div class="opts">
+      <div class="opt" data-why="Ranks on accuracy alone: the licence rules X out for a company's operations whatever it scores">X: it has the highest skill</div>
+      <div class="opt" data-why="Ranks on run time alone: Z gives up three quarters of the skill for seconds that purchasing does not need">Z: it is the fastest of the three</div>
+      <div class="opt" data-ok>Y: within 0.01 of the best, and its licence permits the use</div>
+      <div class="opt" data-why="Treats the licence as a detail to settle later: use in operations comes first, permission cannot follow">X now, and ask about the licence after the pilot</div>
+    </div>
+    <div class="callout tip why"><b>Why.</b> A licence is a gate, not a weight: a method that may not be used has no score. Among the methods that pass, 0.01 of skill is inside any noise.</div>
+  </div>
+  <aside class="notes"><p>Answer: C. The licence was read first on purpose in Lab 3.3. Ask what else is a gate and not a weight in the participants' own organisations: data residency, an approved-software list, a model that must be explainable to a regulator.</p></aside>
 </section>
 
 <section class="slide lab" id="lab-3-4" data-auto="lab" data-lab="3.4">
-  <aside class="notes">REPLACE: what to watch for while participants work, the typical problems, and the fallback for anyone who did not finish an earlier lab</aside>
+  <aside class="notes"><p>Walk the room. No model runs in this lab: every number is read from data/reference, so it works on any machine in seconds. Participants who ran Lab 3.3 in Colab paste their printed row into MY_PRETRAINED at the top, and the pretrained family joins the ranking; without it the stand-in row is shown and excluded. Give most of the time to step 5 and ask three participants to read their entry aloud.</p></aside>
 </section>
 
-<section class="slide" id="wrap-up">
+<!-- ======================= CLOSING ======================= -->
+<section class="slide" id="wrap-up" data-label="Recap">
   <div class="kicker">Day 3 · wrap-up</div>
   <h2>Three things to keep</h2>
   <div class="cols cols-3">
-    <div class="card c-teal"><h4>Remember</h4><p class="small mb0">REPLACE: one idea participants keep</p></div>
-    <div class="card c-coral"><h4>Remember</h4><p class="small mb0">REPLACE: one idea participants keep</p></div>
-    <div class="card c-purple"><h4>Remember</h4><p class="small mb0">REPLACE: one idea participants keep</p></div>
+    <div class="card c-teal"><h4>Coherent, then better</h4><p class="small mb0">Reconciling passed the regional model's knowledge to the feeders: 0.72 to 0.65 in Al-Dana. It helped in 8 regions of 12, where the trusted level was the better one.</p></div>
+    <div class="card c-coral"><h4>One model, many series</h4><p class="small mb0">One boosted model on features known at the origin: skill 0.17 on 388 feeders. Split by the date of the target.</p></div>
+    <div class="card c-purple"><h4>A baseline and a gate</h4><p class="small mb0">A pretrained forecaster is one more row, scored like the others. Its licence is read before its score.</p></div>
   </div>
+  <aside class="notes"><p>Ask each table: which row of the scorecard would you defend to Hamad, and which to Omar? Collect one answer of each kind.</p></aside>
 </section>
 
 <section class="slide dark" id="next" data-label="Next">
   <div class="kicker">Next</div>
   <h2>Day 4: Review and communicate</h2>
-  <p class="lead">REPLACE: what participants prepare before then; unfinished labs can be finished at home</p>
-  <aside class="notes">REPLACE: accounts, installs or reading participants need before the next unit</aside>
+  <p class="lead">A backtest with a score that is too good and three faults to find. Twelve feeders with eight weeks of history. Whether an average of methods beats the best one, chosen honestly. And the fan chart and note that a planner reads. The capstone dataset is chosen in the last lab.</p>
+  <aside class="notes"><p>Tomorrow's first lab is a review: participants read someone else's notebook before they run it. Ask them to look tonight at the two capstone datasets described in labs/capstone/README.md and to come with a first idea of the decision their forecast would serve.</p></aside>
 </section>

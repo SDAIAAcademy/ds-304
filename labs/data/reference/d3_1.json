@@ -1,0 +1,27 @@
+{
+ "region": "R05",
+ "name": "Al-Dana",
+ "feeders": 37,
+ "gaps": [
+  3.0,
+  2.4
+ ],
+ "table": {
+  "base (not coherent)": {
+   "feeders": 0.722,
+   "region": 0.463
+  },
+  "bottom-up": {
+   "feeders": 0.722,
+   "region": 0.634
+  },
+  "top-down": {
+   "feeders": 0.65,
+   "region": 0.463
+  },
+  "least squares": {
+   "feeders": 0.651,
+   "region": 0.465
+  }
+ }
+}

@@ -1,0 +1,33 @@
+{
+ "floor": {
+  "mase": 0.753,
+  "seconds": 0.0,
+  "fits": 776,
+  "by_fold": [
+   0.878,
+   0.628
+  ]
+ },
+ "ets_weekly": {
+  "mase": 0.898,
+  "pinball": 0.346,
+  "cover80": 0.956,
+  "seconds": 140.3,
+  "fits": 776,
+  "by_fold": [
+   1.071,
+   0.725
+  ]
+ },
+ "stl_ets": {
+  "mase": 0.726,
+  "pinball": 0.252,
+  "cover80": 0.876,
+  "seconds": 1461.6,
+  "fits": 776,
+  "by_fold": [
+   0.84,
+   0.612
+  ]
+ }
+}
