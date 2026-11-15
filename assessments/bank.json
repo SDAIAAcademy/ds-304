@@ -3,138 +3,241 @@
   "version": 1,
   "questions": [
     {
-      "id": "q-example-1",
+      "id": "q-floor-choice-01",
       "type": "single",
-      "prompt": "REPLACE: a practice question on LO1, as a short scenario",
+      "prompt": "A water utility backtests three naive forecasts of daily consumption over 12 rolling origins with a 14-day horizon. Scaled errors: last day 1.40, same weekday last week 0.95, same weekday 52 weeks ago 1.20. Which one is the benchmark floor for this series?",
       "options": [
-        "REPLACE: a wrong option that a common misconception makes tempting",
-        "REPLACE: the right answer",
-        "REPLACE: a wrong option that a common misconception makes tempting",
-        "REPLACE: a wrong option that a common misconception makes tempting"
+        "The last day, because it uses the newest value",
+        "The same weekday last week, at 0.95",
+        "The same weekday 52 weeks ago, as for electricity",
+        "The mean of the three, at about 1.18"
       ],
       "correct": [
         1
       ],
-      "explanation": "REPLACE: why the right answer is right, in one sentence",
+      "explanation": "The floor is the best naive method in the backtest of this series at this horizon: here the weekly seasonal naive, at 0.95. Which naive method wins differs from series to series.",
       "misconceptions": [
-        "REPLACE: the misconception behind this option",
+        "Takes the freshest data for the best forecast: the backtest says it is the worst of the three",
         "",
-        "REPLACE: the misconception behind this option",
-        "REPLACE: the misconception behind this option"
+        "Carries the result of another series over: the floor is whichever naive method wins on this series and horizon",
+        "Averages scores as if that made a method: the floor is one naive method, the best one"
       ],
       "lo": [
         "LO1"
       ],
       "day": "day1",
-      "session": 1,
+      "session": 4,
+      "slide": "the-floor-table",
       "level": "apply",
       "pool": "practice",
       "weight": 1
     },
     {
-      "id": "q-example-2",
-      "type": "tf",
-      "prompt": "REPLACE: a statement on LO2 that is true",
-      "options": [
-        "True",
-        "False"
-      ],
-      "correct": [
-        0
-      ],
-      "explanation": "REPLACE: why the right answer is right, in one sentence",
-      "misconceptions": [
-        "",
-        "REPLACE: the misconception behind this option"
-      ],
-      "lo": [
-        "LO2"
-      ],
-      "day": "day1",
-      "session": 1,
-      "level": "understand",
-      "pool": "practice",
-      "weight": 1
-    },
-    {
-      "id": "q-example-3",
+      "id": "q-rolling-origins-01",
       "type": "single",
-      "prompt": "REPLACE: a practice question on LO3, as a short scenario",
+      "prompt": "You must test a 28-day forecast on the last 168 days of a series, so that every one of those days is tested exactly once. How many rolling origins do you need, and how far apart?",
       "options": [
-        "REPLACE: a wrong option that a common misconception makes tempting",
-        "REPLACE: the right answer",
-        "REPLACE: a wrong option that a common misconception makes tempting",
-        "REPLACE: a wrong option that a common misconception makes tempting"
+        "168 origins, one day apart",
+        "1 origin, 168 days before the end",
+        "24 origins, 7 days apart",
+        "6 origins, 28 days apart"
       ],
       "correct": [
-        1
+        3
       ],
-      "explanation": "REPLACE: why the right answer is right, in one sentence",
+      "explanation": "168 / 28 = 6 folds. With origins 28 days apart, the 28-day test windows touch without overlapping, so each day is tested once.",
       "misconceptions": [
-        "REPLACE: the misconception behind this option",
-        "",
-        "REPLACE: the misconception behind this option",
-        "REPLACE: the misconception behind this option"
+        "Moves the origin every day: each day would then be tested up to 28 times, not once",
+        "Uses one long fold: the horizon would be 168 days, not 28",
+        "Spaces the origins by the season, not by the horizon: the 28-day test windows would overlap",
+        ""
       ],
       "lo": [
-        "LO3"
+        "LO1"
       ],
       "day": "day1",
-      "session": 1,
+      "session": 4,
+      "slide": "rolling-origins",
       "level": "apply",
       "pool": "practice",
       "weight": 1
     },
     {
-      "id": "q-example-4",
-      "type": "tf",
-      "prompt": "REPLACE: a statement on LO4 that is true",
+      "id": "q-scaled-error-01",
+      "type": "single",
+      "prompt": "On the test days a forecast for one feeder has a mean absolute error of 9 MWh. Inside the training data, the weekly seasonal naive forecast had a mean absolute error of 6 MWh. What is the scaled error, and what does it say?",
       "options": [
-        "True",
-        "False"
+        "1.5: the forecast errs 1.5 times as much as last week's value did in training",
+        "0.67: the forecast is a third better than the seasonal naive forecast",
+        "3 MWh: the forecast is 3 MWh worse than the seasonal naive forecast",
+        "1.5: the forecast is wrong by 150% of demand on an average day"
       ],
       "correct": [
         0
       ],
-      "explanation": "REPLACE: why the right answer is right, in one sentence",
+      "explanation": "9 / 6 = 1.5. The scaled error divides the test error by the in-sample error of the weekly seasonal naive forecast, so it has no unit and can be compared across series.",
       "misconceptions": [
         "",
-        "REPLACE: the misconception behind this option"
+        "Inverts the ratio: the test error goes on top, the training yardstick below",
+        "Subtracts where the measure divides: a scaled error has no unit",
+        "Reads a scaled error as a percentage of demand: it is a ratio of two errors"
       ],
       "lo": [
-        "LO4"
+        "LO1"
       ],
       "day": "day1",
-      "session": 1,
+      "session": 4,
+      "slide": "scaled-error",
+      "level": "apply",
+      "pool": "practice",
+      "weight": 1
+    },
+    {
+      "id": "q-strength-01",
+      "type": "single",
+      "prompt": "After decomposing a region's log demand, the remainder has variance 0.002 and the annual season plus the remainder has variance 0.010. What is the strength of the annual season?",
+      "options": [
+        "0.20",
+        "0.50",
+        "0.80",
+        "5.00"
+      ],
+      "correct": [
+        2
+      ],
+      "explanation": "Strength = 1 - 0.002 / 0.010 = 0.80: the annual season dominates the remainder.",
+      "misconceptions": [
+        "Reports the ratio itself: strength is one minus the ratio",
+        "Guesses the middle without computing the ratio of the two variances",
+        "",
+        "Divides the wrong way round: strength lies between 0 and 1"
+      ],
+      "lo": [
+        "LO1"
+      ],
+      "day": "day1",
+      "session": 3,
+      "slide": "strength-of-a-component",
+      "level": "apply",
+      "pool": "practice",
+      "weight": 1
+    },
+    {
+      "id": "q-log-decomposition-01",
+      "type": "single",
+      "prompt": "A district-cooling plant's daily load has doubled in five years. Its summer peak was 300 MWh above the winter level five years ago and is 600 MWh above it now. How should you decompose the series?",
+      "options": [
+        "Decompose the load itself, with a longer trend window",
+        "Decompose the last year only, where the swing is constant",
+        "Decompose the load without an annual season",
+        "Decompose the logarithm of the load"
+      ],
+      "correct": [
+        3
+      ],
+      "explanation": "The seasonal swing grows with the level, so the parts multiply. On the log scale the swing is a constant addition, which is what an additive decomposition assumes.",
+      "misconceptions": [
+        "Changes the smoothing when the problem is the scale: the swing would still grow with the level",
+        "Throws away the history to hide the problem: one year cannot separate a trend from a season",
+        "Drops the component that is changing: the summer is the main pattern",
+        ""
+      ],
+      "lo": [
+        "LO1"
+      ],
+      "day": "day1",
+      "session": 3,
+      "slide": "series-as-parts",
       "level": "understand",
       "pool": "practice",
       "weight": 1
     },
     {
-      "id": "q-example-5",
+      "id": "q-time-scales-01",
       "type": "single",
-      "prompt": "REPLACE: a practice question on LO5, as a short scenario",
+      "prompt": "You plot six years of daily demand for a commercial district as one line. You see growth and a summer peak, and nothing else. A colleague says the district has no weekly pattern. What do you do before agreeing?",
       "options": [
-        "REPLACE: a wrong option that a common misconception makes tempting",
-        "REPLACE: the right answer",
-        "REPLACE: a wrong option that a common misconception makes tempting",
-        "REPLACE: a wrong option that a common misconception makes tempting"
+        "Plot four weeks of daily values and compute the mean of each weekday",
+        "Plot monthly totals, where patterns are easier to see",
+        "Agree, since six years of data would show a weekly pattern",
+        "Fit a model with a weekly season and see whether it runs"
       ],
       "correct": [
-        1
+        0
       ],
-      "explanation": "REPLACE: why the right answer is right, in one sentence",
+      "explanation": "Each time scale hides the others. A weekly cycle only shows when you zoom to a few weeks, and a weekday profile measures it.",
       "misconceptions": [
-        "REPLACE: the misconception behind this option",
         "",
-        "REPLACE: the misconception behind this option",
-        "REPLACE: the misconception behind this option"
+        "Aggregates further: a monthly total removes the week completely",
+        "Trusts one time scale: at six years a seven-day cycle is thinner than the line",
+        "Lets a model answer what a plot answers: a model fits a season whether or not one is there"
+      ],
+      "lo": [
+        "LO1"
+      ],
+      "day": "day1",
+      "session": 2,
+      "slide": "friday-is-the-low-day",
+      "level": "understand",
+      "pool": "practice",
+      "weight": 1
+    },
+    {
+      "id": "q-cost-quantile-01",
+      "type": "single",
+      "prompt": "A hospital orders oxygen one week ahead. Each unit short costs 3 times what each unit left over costs. The forecast desk can deliver any quantile of next week's use. Which one should the hospital order?",
+      "options": [
+        "The 25th percentile",
+        "The 50th percentile",
+        "The 75th percentile",
+        "The 99th percentile"
+      ],
+      "correct": [
+        2
+      ],
+      "explanation": "The quantile that minimises expected cost is cost of under / (cost of under + cost of over) = 3 / (3 + 1) = 0.75.",
+      "misconceptions": [
+        "Inverts the costs: puts the cost of a surplus on top",
+        "Hands over the middle whatever the costs: right only when the two costs are equal",
+        "",
+        "Treats any shortfall as unacceptable: the stated costs say 3 to 1, not infinite"
       ],
       "lo": [
         "LO5"
       ],
       "day": "day1",
       "session": 1,
+      "slide": "cost-to-quantile",
+      "level": "apply",
+      "pool": "practice",
+      "weight": 1
+    },
+    {
+      "id": "q-data-delay-01",
+      "type": "single",
+      "prompt": "A planner needs a forecast for each of the next 14 days. The meter data reaches the forecast desk 3 days late. How many steps ahead of its last observation must the model forecast to cover the last day the planner needs?",
+      "options": [
+        "11 steps",
+        "14 steps",
+        "17 steps",
+        "42 steps"
+      ],
+      "correct": [
+        2
+      ],
+      "explanation": "The origin is the last day the model has seen, 3 days before the forecast is sent, so the furthest day is 14 + 3 = 17 steps ahead.",
+      "misconceptions": [
+        "Subtracts the delay: late data makes the forecast longer, not shorter",
+        "Counts from the day the forecast is sent, not from the last day of data",
+        "",
+        "Multiplies horizon and delay: the delay is added once"
+      ],
+      "lo": [
+        "LO5"
+      ],
+      "day": "day1",
+      "session": 1,
+      "slide": "data-delay-steps",
       "level": "apply",
       "pool": "practice",
       "weight": 1

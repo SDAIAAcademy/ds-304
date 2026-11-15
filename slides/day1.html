@@ -1,158 +1,558 @@
+<!-- ======================= OPENING ======================= -->
 <section class="slide title" id="title" data-auto="title">
-  <aside class="notes">REPLACE: welcome; introduce yourself; one question to the room that calibrates the pace; the rhythm of the day</aside>
+  <aside class="notes"><p>Welcome the room. Quick poll: who has shipped a forecast that somebody used to decide something? Who has backtested one? This is a 300-level course: participants already validate tabular models (DS-204) and reason about intervals by simulation (DS-201), and they did the air-passengers starter as pre-work. Day 1 has no model beyond a naive one, on purpose.</p></aside>
+</section>
+
+<section class="slide" data-label="The week" id="four-days-one-backtest">
+  <div class="kicker">The course at a glance</div>
+  <h2>Four days, one backtest that every method must pass, and a capstone</h2>
+  <div class="cols cols-4 gap-s">
+    <div class="card c-teal"><h4>Day 1 · Look and set the floor</h4><p class="small mb0">Frame the request, look at the series, decompose it, backtest the naive forecasts.</p></div>
+    <div class="card c-cyan"><h4>Day 2 · Statistical forecasters</h4><p class="small mb0">Exponential smoothing, ARIMA, weather and Hijri regressors, intervals that hold.</p></div>
+    <div class="card c-coral"><h4>Day 3 · Many series</h4><p class="small mb0">Hierarchies, one boosted model for 400 feeders, a pretrained forecaster, a scorecard.</p></div>
+    <div class="card c-purple"><h4>Day 4 · Review and communicate</h4><p class="small mb0">Leaks across time, short series, combinations, the fan chart and the planner's note.</p></div>
+  </div>
+  <div class="callout tip mt"><b>Day 5 · Capstone.</b> Three method families against the floor on a new dataset, in a public repository, with a two-page planner's note, defended live for eight minutes.</div>
+  <aside class="notes"><p>One sentence per day; do not teach yet. The capstone rubric has five criteria (framing and floor, methods, backtest design, uncertainty and communication, reproducibility): each day builds one or two of them. In the defence the assessor moves the forecast origin or the horizon and the participant predicts, then shows, what changes. Say that now, so the week is read with that question in mind.</p></aside>
+</section>
+
+<section class="slide" data-label="How we work" id="backtest-before-belief">
+  <div class="kicker">How this course works</div>
+  <h2>No forecast is believed before its backtest</h2>
+  <div class="cols cols-3 gap-s">
+    <div class="card c-navy"><h4>A floor first</h4><p class="small mb0">The best naive forecast is the price of entry. A method that does not beat it is not worth its upkeep.</p></div>
+    <div class="card c-teal"><h4>One instrument</h4><p class="small mb0">Every method is scored by the same rolling origins, the same horizon and the same scaled error.</p></div>
+    <div class="card c-coral"><h4>Uncertainty is part of the forecast</h4><p class="small mb0">A number without an interval, or an interval nobody checked, is not delivered.</p></div>
+  </div>
+  <div class="callout warn small mt"><b>AI policy.</b> AI off for the entry and exit checks and for writing the first backtest (Lab 1.4). In the other labs an assistant may explain output, not write the backtest. In the capstone anything goes, defended live.</div>
+  <aside class="notes"><p>Say the AI policy out loud and why: the backtest of Lab 1.4 is the instrument every later number is read on, and the defence asks participants to predict what happens when the origin moves. That is hard to do with a backtest you did not write. The policy is the course's, not the trainer's choice.</p></aside>
+</section>
+
+<section class="slide" data-label="Case study" id="shams-power">
+  <div class="kicker">One case study all week</div>
+  <h2>Shams Power and its forecast desk, Marqab</h2>
+  <p class="lead">A fictional electricity distributor: 12 regions, 400 feeders, nine years of daily demand. You are the forecast desk, <b>Marqab</b> (<span class="ar">مرقاب</span>).</p>
+  <div class="cols cols-3 gap-s mt-s">
+    <div class="card c-teal flat"><h4>Regions</h4><p class="small mb0">Daily demand in MWh, the day's temperature and its normal, 2017 to 2025. A region is the exact sum of its feeders.</p></div>
+    <div class="card c-cyan flat"><h4>Feeders</h4><p class="small mb0">400 series, each residential, commercial or industrial. Twelve were commissioned in September 2025.</p></div>
+    <div class="card c-coral flat"><h4>Calendar</h4><p class="small mb0">Gregorian and Hijri: the weekend, Ramadan, both Eids, National Day and Founding Day, to March 2026.</p></div>
+  </div>
+  <aside class="notes"><p>Name the people. Shahad Al-Tamimi, load planning manager, is the planner the forecast note is written for. Omar Al-Khuzaim buys the energy 28 days ahead. Hamad Al-Dawsari runs network operations and knows why a day looks strange. Thamer Al-Anzi is the data protection officer. Nada Al-Jasser is the forecast analyst: the role participants play. All data is synthetic, generated with a fixed seed by labs/prepare_data.py. Problems are planted in it; do not reveal them yet.</p></aside>
+</section>
+
+<section class="slide" data-label="Setup" id="setup-and-reference-state">
+  <div class="kicker">Lab environment</div>
+  <h2>Open the notebooks in Colab, or run them locally with uv</h2>
+  <div class="cols cols-2">
+    <ol class="bullets">
+      <li><b>Colab:</b> open a notebook from the course page. Its first cell clones the repository and installs one package.</li>
+      <li><b>Locally:</b> the commands on the right. Run <code>00_setup_check.ipynb</code> once.</li>
+      <li>Each lab starts from a <b>supplied reference state</b>: data files and the results earlier labs would have produced. No lab depends on your earlier run.</li>
+    </ol>
+    <pre class="code s" data-file="terminal (local option)"><code class="language-bash">git clone https://github.com/SDAIAAcademy/forecasting
+cd forecasting/labs
+uv sync
+uv run jupyter lab</code></pre>
+  </div>
+  <aside class="notes"><p>Make everyone run the setup check before Session 1 reaches its lab. No key and no account are needed: no lab calls a language model, and everything runs on a laptop processor. Common failures: an old Python (uv installs the right one); on Windows a very long folder path (set UV_PROJECT_ENVIRONMENT to a short folder, see labs/README.md). Every exercise has a safety net: a participant who skips one still gets the reference result in the next cell.</p></aside>
 </section>
 
 <section class="slide" id="agenda" data-auto="agenda"></section>
 
-<!-- Session 1 -->
-
+<!-- ======================= SESSION 1 ======================= -->
 <section class="slide section" id="s1" data-auto="section" data-session="1"></section>
 
-<section class="slide" id="s1-idea" data-lo="LO5">
-  <div class="kicker">REPLACE: the question this slide answers</div>
-  <h2>REPLACE: one idea, stated as a sentence</h2>
-  <div class="cols cols-2">
-    <ul class="bullets">
-      <li>REPLACE: at most six bullets, each a complete thought</li>
-      <li>REPLACE: bold the key phrase; numbers come from the lab run, not from memory</li>
-    </ul>
-    <div class="card c-teal"><h4>In the case study</h4><p class="small mb0">REPLACE: tie the idea to the case study and its data</p></div>
+<section class="slide" data-label="Three numbers" id="forecast-plan-target" data-lo="LO5">
+  <div class="kicker">Before any model</div>
+  <h2>A forecast, a plan and a target are three different numbers</h2>
+  <div class="cols cols-3 gap-s">
+    <div class="card c-teal"><h4>Forecast</h4><p class="small mb0">What you expect to happen, with its uncertainty. It can be wrong; it must not be biased on purpose.</p></div>
+    <div class="card c-cyan"><h4>Plan</h4><p class="small mb0">What you decide to do about it: how much energy to buy, which day to maintain a feeder.</p></div>
+    <div class="card c-coral"><h4>Target</h4><p class="small mb0">What someone wants to happen. A target that leaks into a forecast makes both useless.</p></div>
   </div>
-  <div class="callout warn mt"><b>What goes wrong.</b> REPLACE: the failure participants will hit, and how to recognise it</div>
-  <aside class="notes">REPLACE: what to say, the demo to run, the question to ask the room, the common failure and its fix</aside>
+  <div class="callout warn mt"><b>What goes wrong.</b> "Give me one number" hides which of the three is asked for. Ask what will be done with it.</div>
+  <aside class="notes"><p>Ask the room for a case where a forecast was adjusted until it matched the budget. Most rooms have one. The point for the week: the desk delivers the forecast and its uncertainty; the planner turns it into a plan. Lab 1.1 practises asking "what will you do with it?" on three real-sounding requests.</p></aside>
 </section>
 
-<section class="slide" id="s1-steps" data-lo="LO5">
-  <div class="kicker">Step by step</div>
-  <h2>REPLACE: a process, shown one step per key press</h2>
-  <div class="flow">
-    <div class="step c-teal"><b>1 · REPLACE: name</b>REPLACE: what happens first</div>
-    <div class="arrow frag" data-frag="b">→</div><div class="step c-cyan frag" data-frag="b"><b>2 · REPLACE: name</b>REPLACE: the next piece</div>
-    <div class="arrow frag" data-frag="c">→</div><div class="step c-coral frag" data-frag="c"><b>3 · REPLACE: name</b>REPLACE: the result</div>
+<section class="slide" data-label="The decision" id="decision-behind-request" data-lo="LO5">
+  <div class="kicker">Three requests at Shams Power</div>
+  <h2>"What will demand be?" means something different to each planner</h2>
+  <table class="t small">
+    <tr><th>Who asks</th><th>The decision</th><th>If the forecast is too low</th><th>If it is too high</th></tr>
+    <tr><td>Omar, energy purchasing</td><td>Energy to nominate for each of the next 28 days</td><td>Buys the gap at about three times the price</td><td>Resells the surplus at about half price</td></tr>
+    <tr><td>Hamad, network operations</td><td>The day next week a feeder can be taken out</td><td>Neighbouring feeders overload</td><td>A safe day is refused</td></tr>
+    <tr><td>Shahad, load planning</td><td>Transformer capacity over three years</td><td>The peak day exceeds capacity</td><td>Capital is spent early</td></tr>
+  </table>
+  <div class="callout tip small mt-s"><b>A forecast is worth what the decision it changes is worth.</b> Write the decision down before the first plot.</div>
+  <aside class="notes"><p>These are the three requests of Lab 1.1 (data/requests.json). Read Omar's request aloud: it is the frame of the whole course. Point out that the two costs are never equal in any row. That asymmetry is the next slide but one.</p></aside>
+</section>
+
+<section class="slide" data-label="The frame" id="horizon-granularity-level" data-lo="LO5">
+  <div class="kicker">The frame</div>
+  <h2>The decision fixes horizon, time step, level and what is forecast</h2>
+  <table class="t small">
+    <tr><th>Request</th><th>Horizon</th><th>Time step</th><th>Level</th><th>What is forecast</th></tr>
+    <tr class="hl"><td>Purchasing</td><td>28 days</td><td>day</td><td>region</td><td>the day's energy</td></tr>
+    <tr><td>Maintenance</td><td>7 days</td><td>day</td><td>one feeder</td><td>how high it could go</td></tr>
+    <tr><td>Capacity</td><td>3 years</td><td>year</td><td>region</td><td>the highest day of each summer</td></tr>
+  </table>
+  <div class="cols cols-2 mt-s">
+    <div class="callout tip small"><b>This course.</b> The highlighted row: 28 days ahead, daily, by region.</div>
+    <div class="callout warn small"><b>What goes wrong.</b> The capacity request is not a 28-day model run 39 times. An annual peak is another target.</div>
   </div>
-  <div class="callout tip mt frag"><b>Takeaway.</b> REPLACE: the one sentence to remember</div>
-  <aside class="notes">Press once per step and say what each step adds before the next one appears. REPLACE: the example to walk through</aside>
+  <aside class="notes"><p>Horizon is how far the furthest forecast is; the time step is the granularity; the level is where in the hierarchy. The fourth column is the one people skip: a total, an upper bound and a peak are different statistical objects. A peak over 90 days is an extreme, driven by growth and by how hot the summer is.</p></aside>
+</section>
+
+<section class="slide" data-label="Cost to quantile" id="cost-to-quantile" data-lo="LO5">
+  <div class="kicker">Which number to hand over</div>
+  <h2>Unequal costs move the answer away from the middle</h2>
+  <div class="cols cols-2">
+    <div class="stack">
+      <pre class="code" data-file="Lab 1.1 · step 3"><code class="language-python">def target_quantile(cost_under, cost_over):
+    return cost_under / (cost_under + cost_over)
+
+target_quantile(2.0, 0.5)   # Omar: 0.8</code></pre>
+      <p class="small mb0">A missing MWh costs Omar two contract prices more; a surplus MWh loses half a price.</p>
+    </div>
+    <div class="stack">
+      <div class="stat"><div class="big">80th</div><div class="lbl">percentile for purchasing: demand stays under it four days in five</div></div>
+      <div class="stat"><div class="big">90th</div><div class="lbl">percentile for the maintenance request</div></div>
+    </div>
+  </div>
+  <aside class="notes"><p>This is the newsvendor result: the forecast that minimises expected cost is the quantile cu / (cu + co). Do the arithmetic on the board for Omar: 2 / 2.5 = 0.8. Consequence for the week: a point forecast is not enough, and the measure that scores a quantile (pinball loss, Day 2) is the one the purchasing lead cares about. None of the three planners should be handed the mean.</p></aside>
+</section>
+
+<section class="slide" data-label="Data delay" id="data-delay-steps" data-lo="LO5">
+  <div class="kicker">What the desk knows, and when</div>
+  <h2>A 28-day forecast from two-day-old data is a 30-step forecast</h2>
+  <div class="cols cols-2">
+    <table class="t small">
+      <tr><th>Days ahead</th><th class="num">Mean change in demand</th></tr>
+      <tr><td>1</td><td class="num">4.3%</td></tr>
+      <tr><td>2</td><td class="num">6.2%</td></tr>
+      <tr><td>7</td><td class="num">8.0%</td></tr>
+      <tr><td>28</td><td class="num">15.0%</td></tr>
+      <tr><td>30</td><td class="num">16.5%</td></tr>
+    </table>
+    <ul class="bullets small">
+      <li>Regional meter data reaches the desk <b>two days late</b>.</li>
+      <li>The origin is the last day the model has seen, not the day the forecast is sent.</li>
+      <li>A delay costs most at short horizons: from 1 day to 3 days the change doubles.</li>
+    </ul>
+  </div>
+  <aside class="notes"><p>The table is from Lab 1.1 step 4: the mean absolute change of Al-Rimal's demand after h days, as a share of mean demand. It is a rough measure of how fast today's value stops describing the future. For the labs we keep the origin as the last day of data and a horizon of 28; in the capstone, participants must state the delay of their own data.</p></aside>
+</section>
+
+<section class="slide" data-label="Personal data" id="feeder-level-personal-data" data-lo="LO5">
+  <div class="kicker">Responsible use</div>
+  <h2>The finer the level, the closer the series is to a household</h2>
+  <div class="cols cols-2">
+    <ul class="bullets small">
+      <li>A regional total describes a city. A meter describes when a family is home.</li>
+      <li>A feeder that serves a handful of customers sits between the two.</li>
+      <li>Before a fine-grained series leaves the desk, ask the data protection officer whether it can be linked to a person, and so falls under the Personal Data Protection Law.</li>
+    </ul>
+    <div class="card c-teal flat"><h4>In this course</h4><p class="small mb0">Every series is synthetic and aggregated: regions and feeders, never meters. The capstone uses supplied data, or public data under its stated open-data terms.</p></div>
+  </div>
+  <aside class="notes"><p>Keep this short and concrete: the question to ask is "can this series, alone or joined with another table, point to a person or a household?". The course does not teach the law; it teaches the habit of asking Thamer, the data protection officer, before using or sharing fine-grained consumption. The Personal Data Protection Law, its implementing regulation and the Open Data Policy are listed with their official addresses on the course page.</p><p>Sources: Personal Data Protection Law; NDMO Open Data Policy (cited by name and address; read the text with the data protection officer).</p></aside>
+</section>
+
+<section class="slide" id="check-frame-first" data-lo="LO5">
+  <div class="kicker">Checkpoint</div>
+  <h2>What do you send back first?</h2>
+  <div class="quiz" data-type="single" data-lo="LO5">
+    <p class="lead">A planner writes: "Send me next month's demand for Al-Sahil by Thursday." Being short costs her four times what being long costs. What does the desk reply with first?</p>
+    <div class="opts">
+      <div class="opt" data-why="Starts modelling before the frame exists: the best model of the wrong target is still wrong">The most accurate model's mean forecast for each day</div>
+      <div class="opt" data-why="Treats a monthly total as the request without asking: the decision may be daily">One number for the month, the average of the last three years</div>
+      <div class="opt" data-ok>The frame: daily or monthly, which decision, and the 80th percentile</div>
+      <div class="opt" data-why="Confuses a target with a forecast: the budget is what someone wants, not what is expected">The figure in the annual budget, so the two stay consistent</div>
+    </div>
+    <div class="callout tip why"><b>Why.</b> The decision fixes the time step and the level, and a cost ratio of 4 to 1 asks for the quantile 4 / 5, not the mean.</div>
+  </div>
+  <aside class="notes"><p>Answer: C. If the room picks A, ask what "accurate" would be measured on before the horizon and the time step are known. The quantile is 4 / (4 + 1) = 0.8.</p></aside>
 </section>
 
 <section class="slide lab" id="lab-1-1" data-auto="lab" data-lab="1.1">
-  <aside class="notes">REPLACE: what to watch for while participants work, the typical problems, and the fallback for anyone who did not finish an earlier lab</aside>
+  <aside class="notes"><p>Walk the room. Usual problems: request C framed as a daily forecast over 1,095 days (ask what the board decides on); the cost of a shortfall entered as 3 instead of 2 (the contract price is paid either way, so the extra cost is two prices); frames written as model names. The swap at the end matters: a frame the neighbour cannot read back is not finished. Nothing from an earlier lab is needed.</p></aside>
 </section>
 
-<!-- Session 2 -->
-
+<!-- ======================= SESSION 2 ======================= -->
 <section class="slide section" id="s2" data-auto="section" data-session="2"></section>
 
-<section class="slide" id="s2-idea" data-lo="LO1">
-  <div class="kicker">REPLACE: the question this slide answers</div>
-  <h2>REPLACE: one idea, stated as a sentence</h2>
-  <div class="cols cols-2">
-    <ul class="bullets">
-      <li>REPLACE: at most six bullets, each a complete thought</li>
-      <li>REPLACE: bold the key phrase; numbers come from the lab run, not from memory</li>
-    </ul>
-    <div class="card c-teal"><h4>In the case study</h4><p class="small mb0">REPLACE: tie the idea to the case study and its data</p></div>
+<section class="slide" data-label="Nine years" id="nine-years-trend-and-summer" data-lo="LO1">
+  <div class="kicker">The longest time scale</div>
+  <h2>Nine years show two things: growth and summer</h2>
+  <div class="figure">
+    <svg viewBox="0 0 760 300" role="img" aria-label="Al-Rimal weekly mean demand, 2017 to 2025: nine summer peaks on a rising level" xmlns="http://www.w3.org/2000/svg"><line x1="62" x2="748" y1="258.0" y2="258.0" stroke="#d9dee5" stroke-width="1"/><text x="54" y="263.0" text-anchor="end" font-size="15" fill="#5b6675">1,832</text><line x1="62" x2="748" y1="180.0" y2="180.0" stroke="#d9dee5" stroke-width="1"/><text x="54" y="185.0" text-anchor="end" font-size="15" fill="#5b6675">3,133</text><line x1="62" x2="748" y1="102.0" y2="102.0" stroke="#d9dee5" stroke-width="1"/><text x="54" y="107.0" text-anchor="end" font-size="15" fill="#5b6675">4,434</text><line x1="62" x2="748" y1="24.0" y2="24.0" stroke="#d9dee5" stroke-width="1"/><text x="54" y="29.0" text-anchor="end" font-size="15" fill="#5b6675">5,734</text><text x="99.7" y="293" text-anchor="middle" font-size="15" fill="#5b6675">2017</text><text x="175.8" y="293" text-anchor="middle" font-size="15" fill="#5b6675">2018</text><text x="252.0" y="293" text-anchor="middle" font-size="15" fill="#5b6675">2019</text><text x="328.3" y="293" text-anchor="middle" font-size="15" fill="#5b6675">2020</text><text x="404.4" y="293" text-anchor="middle" font-size="15" fill="#5b6675">2021</text><text x="480.5" y="293" text-anchor="middle" font-size="15" fill="#5b6675">2022</text><text x="556.6" y="293" text-anchor="middle" font-size="15" fill="#5b6675">2023</text><text x="632.9" y="293" text-anchor="middle" font-size="15" fill="#5b6675">2024</text><text x="709.0" y="293" text-anchor="middle" font-size="15" fill="#5b6675">2025</text><polyline points="62.0,249.9 63.5,254.9 64.9,255.6 66.4,254.7 67.8,257.2 69.3,255.0 70.8,252.1 72.2,256.4 73.7,257.2 75.1,257.4 76.6,258.0 78.1,236.1 79.5,243.2 81.0,239.4 82.4,252.8 83.9,247.9 85.4,212.5 86.8,185.7 88.3,175.3 89.7,142.9 91.2,142.8 92.7,161.1 94.1,121.7 95.6,116.7 97.0,123.3 98.5,133.1 99.9,134.0 101.4,113.8 102.9,101.5 104.3,114.1 105.8,118.7 107.2,117.6 108.7,105.1 110.2,122.8 111.6,139.1 113.1,140.9 114.5,138.8 116.0,128.0 117.5,108.6 118.9,127.9 120.4,175.7 121.8,180.2 123.3,174.5 124.8,207.6 126.2,246.9 127.7,226.0 129.1,230.4 130.6,244.4 132.1,253.2 133.5,252.4 135.0,252.1 136.4,254.2 137.9,248.8 139.4,250.2 140.8,252.8 142.3,248.3 143.7,249.7 145.2,253.3 146.7,253.2 148.1,254.2 149.6,252.4 151.0,252.8 152.5,252.9 154.0,248.6 155.4,252.2 156.9,252.6 158.3,223.6 159.8,216.3 161.3,222.4 162.7,209.5 164.2,179.1 165.6,169.2 167.1,161.9 168.5,155.4 170.0,124.4 171.5,121.4 172.9,133.0 174.4,98.8 175.8,88.6 177.3,69.6 178.8,106.3 180.2,75.9 181.7,87.6 183.1,96.3 184.6,100.2 186.1,116.4 187.5,116.9 189.0,101.1 190.4,100.1 191.9,129.8 193.4,157.2 194.8,146.9 196.3,167.1 197.7,204.6 199.2,199.2 200.7,220.2 202.1,211.3 203.6,232.6 205.0,217.2 206.5,227.7 208.0,246.1 209.4,247.7 210.9,250.0 212.3,248.9 213.8,245.6 215.3,249.5 216.7,250.8 218.2,248.6 219.6,247.8 221.1,247.8 222.6,245.4 224.0,250.5 225.5,249.7 226.9,248.7 228.4,251.3 229.9,246.6 231.3,250.0 232.8,250.8 234.2,235.6 235.7,227.3 237.1,195.2 238.6,200.4 240.1,195.9 241.5,158.7 243.0,177.4 244.4,134.1 245.9,141.8 247.4,153.3 248.8,120.7 250.3,97.9 251.7,101.2 253.2,92.0 254.7,92.7 256.1,93.8 257.6,83.8 259.0,91.1 260.5,124.4 262.0,115.2 263.4,113.2 264.9,118.4 266.3,109.0 267.8,103.1 269.3,125.8 270.7,157.0 272.2,172.3 273.6,187.1 275.1,189.3 276.6,213.9 278.0,225.8 279.5,224.5 280.9,227.6 282.4,242.0 283.9,234.0 285.3,245.7 286.8,244.8 288.2,243.6 289.7,245.7 291.2,246.0 292.6,244.6 294.1,244.5 295.5,243.2 297.0,243.9 298.5,245.1 299.9,242.4 301.4,244.5 302.8,245.9 304.3,247.0 305.7,247.6 307.2,245.6 308.7,224.9 310.1,206.1 311.6,185.9 313.0,201.6 314.5,198.2 316.0,166.1 317.4,136.7 318.9,125.3 320.3,119.4 321.8,141.0 323.3,97.1 324.7,93.2 326.2,110.9 327.6,120.1 329.1,68.7 330.6,68.1 332.0,80.2 333.5,61.9 334.9,97.6 336.4,97.6 337.9,83.3 339.3,94.5 340.8,80.2 342.2,103.5 343.7,84.4 345.2,115.7 346.6,139.6 348.1,131.8 349.5,151.5 351.0,196.8 352.5,194.3 353.9,202.0 355.4,237.4 356.8,215.7 358.3,212.0 359.8,242.6 361.2,243.6 362.7,240.2 364.1,242.1 365.6,243.2 367.1,243.3 368.5,242.3 370.0,242.7 371.4,246.2 372.9,244.3 374.3,240.7 375.8,236.6 377.3,240.5 378.7,241.4 380.2,244.2 381.6,239.8 383.1,240.1 384.6,233.3 386.0,223.2 387.5,225.9 388.9,191.0 390.4,170.8 391.9,162.8 393.3,147.8 394.8,167.9 396.2,142.6 397.7,121.8 399.2,113.5 400.6,98.4 402.1,93.5 403.5,67.1 405.0,40.3 406.5,60.1 407.9,74.6 409.4,64.1 410.8,60.6 412.3,53.5 413.8,31.3 415.2,72.6 416.7,84.0 418.1,90.2 419.6,100.7 421.1,115.8 422.5,129.1 424.0,118.6 425.4,149.6 426.9,161.6 428.4,181.7 429.8,159.0 431.3,195.4 432.7,236.8 434.2,222.0 435.7,239.5 437.1,235.4 438.6,240.3 440.0,239.8 441.5,239.0 442.9,237.5 444.4,240.1 445.9,239.2 447.3,237.2 448.8,242.5 450.2,241.3 451.7,241.4 453.2,238.8 454.6,241.3 456.1,238.2 457.5,233.6 459.0,238.0 460.5,237.2 461.9,235.5 463.4,215.6 464.8,222.5 466.3,191.7 467.8,161.7 469.2,147.1 470.7,132.5 472.1,132.5 473.6,115.3 475.1,100.7 476.5,77.4 478.0,73.9 479.4,78.8 480.9,73.9 482.4,89.5 483.8,70.5 485.3,43.5 486.7,62.1 488.2,65.1 489.7,80.3 491.1,74.2 492.6,100.7 494.0,95.2 495.5,83.9 497.0,109.0 498.4,127.5 499.9,137.9 501.3,150.5 502.8,147.2 504.3,130.6 505.7,149.7 507.2,190.2 508.6,195.7 510.1,220.3 511.5,219.8 513.0,235.0 514.5,232.6 515.9,234.0 517.4,235.6 518.8,233.5 520.3,232.5 521.8,228.3 523.2,230.4 524.7,235.0 526.1,233.5 527.6,232.7 529.1,237.0 530.5,238.7 532.0,234.9 533.4,236.4 534.9,240.3 536.4,213.6 537.8,211.8 539.3,194.4 540.7,197.0 542.2,194.5 543.7,171.5 545.1,148.5 546.6,126.8 548.0,132.5 549.5,132.0 551.0,108.4 552.4,79.2 553.9,91.7 555.3,85.8 556.8,90.7 558.3,62.1 559.7,43.5 561.2,29.9 562.6,55.9 564.1,70.4 565.6,84.9 567.0,90.6 568.5,80.3 569.9,90.4 571.4,102.0 572.9,107.3 574.3,118.5 575.8,146.6 577.2,142.4 578.7,114.6 580.1,154.2 581.6,188.9 583.1,207.4 584.5,190.2 586.0,224.7 587.4,231.9 588.9,192.9 590.4,229.5 591.8,229.3 593.3,232.8 594.7,231.7 596.2,231.3 597.7,230.9 599.1,232.0 600.6,234.5 602.0,231.2 603.5,230.6 605.0,230.9 606.4,232.3 607.9,231.4 609.3,234.4 610.8,224.6 612.3,226.9 613.7,218.1 615.2,209.8 616.6,218.1 618.1,202.7 619.6,168.1 621.0,152.0 622.5,140.3 623.9,107.5 625.4,123.2 626.9,106.3 628.3,57.0 629.8,82.4 631.2,61.9 632.7,46.3 634.2,59.9 635.6,39.2 637.1,24.9 638.5,40.5 640.0,39.4 641.5,54.3 642.9,51.0 644.4,61.1 645.8,50.3 647.3,62.7 648.7,82.4 650.2,77.1 651.7,113.5 653.1,125.4 654.6,136.4 656.0,171.7 657.5,214.9 659.0,205.3 660.4,204.9 661.9,226.5 663.3,231.2 664.8,217.0 666.3,229.4 667.7,228.2 669.2,226.8 670.6,228.3 672.1,226.0 673.6,225.4 675.0,226.0 676.5,224.5 677.9,224.2 679.4,225.1 680.9,227.7 682.3,229.2 683.8,226.3 685.2,223.5 686.7,223.3 688.2,211.6 689.6,221.6 691.1,228.1 692.5,196.1 694.0,181.9 695.5,168.7 696.9,135.3 698.4,137.1 699.8,153.2 701.3,131.5 702.8,105.0 704.2,92.2 705.7,78.2 707.1,64.5 708.6,49.9 710.1,52.1 711.5,51.4 713.0,30.7 714.4,46.5 715.9,36.9 717.3,24.0 718.8,25.8 720.3,39.7 721.7,35.9 723.2,72.3 724.6,56.2 726.1,122.1 727.6,121.6 729.0,111.4 730.5,99.8 731.9,142.4 733.4,148.9 734.9,153.4 736.3,181.0 737.8,218.0 739.2,221.1 740.7,216.0 742.2,219.9 743.6,225.2 745.1,223.2 746.5,222.4 748.0,218.2" fill="none" stroke="#16324f" stroke-width="1.6" stroke-linejoin="round"/></svg>
+    <div class="caption">Al-Rimal, weekly mean of daily demand in MWh, 2017 to 2025 (synthetic).</div>
   </div>
-  <div class="callout warn mt"><b>What goes wrong.</b> REPLACE: the failure participants will hit, and how to recognise it</div>
-  <aside class="notes">REPLACE: what to say, the demo to run, the question to ask the room, the common failure and its fix</aside>
+  <aside class="notes"><p>From Lab 1.2 step 1. Ask what they see before saying it: a level that rises about 2.7% a year and a summer peak every year. Then ask what they cannot see at this scale: the week, the holidays, single odd days. Each time scale hides the others, which is why the lab plots three.</p></aside>
 </section>
 
-<section class="slide" id="s2-steps" data-lo="LO1">
-  <div class="kicker">Step by step</div>
-  <h2>REPLACE: a process, shown one step per key press</h2>
-  <div class="flow">
-    <div class="step c-teal"><b>1 · REPLACE: name</b>REPLACE: what happens first</div>
-    <div class="arrow frag" data-frag="b">→</div><div class="step c-cyan frag" data-frag="b"><b>2 · REPLACE: name</b>REPLACE: the next piece</div>
-    <div class="arrow frag" data-frag="c">→</div><div class="step c-coral frag" data-frag="c"><b>3 · REPLACE: name</b>REPLACE: the result</div>
+<section class="slide" data-label="Temperature" id="summer-is-temperature" data-lo="LO1">
+  <div class="kicker">One year</div>
+  <h2>The annual shape is the temperature, not the calendar</h2>
+  <div class="cols cols-3">
+    <div class="stat"><div class="big">2.3×</div><div class="lbl">July 2025 demand against January 2025</div></div>
+    <div class="stat"><div class="big">0.97</div><div class="lbl">correlation of daily demand with cooling degrees above 22 °C</div></div>
+    <div class="stat"><div class="big">2.7%</div><div class="lbl">growth per year, 2017 to 2025</div></div>
   </div>
-  <div class="callout tip mt frag"><b>Takeaway.</b> REPLACE: the one sentence to remember</div>
-  <aside class="notes">Press once per step and say what each step adds before the next one appears. REPLACE: the example to walk through</aside>
+  <div class="callout tip small mt"><b>Cooling degrees.</b> How far the day's temperature is above the point where cooling starts: <code>max(0, temp - 22)</code>. Below that point temperature barely matters.</div>
+  <aside class="notes"><p>All three numbers are from Lab 1.2 on Al-Rimal. The consequence is practical: a hot May looks like June, so "the same date last year" is right about the season and wrong about the week. The cooling-degree transform returns on Day 2 as a regressor. Al-Jabal, the cool mountain region of the stretch task, has a much weaker annual shape.</p></aside>
+</section>
+
+<section class="slide" data-label="The week" id="friday-is-the-low-day" data-lo="LO1">
+  <div class="kicker">Four weeks</div>
+  <h2>The week only shows when you zoom in, and it starts on Sunday</h2>
+  <div class="cols cols-21">
+    <div class="figure">
+      <svg viewBox="0 0 760 300" role="img" aria-label="Al-Rimal daily demand over four weeks in autumn 2025: every Friday is the lowest day of its week" xmlns="http://www.w3.org/2000/svg"><line x1="62" x2="748" y1="258.0" y2="258.0" stroke="#d9dee5" stroke-width="1"/><text x="54" y="263.0" text-anchor="end" font-size="15" fill="#5b6675">3,201</text><line x1="62" x2="748" y1="180.0" y2="180.0" stroke="#d9dee5" stroke-width="1"/><text x="54" y="185.0" text-anchor="end" font-size="15" fill="#5b6675">3,768</text><line x1="62" x2="748" y1="102.0" y2="102.0" stroke="#d9dee5" stroke-width="1"/><text x="54" y="107.0" text-anchor="end" font-size="15" fill="#5b6675">4,336</text><line x1="62" x2="748" y1="24.0" y2="24.0" stroke="#d9dee5" stroke-width="1"/><text x="54" y="29.0" text-anchor="end" font-size="15" fill="#5b6675">4,904</text><text x="189.0" y="293" text-anchor="middle" font-size="15" fill="#5b6675">10 Oct</text><text x="366.9" y="293" text-anchor="middle" font-size="15" fill="#5b6675">17 Oct</text><text x="544.7" y="293" text-anchor="middle" font-size="15" fill="#5b6675">24 Oct</text><text x="722.6" y="293" text-anchor="middle" font-size="15" fill="#5b6675">31 Oct</text><line x1="189.0" x2="189.0" y1="10" y2="272" stroke="#e4572e" stroke-width="1.5" stroke-dasharray="4 4"/><line x1="366.9" x2="366.9" y1="10" y2="272" stroke="#e4572e" stroke-width="1.5" stroke-dasharray="4 4"/><line x1="544.7" x2="544.7" y1="10" y2="272" stroke="#e4572e" stroke-width="1.5" stroke-dasharray="4 4"/><line x1="722.6" x2="722.6" y1="10" y2="272" stroke="#e4572e" stroke-width="1.5" stroke-dasharray="4 4"/><polyline points="62.0,107.6 87.4,84.0 112.8,24.0 138.2,41.1 163.6,65.5 189.0,134.9 214.4,124.4 239.9,111.4 265.3,127.4 290.7,138.4 316.1,163.6 341.5,183.3 366.9,231.6 392.3,215.5 417.7,208.3 443.1,208.5 468.5,218.5 493.9,187.9 519.3,178.9 544.7,224.0 570.1,167.3 595.6,187.5 621.0,192.7 646.4,142.2 671.8,149.0 697.2,182.9 722.6,258.0 748.0,256.9" fill="none" stroke="#16324f" stroke-width="2" stroke-linejoin="round"/><circle cx="62.0" cy="107.6" r="3.5" fill="#16324f"/><circle cx="87.4" cy="84.0" r="3.5" fill="#16324f"/><circle cx="112.8" cy="24.0" r="3.5" fill="#16324f"/><circle cx="138.2" cy="41.1" r="3.5" fill="#16324f"/><circle cx="163.6" cy="65.5" r="3.5" fill="#16324f"/><circle cx="189.0" cy="134.9" r="3.5" fill="#16324f"/><circle cx="214.4" cy="124.4" r="3.5" fill="#16324f"/><circle cx="239.9" cy="111.4" r="3.5" fill="#16324f"/><circle cx="265.3" cy="127.4" r="3.5" fill="#16324f"/><circle cx="290.7" cy="138.4" r="3.5" fill="#16324f"/><circle cx="316.1" cy="163.6" r="3.5" fill="#16324f"/><circle cx="341.5" cy="183.3" r="3.5" fill="#16324f"/><circle cx="366.9" cy="231.6" r="3.5" fill="#16324f"/><circle cx="392.3" cy="215.5" r="3.5" fill="#16324f"/><circle cx="417.7" cy="208.3" r="3.5" fill="#16324f"/><circle cx="443.1" cy="208.5" r="3.5" fill="#16324f"/><circle cx="468.5" cy="218.5" r="3.5" fill="#16324f"/><circle cx="493.9" cy="187.9" r="3.5" fill="#16324f"/><circle cx="519.3" cy="178.9" r="3.5" fill="#16324f"/><circle cx="544.7" cy="224.0" r="3.5" fill="#16324f"/><circle cx="570.1" cy="167.3" r="3.5" fill="#16324f"/><circle cx="595.6" cy="187.5" r="3.5" fill="#16324f"/><circle cx="621.0" cy="192.7" r="3.5" fill="#16324f"/><circle cx="646.4" cy="142.2" r="3.5" fill="#16324f"/><circle cx="671.8" cy="149.0" r="3.5" fill="#16324f"/><circle cx="697.2" cy="182.9" r="3.5" fill="#16324f"/><circle cx="722.6" cy="258.0" r="3.5" fill="#16324f"/><circle cx="748.0" cy="256.9" r="3.5" fill="#16324f"/></svg>
+      <div class="caption">Al-Rimal, four weeks in autumn 2025. The dashed lines are Fridays.</div>
+    </div>
+    <div class="stack">
+      <div class="stat"><div class="big">0.94</div><div class="lbl">Friday, against the mean day</div></div>
+      <div class="stat"><div class="big">0.98</div><div class="lbl">Saturday</div></div>
+    </div>
+  </div>
+  <aside class="notes"><p>From Lab 1.2 step 3: the weekday profile over 2023 to 2025. The weekend is Friday and Saturday; a library default that assumes Saturday and Sunday will put the dip on the wrong days. Al-Rimal is mostly residential, so its week is shallow; commercial and industrial feeders drop to about three quarters on a Friday. That difference matters on Day 3.</p></aside>
+</section>
+
+<section class="slide" data-label="Hijri" id="hijri-holidays-move" data-lo="LO1">
+  <div class="kicker">A pattern that is not a season</div>
+  <h2>Eid arrives 10 to 12 days earlier every Gregorian year</h2>
+  <div class="cols cols-2">
+    <table class="t small">
+      <tr><th>Year</th><th>First day of Eid al-Fitr</th></tr>
+      <tr><td>2021</td><td>13 May</td></tr>
+      <tr><td>2022</td><td>2 May</td></tr>
+      <tr><td>2023</td><td>21 April</td></tr>
+      <tr><td>2024</td><td>10 April</td></tr>
+      <tr><td>2025</td><td>30 March</td></tr>
+    </table>
+    <ul class="bullets small">
+      <li>The Hijri year is about 11 days shorter than the Gregorian year.</li>
+      <li>So Ramadan and both Eids drift through the seasons, a full circle in about 33 years.</li>
+      <li>A 365-day season looks for last year's Eid on the wrong days.</li>
+    </ul>
+  </div>
+  <aside class="notes"><p>The dates are the lab's calendar file (data/calendar.csv), which follows the dates announced in Saudi Arabia for 2017 to 2025; the 2026 dates in the file are computed and must be checked against the Umm al-Qura calendar before real use. Say this: in real work the calendar is a dataset with an owner, like any other.</p></aside>
+</section>
+
+<section class="slide" data-label="The Eid dip" id="eid-dip-measured" data-lo="LO1">
+  <div class="kicker">Measure it</div>
+  <h2>Every Eid al-Fitr is a dip, from 8% to 28% in Al-Rimal</h2>
+  <div class="cols cols-21">
+    <div class="figure">
+      <svg viewBox="0 0 760 300" role="img" aria-label="Al-Rimal daily demand, February to July 2025, with Ramadan and the two Eids shaded: demand drops on both Eids" xmlns="http://www.w3.org/2000/svg"><rect x="179.1" y="10" width="121.3" height="262" fill="#7b61ff" opacity="0.13"/><rect x="296.2" y="10" width="20.9" height="262" fill="#e4572e" opacity="0.35"/><rect x="580.7" y="10" width="25.1" height="262" fill="#e4572e" opacity="0.35"/><line x1="62" x2="748" y1="258.0" y2="258.0" stroke="#d9dee5" stroke-width="1"/><text x="54" y="263.0" text-anchor="end" font-size="15" fill="#5b6675">1,998</text><line x1="62" x2="748" y1="180.0" y2="180.0" stroke="#d9dee5" stroke-width="1"/><text x="54" y="185.0" text-anchor="end" font-size="15" fill="#5b6675">3,239</text><line x1="62" x2="748" y1="102.0" y2="102.0" stroke="#d9dee5" stroke-width="1"/><text x="54" y="107.0" text-anchor="end" font-size="15" fill="#5b6675">4,479</text><line x1="62" x2="748" y1="24.0" y2="24.0" stroke="#d9dee5" stroke-width="1"/><text x="54" y="29.0" text-anchor="end" font-size="15" fill="#5b6675">5,719</text><text x="120.6" y="293" text-anchor="middle" font-size="15" fill="#5b6675">Feb</text><text x="237.7" y="293" text-anchor="middle" font-size="15" fill="#5b6675">Mar</text><text x="367.4" y="293" text-anchor="middle" font-size="15" fill="#5b6675">Apr</text><text x="492.8" y="293" text-anchor="middle" font-size="15" fill="#5b6675">May</text><text x="622.5" y="293" text-anchor="middle" font-size="15" fill="#5b6675">Jun</text><text x="748.0" y="293" text-anchor="middle" font-size="15" fill="#5b6675">Jul</text><polyline points="62.0,240.5 66.2,231.4 70.4,232.0 74.5,231.4 78.7,232.0 82.9,231.9 87.1,244.5 91.3,234.6 95.5,231.1 99.6,232.7 103.8,231.8 108.0,234.5 112.2,231.7 116.4,247.7 120.6,239.4 124.7,239.3 128.9,234.5 133.1,230.9 137.3,232.0 141.5,233.1 145.7,248.8 149.8,255.4 154.0,232.7 158.2,232.8 162.4,230.6 166.6,234.4 170.8,231.4 174.9,245.9 179.1,240.0 183.3,231.4 187.5,228.0 191.7,229.6 195.9,232.5 200.0,226.7 204.2,239.3 208.4,238.2 212.6,231.8 216.8,228.3 221.0,229.7 225.1,232.8 229.3,229.1 233.5,243.0 237.7,237.3 241.9,224.3 246.0,227.6 250.2,229.3 254.4,224.6 258.6,218.2 262.8,222.6 267.0,209.0 271.1,207.3 275.3,222.4 279.5,225.7 283.7,223.1 287.9,223.0 292.1,218.7 296.2,241.1 300.4,258.0 304.6,247.6 308.8,238.8 313.0,244.8 317.2,235.5 321.3,247.6 325.5,234.1 329.7,211.3 333.9,195.9 338.1,188.0 342.3,192.2 346.4,202.2 350.6,217.4 354.8,220.3 359.0,209.1 363.2,195.3 367.4,193.6 371.5,187.3 375.7,184.2 379.9,197.1 384.1,185.0 388.3,178.0 392.5,184.8 396.6,168.4 400.8,162.1 405.0,180.3 409.2,190.4 413.4,171.1 417.5,166.8 421.7,161.5 425.9,144.6 430.1,133.8 434.3,134.1 438.5,159.9 442.6,143.3 446.8,100.8 451.0,94.1 455.2,117.0 459.4,135.8 463.6,147.6 467.7,172.1 471.9,168.3 476.1,156.7 480.3,155.2 484.5,154.3 488.7,167.1 492.8,167.0 497.0,173.6 501.2,151.7 505.4,140.7 509.6,143.5 513.8,146.7 517.9,142.6 522.1,128.5 526.3,153.2 530.5,129.9 534.7,105.8 538.9,100.6 543.0,105.6 547.2,118.2 551.4,124.7 555.6,128.6 559.8,99.4 564.0,78.9 568.1,56.7 572.3,68.9 576.5,69.7 580.7,100.2 584.9,154.6 589.0,128.3 593.2,83.6 597.4,85.1 601.6,90.7 605.8,68.7 610.0,57.4 614.1,87.9 618.3,82.5 622.5,86.4 626.7,71.3 630.9,74.7 635.1,63.7 639.2,53.6 643.4,82.4 647.6,63.2 651.8,49.6 656.0,25.5 660.2,37.7 664.3,54.0 668.5,55.7 672.7,75.2 676.9,57.2 681.1,45.9 685.3,36.2 689.4,34.2 693.6,56.2 697.8,56.1 702.0,70.4 706.2,57.3 710.4,57.2 714.5,56.5 718.7,55.9 722.9,32.9 727.1,27.2 731.3,72.4 735.5,58.3 739.6,59.4 743.8,49.7 748.0,24.0" fill="none" stroke="#16324f" stroke-width="1.8" stroke-linejoin="round"/></svg>
+      <div class="caption">Al-Rimal, February to July 2025. Light: Ramadan. Dark: Eid al-Fitr and Eid al-Adha.</div>
+    </div>
+    <div class="stack">
+      <div class="card c-teal flat"><h4>How the dip is measured</h4><p class="small mb0">The first day of Eid against the same weekday one week before and one week after.</p></div>
+      <div class="card c-coral flat"><h4>Why both sides</h4><p class="small mb0">In spring demand climbs every week. A "before" alone makes the dip look smaller.</p></div>
+    </div>
+  </div>
+  <aside class="notes"><p>From Lab 1.2 step 4: nine Eid al-Fitr dips between -7.9% (2022) and -27.9% (2025). The 2022 dip is small because that Eid fell in a hot spell: weather and holiday overlap, which is why Day 2 puts both in one model. A first version of this lab compared with the four weeks before only and found a "rise" of 23% in 2022. Tell that story: the measure matters as much as the plot.</p></aside>
+</section>
+
+<section class="slide" data-label="Odd days" id="drop-weather-does-not-explain" data-lo="LO1">
+  <div class="kicker">Outliers</div>
+  <h2>Look for the drop the weather does not explain, then ask someone</h2>
+  <div class="cols cols-2">
+    <ul class="bullets small">
+      <li>In Al-Rimal a cool week can cut demand by a quarter. A drop alone proves nothing.</li>
+      <li>Keep the days with no calendar event that were <b>not cooler</b> than their neighbours.</li>
+      <li>One day stands out twice as far as any other.</li>
+    </ul>
+    <div class="stack">
+      <div class="stat"><div class="big">-30.5%</div><div class="lbl">14 March 2023, no holiday, no cold spell</div></div>
+      <div class="callout warn small"><b>Do not delete it yet.</b> Ask operations what happened that day.</div>
+    </div>
+  </div>
+  <aside class="notes"><p>Lab 1.2 step 5. Hamad's answer: a sandstorm outage on 14 and 15 March 2023 took half the feeders of Al-Rimal down. Demand was not low, supply was: the meter measured what was delivered. The right treatment is a note and a flag, so that no model learns it as a pattern and no backtest is blamed for missing it. Deleting silently is the wrong habit.</p></aside>
+</section>
+
+<section class="slide" id="check-wrong-eid-days" data-lo="LO1">
+  <div class="kicker">Checkpoint</div>
+  <h2>Why does last year's pattern miss Eid?</h2>
+  <div class="quiz" data-type="single" data-lo="LO1">
+    <p class="lead">A model with a 365-day season forecasts Al-Rimal for spring 2026. It is far too high on a few days in March and too low on a few in early April. What is the likely cause?</p>
+    <div class="opts">
+      <div class="opt" data-ok>Eid al-Fitr moved about 11 days earlier than in 2025</div>
+      <div class="opt" data-why="Blames noise for an error with a pattern: too high on some days and too low on others, a fixed distance apart, is a shift">Spring weather is more variable than summer weather</div>
+      <div class="opt" data-why="Mixes up the weekly and the annual pattern: a weekday error would repeat every week, not on a few days">The weekend is Friday and Saturday, not Saturday and Sunday</div>
+      <div class="opt" data-why="Reads a holiday as growth: a trend error would grow with the horizon, not sit on a few days">Demand grew faster in 2026 than the model assumed</div>
+    </div>
+    <div class="callout tip why"><b>Why.</b> The model repeats the 2025 dip on the 2025 dates. In 2026 the dip comes earlier: the model is too high where Eid now is, and too low where it was.</div>
+  </div>
+  <aside class="notes"><p>Answer: A. The pair "too high, then too low, about eleven days apart" is the signature of a moving holiday. In 2026 the first day of Eid al-Fitr in the lab calendar is 20 March, against 30 March in 2025.</p></aside>
 </section>
 
 <section class="slide lab" id="lab-1-2" data-auto="lab" data-lab="1.2">
-  <aside class="notes">REPLACE: what to watch for while participants work, the typical problems, and the fallback for anyone who did not finish an earlier lab</aside>
+  <aside class="notes"><p>Walk the room. Usual problems: plotting daily data over nine years and reading nothing (resample to weekly means); the weekday profile computed over all nine years, so growth blurs it (use 2023 to 2025); the Eid dip measured against the weeks before only. In step 5, a participant who finds a cold week in October has found weather, not an outage: point them at the temperature column. Nothing from an earlier lab is needed.</p></aside>
 </section>
 
-<!-- Session 3 -->
-
+<!-- ======================= SESSION 3 ======================= -->
 <section class="slide section" id="s3" data-auto="section" data-session="3"></section>
 
-<section class="slide" id="s3-idea" data-lo="LO1">
-  <div class="kicker">REPLACE: the question this slide answers</div>
-  <h2>REPLACE: one idea, stated as a sentence</h2>
-  <div class="cols cols-2">
-    <ul class="bullets">
-      <li>REPLACE: at most six bullets, each a complete thought</li>
-      <li>REPLACE: bold the key phrase; numbers come from the lab run, not from memory</li>
-    </ul>
-    <div class="card c-teal"><h4>In the case study</h4><p class="small mb0">REPLACE: tie the idea to the case study and its data</p></div>
+<section class="slide" data-label="The parts" id="series-as-parts" data-lo="LO1">
+  <div class="kicker">Decomposition</div>
+  <h2>Split the series into parts you can name, and one you cannot</h2>
+  <div class="flow">
+    <div class="step c-navy"><b>Trend</b>the slow level: growth, new feeders</div>
+    <div class="arrow">+</div>
+    <div class="step c-teal"><b>Weekly season</b>Friday and Saturday</div>
+    <div class="arrow">+</div>
+    <div class="step c-cyan"><b>Annual season</b>the summer</div>
+    <div class="arrow">+</div>
+    <div class="step c-coral"><b>Remainder</b>everything else</div>
   </div>
-  <div class="callout warn mt"><b>What goes wrong.</b> REPLACE: the failure participants will hit, and how to recognise it</div>
-  <aside class="notes">REPLACE: what to say, the demo to run, the question to ask the room, the common failure and its fix</aside>
+  <div class="callout tip mt"><b>On the log scale.</b> Summer swings are larger in MWh when the level is higher, so the parts multiply. Taking the logarithm turns the product into this sum.</div>
+  <aside class="notes"><p>Additive or multiplicative is the first choice in any decomposition. The test is a plot: does the seasonal swing grow with the level? In Al-Rimal it does. On the log scale a remainder of -0.10 reads as "about 10% below what trend and seasons say". Ask where a holiday that moves would land: it has no part of its own, so it lands in the remainder.</p></aside>
 </section>
 
-<section class="slide" id="s3-steps" data-lo="LO1">
-  <div class="kicker">Step by step</div>
-  <h2>REPLACE: a process, shown one step per key press</h2>
-  <div class="flow">
-    <div class="step c-teal"><b>1 · REPLACE: name</b>REPLACE: what happens first</div>
-    <div class="arrow frag" data-frag="b">→</div><div class="step c-cyan frag" data-frag="b"><b>2 · REPLACE: name</b>REPLACE: the next piece</div>
-    <div class="arrow frag" data-frag="c">→</div><div class="step c-coral frag" data-frag="c"><b>3 · REPLACE: name</b>REPLACE: the result</div>
+<section class="slide" data-label="Two seasons" id="stl-with-two-periods" data-lo="LO1">
+  <div class="kicker">The tool</div>
+  <h2>A decomposition with two seasonal periods, robust to odd days</h2>
+  <div class="cols cols-2">
+    <pre class="code s" data-file="Lab 1.3 · step 1"><code class="language-python">from statsmodels.tsa.seasonal import MSTL
+
+res = MSTL(np.log(y), periods=(7, 365),
+           stl_kwargs={"robust": True}).fit()
+
+res.trend
+res.seasonal["seasonal_7"]
+res.seasonal["seasonal_365"]
+res.resid</code></pre>
+    <ul class="bullets small">
+      <li>Each season is smoothed over its own cycles and may change slowly over the years.</li>
+      <li><b>Robust</b> fitting gives an odd day little weight, so an outage stays in the remainder and does not bend the season.</li>
+      <li>The four parts add up to the log of demand exactly. Check it.</li>
+    </ul>
   </div>
-  <div class="callout tip mt frag"><b>Takeaway.</b> REPLACE: the one sentence to remember</div>
-  <aside class="notes">Press once per step and say what each step adds before the next one appears. REPLACE: the example to walk through</aside>
+  <aside class="notes"><p>MSTL repeats a seasonal-trend decomposition by local regression once per period. The lab passes two more settings that limit the number of robust iterations, to keep nine years under ten seconds on a laptop; the slide leaves them out. Without "robust" the outage of March 2023 leaks into the annual season and reappears, faintly, every March.</p><p>Sources: statsmodels, MSTL; Forecasting: Principles and Practice, 3rd edition, chapter 3.</p></aside>
+</section>
+
+<section class="slide" data-label="Strength" id="strength-of-a-component" data-lo="LO1">
+  <div class="kicker">A number per part</div>
+  <h2>Strength compares a component with the noise around it</h2>
+  <div class="cols cols-2">
+    <pre class="code" data-file="Lab 1.3 · step 2"><code class="language-python">def strength(component, remainder):
+    ratio = remainder.var() / (
+        component + remainder).var()
+    return max(0.0, 1 - ratio)</code></pre>
+    <table class="t small">
+      <tr><th>Al-Rimal, 2017 to 2025</th><th class="num">Strength</th></tr>
+      <tr><td>Annual season</td><td class="num">0.96</td></tr>
+      <tr><td>Trend</td><td class="num">0.50</td></tr>
+      <tr><td>Weekly season</td><td class="num">0.16</td></tr>
+    </table>
+  </div>
+  <div class="callout tip small mt-s"><b>Read it as.</b> Near 1: the component dominates the remainder. Near 0: it is lost in it.</div>
+  <aside class="notes"><p>The definition is the one in Forecasting: Principles and Practice (STL features). Numbers from Lab 1.3 step 2. In Al-Rimal the annual season is almost everything and the week is weak, which predicts the result of Session 4: "the same weekday last year" will beat "last week" at 28 days. Ask the room to predict that now.</p><p>Sources: Forecasting: Principles and Practice, 3rd edition, STL features.</p></aside>
+</section>
+
+<section class="slide" data-label="Twelve regions" id="twelve-regions-differ" data-lo="LO1">
+  <div class="kicker">One table for 12 regions</div>
+  <h2>The regions are not alike, so one model setting will not suit all</h2>
+  <table class="t small">
+    <tr><th>Region, 2021 to 2025</th><th class="num">Trend</th><th class="num">Annual</th><th class="num">Weekly</th><th>What it says</th></tr>
+    <tr><td>Al-Rimal (R01)</td><td class="num">0.19</td><td class="num">0.96</td><td class="num">0.17</td><td>hot, residential: the summer rules</td></tr>
+    <tr><td>Al-Sahil (R02)</td><td class="num">0.27</td><td class="num">0.85</td><td class="num">0.51</td><td>coastal, more commerce: the week counts</td></tr>
+    <tr><td>Al-Jabal (R03)</td><td class="num">0.40</td><td class="num">0.71</td><td class="num">0.34</td><td>cool mountain: a weaker summer</td></tr>
+    <tr class="hl"><td>Al-Mina (R11)</td><td class="num">0.89</td><td class="num">0.83</td><td class="num">0.56</td><td>industrial port: a trend that is too strong</td></tr>
+  </table>
+  <p class="small mt-s">Trend strength depends on the window: Al-Rimal's is 0.50 over nine years and 0.19 over five. Compare regions within one table.</p>
+  <aside class="notes"><p>Lab 1.3 step 3, four of the twelve rows. The table uses five years so that twelve decompositions run in under a minute. Ask what is odd about Al-Mina before the next slide but one: a trend strength of 0.89 in five years is not growth, it is a step.</p></aside>
+</section>
+
+<section class="slide" data-label="The remainder" id="what-the-remainder-holds" data-lo="LO1">
+  <div class="kicker">Read what is left</div>
+  <h2>The remainder is the to-do list of the next model</h2>
+  <div class="cols cols-3">
+    <div class="stat"><div class="big">-13%</div><div class="lbl">mean remainder on the 54 main Eid days of nine years</div></div>
+    <div class="stat"><div class="big">2 of 12</div><div class="lbl">largest remainders are Eid days; most are weather swings</div></div>
+    <div class="stat"><div class="big">-0.35</div><div class="lbl">log remainder on 14 March 2023, the outage</div></div>
+  </div>
+  <div class="callout warn small mt"><b>What goes wrong.</b> Expecting holidays to top the list. In a hot region a week that is warmer or cooler than normal moves demand more than Eid does.</div>
+  <aside class="notes"><p>Lab 1.3 step 4. The finding is unflattering to the tidy story and worth keeping: the largest single remainders are days when the temperature was far from its normal for the date, because a fixed annual season knows the normal and not the day. Eid shows as a consistent average, not as the extremes. So the next model needs two things the decomposition cannot hold: the temperature and the moving calendar. That is Lab 2.3.</p></aside>
+</section>
+
+<section class="slide" data-label="A break" id="a-step-is-not-a-trend" data-lo="LO1">
+  <div class="kicker">Structural breaks</div>
+  <h2>Al-Mina grew 52% in two years: a step, not a trend</h2>
+  <div class="cols cols-2">
+    <ul class="bullets small">
+      <li>On 1 July 2022 six industrial feeders joined the region.</li>
+      <li>A decomposition smooths the step into a steep trend.</li>
+      <li>A model trained across the step reads it as fast growth, or averages two levels.</li>
+    </ul>
+    <div class="stack">
+      <div class="card c-teal flat"><h4>Options</h4><p class="small mb0">Train after the break. Or tell the model: a step regressor, or forecast the new feeders apart.</p></div>
+      <div class="card c-coral flat"><h4>How you find out</h4><p class="small mb0">The yearly means, then a question to network operations.</p></div>
+    </div>
+  </div>
+  <aside class="notes"><p>Lab 1.3 step 5: growth of the yearly mean from 2021 to 2023 is 51.8% in Al-Mina; the next region is at 10%. The labs train on a window of three years (1,096 days) for this reason among others: by 2025 the window lies after the break. In the capstone, participants are expected to look for breaks and say what they did about them.</p></aside>
+</section>
+
+<section class="slide" id="check-remainder-reading" data-lo="LO1">
+  <div class="kicker">Checkpoint</div>
+  <h2>What does this remainder tell you?</h2>
+  <div class="quiz" data-type="single" data-lo="LO1">
+    <p class="lead">You decompose a region's log demand with weekly and annual periods. The remainder is near zero on average, but about -0.12 on the same ten days every year: the days around the two Eids. What do you conclude?</p>
+    <div class="opts">
+      <div class="opt" data-why="Asks the season to hold what moves: a longer smoothing window still assumes the same dates each year">The annual season needs a longer smoothing window</div>
+      <div class="opt" data-why="Treats a regular effect as an outlier: robust fitting keeps it out of the season, it does not explain it">The fit should be made robust so these days are ignored</div>
+      <div class="opt" data-why="Reads a level effect as a variance problem: the log already handles swings that grow with the level">The series should be decomposed without the logarithm</div>
+      <div class="opt" data-ok>The effect is real and regular, and needs a regressor of its own</div>
+    </div>
+    <div class="callout tip why"><b>Why.</b> A fixed 365-day season cannot hold an event that moves 11 days a year, so the effect stays in the remainder. A calendar regressor can carry it.</div>
+  </div>
+  <aside class="notes"><p>Answer: D. Option B is the tempting one: robust fitting is the right setting, and it is the reason the effect shows so cleanly in the remainder. It still leaves the effect unexplained.</p></aside>
 </section>
 
 <section class="slide lab" id="lab-1-3" data-auto="lab" data-lab="1.3">
-  <aside class="notes">REPLACE: what to watch for while participants work, the typical problems, and the fallback for anyone who did not finish an earlier lab</aside>
+  <aside class="notes"><p>Walk the room. The first decomposition takes about ten seconds and the table of twelve regions about a minute: tell participants to read the next task while it runs. Usual problems: decomposing demand and not its logarithm; computing strength on the component alone, without adding the remainder; reading the largest remainders as holidays without looking at the event column. Nothing from an earlier lab is needed.</p></aside>
 </section>
 
-<!-- Session 4 -->
-
+<!-- ======================= SESSION 4 ======================= -->
 <section class="slide section" id="s4" data-auto="section" data-session="4"></section>
 
-<section class="slide" id="s4-idea" data-lo="LO1">
-  <div class="kicker">REPLACE: the question this slide answers</div>
-  <h2>REPLACE: one idea, stated as a sentence</h2>
-  <div class="cols cols-2">
-    <ul class="bullets">
-      <li>REPLACE: at most six bullets, each a complete thought</li>
-      <li>REPLACE: bold the key phrase; numbers come from the lab run, not from memory</li>
-    </ul>
-    <div class="card c-teal"><h4>In the case study</h4><p class="small mb0">REPLACE: tie the idea to the case study and its data</p></div>
+<section class="slide" data-label="Why a floor" id="a-floor-before-any-model" data-lo="LO1">
+  <div class="kicker">The benchmark floor</div>
+  <h2>Before any model, find out how good "no model" is</h2>
+  <div class="cols cols-3 gap-s">
+    <div class="card c-navy"><h4>It costs nothing</h4><p class="small mb0">No fitting, no tuning, no upkeep. It cannot break in production.</p></div>
+    <div class="card c-teal"><h4>It is often good</h4><p class="small mb0">On strongly seasonal series, repeating the right past period is hard to beat.</p></div>
+    <div class="card c-coral"><h4>It sets the price</h4><p class="small mb0">Every later method reports its distance to the floor, not its own error alone.</p></div>
   </div>
-  <div class="callout warn mt"><b>What goes wrong.</b> REPLACE: the failure participants will hit, and how to recognise it</div>
-  <aside class="notes">REPLACE: what to say, the demo to run, the question to ask the room, the common failure and its fix</aside>
+  <div class="callout warn mt"><b>What goes wrong.</b> "Our model has a 4% error" says nothing until you know that repeating last year gives 5%, or 3%.</div>
+  <aside class="notes"><p>This is the habit the course is named for. Participants met a baseline in DS-204; the forecasting version has a twist: there are several naive forecasts, and which one is the floor depends on the series and the horizon. That is what Lab 1.4 finds out.</p></aside>
 </section>
 
-<section class="slide" id="s4-steps" data-lo="LO1">
-  <div class="kicker">Step by step</div>
-  <h2>REPLACE: a process, shown one step per key press</h2>
-  <div class="flow">
-    <div class="step c-teal"><b>1 · REPLACE: name</b>REPLACE: what happens first</div>
-    <div class="arrow frag" data-frag="b">→</div><div class="step c-cyan frag" data-frag="b"><b>2 · REPLACE: name</b>REPLACE: the next piece</div>
-    <div class="arrow frag" data-frag="c">→</div><div class="step c-coral frag" data-frag="c"><b>3 · REPLACE: name</b>REPLACE: the result</div>
+<section class="slide" data-label="Naive forecasts" id="naive-and-seasonal-naive" data-lo="LO1">
+  <div class="kicker">Three ways to repeat the past</div>
+  <h2>Naive repeats the last day; seasonal naive repeats the last cycle</h2>
+  <div class="cols cols-2">
+    <pre class="code s" data-file="Lab 1.4 · step 2"><code class="language-python">def naive(train, h):
+    return np.repeat(train.iloc[-1], h)
+
+def seasonal_naive(train, h, m):
+    last = train.to_numpy()[-m:]
+    return np.resize(last, h)</code></pre>
+    <table class="t small">
+      <tr><th>Method</th><th>Next Friday equals</th></tr>
+      <tr><td>Naive</td><td>the last day seen</td></tr>
+      <tr><td>Seasonal naive, m = 7</td><td>last Friday</td></tr>
+      <tr><td>Seasonal naive, m = 364</td><td>the Friday 52 weeks ago</td></tr>
+    </table>
   </div>
-  <div class="callout tip mt frag"><b>Takeaway.</b> REPLACE: the one sentence to remember</div>
-  <aside class="notes">Press once per step and say what each step adds before the next one appears. REPLACE: the example to walk through</aside>
+  <div class="callout tip small mt-s"><b>364, not 365.</b> Fifty-two whole weeks keep a Friday on a Friday.</div>
+  <aside class="notes"><p>np.resize repeats the last m values when the horizon is longer than the cycle: a 28-day forecast with m = 7 is last week four times. Ask which of the three the decomposition table predicts will win in Al-Rimal at 28 days, and why.</p></aside>
+</section>
+
+<section class="slide" data-label="Rolling origins" id="rolling-origins" data-lo="LO1">
+  <div class="kicker">The instrument</div>
+  <h2>Move the origin through the last year and forecast 28 days each time</h2>
+  <div class="cols cols-21">
+    <div class="figure">
+      <svg viewBox="0 0 760 300" role="img" aria-label="One fold of the backtest: six weeks of history, then 28 test days with the last-week forecast and the last-year forecast against what happened" xmlns="http://www.w3.org/2000/svg"><line x1="62" x2="748" y1="258.0" y2="258.0" stroke="#d9dee5" stroke-width="1"/><text x="54" y="263.0" text-anchor="end" font-size="15" fill="#5b6675">3,341</text><line x1="62" x2="748" y1="180.0" y2="180.0" stroke="#d9dee5" stroke-width="1"/><text x="54" y="185.0" text-anchor="end" font-size="15" fill="#5b6675">4,186</text><line x1="62" x2="748" y1="102.0" y2="102.0" stroke="#d9dee5" stroke-width="1"/><text x="54" y="107.0" text-anchor="end" font-size="15" fill="#5b6675">5,032</text><line x1="62" x2="748" y1="24.0" y2="24.0" stroke="#d9dee5" stroke-width="1"/><text x="54" y="29.0" text-anchor="end" font-size="15" fill="#5b6675">5,878</text><text x="469.6" y="293" text-anchor="middle" font-size="15" fill="#5b6675">origin 18 Jun 2025</text><line x1="469.6" x2="469.6" y1="10" y2="272" stroke="#8a94a3" stroke-width="1.5" stroke-dasharray="4 4"/><polyline points="62.0,219.9 71.9,255.7 81.9,250.2 91.8,233.2 101.8,231.1 111.7,229.8 121.7,248.5 131.6,248.4 141.5,258.0 151.5,225.8 161.4,209.8 171.4,213.9 181.3,218.5 191.2,212.6 201.2,191.9 211.1,228.1 221.1,193.9 231.0,158.7 241.0,150.9 250.9,158.3 260.8,176.7 270.8,186.2 280.7,192.1 290.7,149.2 300.6,119.1 310.6,86.6 320.5,104.5 330.4,105.7 340.4,150.4 350.3,230.2 360.3,191.6 370.2,126.1 380.1,128.3 390.1,136.4 400.0,104.1 410.0,87.6 419.9,132.4 429.9,124.5 439.8,130.2 449.7,108.0 459.7,113.1 469.6,96.9" fill="none" stroke="#16324f" stroke-width="1.8" stroke-linejoin="round"/><polyline points="479.6,82.0 489.5,124.3 499.4,96.1 509.4,76.2 519.3,40.8 529.3,58.8 539.2,82.6 549.2,85.2 559.1,113.7 569.0,87.3 579.0,70.7 588.9,56.5 598.9,53.7 608.8,85.9 618.8,85.7 628.7,106.7 638.6,87.5 648.6,87.3 658.5,86.3 668.5,85.4 678.4,51.7 688.3,43.3 698.3,109.6 708.2,89.0 718.2,90.5 728.1,76.3 738.1,38.7 748.0,40.0" fill="none" stroke="#16324f" stroke-width="1.8" stroke-linejoin="round"/><polyline points="479.6,87.6 489.5,132.4 499.4,124.5 509.4,130.2 519.3,108.0 529.3,113.1 539.2,96.9 549.2,87.6 559.1,132.4 569.0,124.5 579.0,130.2 588.9,108.0 598.9,113.1 608.8,96.9 618.8,87.6 628.7,132.4 638.6,124.5 648.6,130.2 658.5,108.0 668.5,113.1 678.4,96.9 688.3,87.6 698.3,132.4 708.2,124.5 718.2,130.2 728.1,108.0 738.1,113.1 748.0,96.9" fill="none" stroke="#e4572e" stroke-width="2" stroke-linejoin="round" stroke-dasharray="6 4"/><polyline points="479.6,64.6 489.5,98.9 499.4,87.4 509.4,80.6 519.3,68.8 529.3,61.3 539.2,64.5 549.2,83.3 559.1,81.2 569.0,74.4 579.0,66.8 588.9,57.9 598.9,69.6 608.8,90.0 618.8,93.0 628.7,134.8 638.6,114.2 648.6,87.9 658.5,91.7 668.5,62.4 678.4,50.9 688.3,46.9 698.3,93.0 708.2,52.5 718.2,26.3 728.1,24.0 738.1,30.0 748.0,58.1" fill="none" stroke="#00a19a" stroke-width="2" stroke-linejoin="round"/></svg>
+      <div class="caption">One fold. Solid: what happened. Dashed coral: last week repeated. Teal: the same weekdays a year earlier.</div>
+    </div>
+    <ul class="bullets small">
+      <li>The <b>origin</b> is the last day the forecaster has seen.</li>
+      <li>13 origins, 28 days apart: every day of 2025 is tested exactly once.</li>
+      <li>Each fold trains on the 1,096 days before its origin.</li>
+      <li>Nothing after the origin may reach the forecast.</li>
+    </ul>
+  </div>
+  <aside class="notes"><p>The fold shown starts on 18 June 2025: demand climbs into summer, last week's values stay flat and fall behind, last year's values climb with it. One fold is an anecdote; thirteen are a measurement. This is time series cross-validation: unlike the shuffled folds of DS-204, the order of time is kept and training always ends before testing starts. The last bullet is the rule Day 4 audits.</p><p>Sources: Forecasting: Principles and Practice, 3rd edition, time series cross-validation.</p></aside>
+</section>
+
+<section class="slide" data-label="Scaled error" id="scaled-error" data-lo="LO1">
+  <div class="kicker">The measure</div>
+  <h2>A scaled error lets a region and a feeder share one table</h2>
+  <div class="cols cols-2">
+    <pre class="code s" data-file="Lab 1.4 · step 3"><code class="language-python">def scaled_error(actual, forecast, train, m=7):
+    v = train.to_numpy()
+    scale = np.mean(np.abs(v[m:] - v[:-m]))
+    err = np.mean(np.abs(actual - forecast))
+    return err / scale</code></pre>
+    <ul class="bullets small">
+      <li>The numerator: mean absolute error on the test days.</li>
+      <li>The denominator: the error of "last week" <b>inside the training data</b>, one week ahead.</li>
+      <li>No unit. Below 1 beats that in-sample error.</li>
+      <li>Above 1 at 28 days is normal: the yardstick is one week ahead.</li>
+    </ul>
+  </div>
+  <aside class="notes"><p>This is the mean absolute scaled error (MASE). Why not a percentage error: it explodes near zero, which feeders reach, and it punishes over-forecasts and under-forecasts unequally. Why the denominator comes from training data: it must not depend on the test window, or the scale itself would leak. From now on the number to watch is the distance to the floor, not the distance to 1.</p><p>Sources: Forecasting: Principles and Practice, 3rd edition, evaluating point forecast accuracy.</p></aside>
+</section>
+
+<section class="slide" data-label="The floor" id="the-floor-table" data-lo="LO1">
+  <div class="kicker">Lab 1.4 · Al-Rimal, 13 origins, 364 test days</div>
+  <h2>The floor is "the same weekday last year", at 1.06</h2>
+  <table class="t small">
+    <tr><th>Method</th><th class="num">Scaled error</th><th class="num">Week 1</th><th class="num">Week 2</th><th class="num">Week 3</th><th class="num">Week 4</th></tr>
+    <tr><td>Naive (last day)</td><td class="num">1.64</td><td class="num">1.09</td><td class="num">1.87</td><td class="num">1.55</td><td class="num">2.07</td></tr>
+    <tr><td>Last week (m = 7)</td><td class="num">1.62</td><td class="num">1.18</td><td class="num">1.77</td><td class="num">1.46</td><td class="num">2.05</td></tr>
+    <tr class="hl"><td>Same weekday last year (m = 364)</td><td class="num">1.06</td><td class="num">0.92</td><td class="num">0.96</td><td class="num">1.08</td><td class="num">1.28</td></tr>
+  </table>
+  <div class="callout tip small mt-s"><b>Report by horizon.</b> One average hides that "last week" is close in week 1 and twice as bad in week 4.</div>
+  <aside class="notes"><p>This table is LO1's evidence: scaled errors by horizon. Read it by column, then by row. "Last week" loses because the temperature four weeks ahead is closer to the same weeks last year than to last week. Note that the floor's own error also grows over the horizon, from 0.92 to 1.28: last year's values are shifted by a level estimated at the origin in better methods, which is where Day 2 starts.</p></aside>
+</section>
+
+<section class="slide" data-label="Where it fails" id="where-the-floor-fails" data-lo="LO1">
+  <div class="kicker">Know your floor's weak days</div>
+  <h2>On Eid days the floor's error doubles</h2>
+  <div class="cols cols-2">
+    <div class="stack">
+      <div class="stat"><div class="big">2.17</div><div class="lbl">scaled error of the floor on the 11 Eid days of 2025</div></div>
+      <div class="stat"><div class="big">1.03</div><div class="lbl">on the other 353 days</div></div>
+    </div>
+    <ul class="bullets small">
+      <li>Last year's Eid was about 11 days later: the floor puts the dip on the wrong days.</li>
+      <li>Eleven days are 3% of the year, so the overall score barely moves.</li>
+      <li>They are the days the purchasing lead remembers.</li>
+    </ul>
+  </div>
+  <aside class="notes"><p>The stretch of Lab 1.4. An average over the year can hide exactly the days that matter to the user. From Day 2 on, methods are scored overall and on Eid days. Ask: what would have to be true of a method for it to do well on these days? It needs the Hijri calendar as an input.</p></aside>
+</section>
+
+<section class="slide" id="check-which-floor" data-lo="LO1">
+  <div class="kicker">Checkpoint</div>
+  <h2>Which backtest is a fair floor?</h2>
+  <div class="quiz" data-type="single" data-lo="LO1">
+    <p class="lead">A colleague reports a floor for a 28-day daily forecast: seasonal naive with m = 7, tested on the 28 days after one origin in January, error 0.28 after scaling. What is the main weakness?</p>
+    <div class="opts">
+      <div class="opt" data-why="Thinks the scale must be recomputed on test data: the denominator belongs to the training window by design">The scale should come from the test days, not the training days</div>
+      <div class="opt" data-ok>One origin in a calm month says little about the other eleven</div>
+      <div class="opt" data-why="Assumes a floor must be a fitted model: a floor is the best method that needs no fitting">A seasonal naive forecast is too simple to count as a floor</div>
+      <div class="opt" data-why="Confuses the horizon with the season: the horizon is fixed by the decision and stays at 28">The horizon should be shortened to 7 days to match m = 7</div>
+    </div>
+    <div class="callout tip why"><b>Why.</b> A single fold is an anecdote. In the lab the same method scores 0.28 in the first fold and 1.62 over 13 folds that cover the year.</div>
+  </div>
+  <aside class="notes"><p>Answer: B. The numbers are real: Lab 1.4's first fold (January 2025) gives 0.282 for "last week", and the full backtest 1.616. A second weakness worth naming: m = 364 was never tried, so the colleague does not know which naive forecast is the floor.</p></aside>
 </section>
 
 <section class="slide lab" id="lab-1-4" data-auto="lab" data-lab="1.4">
-  <aside class="notes">REPLACE: what to watch for while participants work, the typical problems, and the fallback for anyone who did not finish an earlier lab</aside>
+  <aside class="notes"><p>AI off for this lab: assistants closed, as the course policy states. Walk the room. Usual problems: origins that end one fold short of the last day; test days that include the origin itself (the forecast then "sees" one test day); the scale computed on the whole series. A participant who cannot finish a step still gets the reference result from the next cell and can continue. Nothing from an earlier lab is needed. The floor table this lab produces is supplied to every later lab as data/reference/bt_floor.csv.</p></aside>
 </section>
 
-<section class="slide" id="wrap-up">
+<!-- ======================= CLOSING ======================= -->
+<section class="slide" id="wrap-up" data-label="Recap">
   <div class="kicker">Day 1 · wrap-up</div>
   <h2>Three things to keep</h2>
   <div class="cols cols-3">
-    <div class="card c-teal"><h4>Remember</h4><p class="small mb0">REPLACE: one idea participants keep</p></div>
-    <div class="card c-coral"><h4>Remember</h4><p class="small mb0">REPLACE: one idea participants keep</p></div>
-    <div class="card c-purple"><h4>Remember</h4><p class="small mb0">REPLACE: one idea participants keep</p></div>
+    <div class="card c-teal"><h4>The frame comes first</h4><p class="small mb0">The decision fixes the horizon, the level and the quantile. For Shams Power: 28 days, daily, by region, the 80th percentile.</p></div>
+    <div class="card c-coral"><h4>Look, then decompose</h4><p class="small mb0">Summer is temperature, the weekend is Friday and Saturday, Eid moves. What the decomposition cannot hold sits in the remainder.</p></div>
+    <div class="card c-purple"><h4>The floor is 1.06</h4><p class="small mb0">"The same weekday last year", over 13 rolling origins. It fails on Eid days. Tomorrow's methods must beat it.</p></div>
   </div>
+  <aside class="notes"><p>Ask each table for the one number from today they would put in a forecast note. Good answers: the floor's 1.06, the 80th percentile, the 2.17 on Eid days.</p></aside>
 </section>
 
 <section class="slide dark" id="next" data-label="Next">
   <div class="kicker">Next</div>
   <h2>Day 2: Statistical forecasters</h2>
-  <p class="lead">REPLACE: what participants prepare before then; unfinished labs can be finished at home</p>
-  <aside class="notes">REPLACE: accounts, installs or reading participants need before the next unit</aside>
+  <p class="lead">Exponential smoothing and ARIMA against the floor, then temperature and Hijri regressors for the Eid days, then the question of whether an 80% interval holds 80% of the time. Unfinished labs can be finished at home: none is needed tomorrow.</p>
+  <aside class="notes"><p>Nothing to install for Day 2. Every Day 2 lab starts from the data files and the supplied floor table.</p></aside>
 </section>

@@ -146,7 +146,7 @@ def bt(name: str) -> pd.DataFrame:
 def save(name: str, text: str) -> Path:
     OUT.mkdir(exist_ok=True)
     p = OUT / name
-    p.write_text(text, encoding="utf-8")
+    p.write_text(text, encoding="utf-8", newline="\n")
     return p
 
 

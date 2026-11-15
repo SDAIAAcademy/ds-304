@@ -1,0 +1,20 @@
+{
+ "A": {
+  "horizon_days": 28,
+  "granularity": "day",
+  "level": "region",
+  "target": "total"
+ },
+ "B": {
+  "horizon_days": 7,
+  "granularity": "day",
+  "level": "feeder",
+  "target": "upper"
+ },
+ "C": {
+  "horizon_days": 1095,
+  "granularity": "year",
+  "level": "region",
+  "target": "peak"
+ }
+}
