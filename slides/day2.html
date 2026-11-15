@@ -502,11 +502,11 @@ pinball([10], [12], 0.9)   # 0.2</code></pre>
   <div class="kicker">Checkpoint</div>
   <h2>Which forecast would you hand to the planner?</h2>
   <div class="quiz" data-type="single" data-lo="LO3">
-    <p class="lead">Model A: scaled error 0.75, its 80% interval covers 62% of days. Model B: scaled error 0.80, its 80% interval covers 79%. The planner buys on the 0.8 quantile. What do you deliver?</p>
+    <p class="lead">Model P: scaled error 0.75, its 80% interval covers 62% of days. Model Q: scaled error 0.80, its 80% interval covers 79%. The planner buys on the 0.8 quantile. What do you deliver?</p>
     <div class="opts">
-      <div class="opt" data-why="Ranks by the point score alone: the planner acts on a quantile, and this model's quantiles are too close to the middle">Model A as it is: it has the lower error</div>
-      <div class="opt" data-ok>Model B, or model A with intervals rebuilt from its backtest errors</div>
-      <div class="opt" data-why="Widens by guesswork: an arbitrary factor has no measured coverage behind it">Model A with every interval doubled in width</div>
+      <div class="opt" data-why="Ranks by the point score alone: the planner acts on a quantile, and this model's quantiles are too close to the middle">Model P as it is: it has the lower error</div>
+      <div class="opt" data-ok>Model Q, or model P with intervals rebuilt from its backtest errors</div>
+      <div class="opt" data-why="Widens by guesswork: an arbitrary factor has no measured coverage behind it">Model P with every interval doubled in width</div>
       <div class="opt" data-why="Averages two numbers that measure different things: coverage is not improved by mixing in a point score">Neither: average the two scaled errors and report 0.775</div>
     </div>
     <div class="callout tip why"><b>Why.</b> A quantile that is not calibrated costs the planner on every purchase. Use intervals that hold, or repair the better point forecast from its own backtest errors.</div>

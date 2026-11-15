@@ -1,158 +1,486 @@
+<!-- ======================= OPENING ======================= -->
 <section class="slide title" id="title" data-auto="title">
-  <aside class="notes">REPLACE: welcome; introduce yourself; one question to the room that calibrates the pace; the rhythm of the day</aside>
+  <aside class="notes"><p>Open with a number on the board: 0.24. A colleague's backtest for Al-Rimal, 28 days ahead, arrived this morning with that score. The floor is 1.06 and the best model of this course scored 0.77. Ask: is this good news? Let the room argue for a minute. Session 1 is the review.</p></aside>
 </section>
 
 <section class="slide" id="agenda" data-auto="agenda"></section>
 
-<!-- Session 1 -->
-
-<section class="slide section" id="s1" data-auto="section" data-session="1"></section>
-
-<section class="slide" id="s1-idea" data-lo="LO4">
-  <div class="kicker">REPLACE: the question this slide answers</div>
-  <h2>REPLACE: one idea, stated as a sentence</h2>
-  <div class="cols cols-2">
-    <ul class="bullets">
-      <li>REPLACE: at most six bullets, each a complete thought</li>
-      <li>REPLACE: bold the key phrase; numbers come from the lab run, not from memory</li>
-    </ul>
-    <div class="card c-teal"><h4>In the case study</h4><p class="small mb0">REPLACE: tie the idea to the case study and its data</p></div>
+<section class="slide" id="review-day-3" data-lo="LO3">
+  <div class="kicker">Review · Day 3</div>
+  <h2>What may be said about these two methods?</h2>
+  <div class="quiz" data-type="single" data-lo="LO3">
+    <p class="lead">On two held-out folds, method P scores 0.64 (0.75 and 0.53 by fold) and method Q scores 0.62 (0.73 and 0.51). P is a table lookup; Q needs a feature pipeline. What is the sound reading?</p>
+    <div class="opts">
+      <div class="opt" data-why="Reads two hundredths as a result: the folds of one method differ by ten times as much">Q is the more accurate method and should replace P</div>
+      <div class="opt" data-ok>The gap is small beside the spread between folds: prefer the simpler P</div>
+      <div class="opt" data-why="Dismisses two folds that agree: both methods can still be compared with the floor and with each other">Two folds are too few to say anything about either method</div>
+      <div class="opt" data-why="Assumes complexity earns trust: upkeep is a cost, and nothing here pays for it">Q, because a trained model will improve as data arrives</div>
+    </div>
+    <div class="callout tip why"><b>Why.</b> A difference counts when it is large beside the fold-to-fold spread. When it is not, the simplest method within noise of the best is the defensible choice.</div>
   </div>
-  <div class="callout warn mt"><b>What goes wrong.</b> REPLACE: the failure participants will hit, and how to recognise it</div>
-  <aside class="notes">REPLACE: what to say, the demo to run, the question to ask the room, the common failure and its fix</aside>
+  <aside class="notes"><p>Answer: B. The numbers are invented for the question. Q is ahead in both folds, which is some evidence, but by 0.02 where the folds differ by 0.22: more folds would be needed before paying for a pipeline.</p></aside>
 </section>
 
-<section class="slide" id="s1-steps" data-lo="LO4">
-  <div class="kicker">Step by step</div>
-  <h2>REPLACE: a process, shown one step per key press</h2>
-  <div class="flow">
-    <div class="step c-teal"><b>1 · REPLACE: name</b>REPLACE: what happens first</div>
-    <div class="arrow frag" data-frag="b">→</div><div class="step c-cyan frag" data-frag="b"><b>2 · REPLACE: name</b>REPLACE: the next piece</div>
-    <div class="arrow frag" data-frag="c">→</div><div class="step c-coral frag" data-frag="c"><b>3 · REPLACE: name</b>REPLACE: the result</div>
+<!-- ======================= SESSION 1 ======================= -->
+<section class="slide section" id="s1" data-auto="section" data-session="1"></section>
+
+<section class="slide" data-label="Too good" id="a-score-too-good" data-lo="LO4">
+  <div class="kicker">A backtest arrives for review</div>
+  <h2>A score far below every honest result is a finding to explain</h2>
+  <div class="cols cols-3">
+    <div class="stat"><div class="big">1.06</div><div class="lbl">the floor, Al-Rimal, 13 origins over 2025</div></div>
+    <div class="stat"><div class="big">0.77</div><div class="lbl">the regression of Lab 2.3 with weather and calendar</div></div>
+    <div class="stat"><div class="big">0.24</div><div class="lbl">the backtest you are asked to review</div></div>
   </div>
-  <div class="callout tip mt frag"><b>Takeaway.</b> REPLACE: the one sentence to remember</div>
-  <aside class="notes">Press once per step and say what each step adds before the next one appears. REPLACE: the example to walk through</aside>
+  <div class="callout warn mt"><b>The reviewer's first question.</b> What does this forecast know on the origin day, and how does it know it?</div>
+  <aside class="notes"><p>The colleague is left unnamed; the reviewer is each participant, working beside Nada Al-Jasser, the desk's forecast analyst, who signs what leaves the desk. Nothing in the notebook is dishonest: each fault is a line that looks reasonable. That is why reviews exist. A model that cuts the best known error by two thirds with two extra columns should make a reviewer look harder, not celebrate.</p></aside>
+</section>
+
+<section class="slide" data-label="Three doors" id="three-doors-for-leakage" data-lo="LO4">
+  <div class="kicker">Leakage across time</div>
+  <h2>Three doors through which the future reaches a forecast</h2>
+  <div class="cols cols-3">
+    <div class="card c-coral"><h4>1 · A feature</h4><p class="small mb0">A column computed from the series itself that reaches past the origin: a centred average, a lag shorter than the horizon.</p></div>
+    <div class="card c-teal"><h4>2 · A regressor</h4><p class="small mb0">An outside variable used with values that were not known on the origin day: measured weather, revised figures.</p></div>
+    <div class="card c-purple"><h4>3 · A choice</h4><p class="small mb0">A model, setting or window picked because it scored best on the test folds. No column leaks; the decision does.</p></div>
+  </div>
+  <aside class="notes"><p>The first two were met on Days 2 and 3 one at a time. The third is the hardest to see because the code of the model is clean: the leak is in how the analyst used the results. The lab's notebook has one of each, in this order, and the score is recorded after every fix.</p><p>Source: Kaufman, Rosset, Perlich and Stitelman (2012), Leakage in Data Mining.</p></aside>
+</section>
+
+<section class="slide" data-label="Fault 1" id="feature-sees-the-future" data-lo="LO4">
+  <div class="kicker">Lab 4.1 · step 2</div>
+  <h2>A centred average contains the days being forecast</h2>
+  <pre class="code s" data-file="as received"><code class="language-python">X["smooth"] = data.demand.rolling(7, center=True, min_periods=1).mean().reindex(dates)   # t-3 to t+3</code></pre>
+  <pre class="code s mt-s" data-file="fix 1"><code class="language-python">X["smooth"] = data.demand.rolling(7).mean().shift(28).reindex(dates)       # ends 28 days before t</code></pre>
+  <div class="cols cols-2 mt-s">
+    <div class="stat"><div class="big">0.24 → 0.41</div><div class="lbl">scaled error before and after the fix</div></div>
+    <div class="callout tip small"><b>The rule.</b> A feature built from the target must end at least one horizon before the day it describes: here 28 days.</div>
+  </div>
+  <aside class="notes"><p>The centred mean of the target day includes the target itself and three days after it. A trailing mean is not enough either: for a forecast made 28 days ahead, yesterday's demand is not known. Shift by the horizon. The score nearly doubles and is still far too good.</p></aside>
+</section>
+
+<section class="slide" data-label="Fault 2" id="regressor-from-the-future" data-lo="LO4">
+  <div class="kicker">Lab 4.1 · step 3</div>
+  <h2>The measured temperature of the test days was never available</h2>
+  <pre class="code s" data-file="fix 2"><code class="language-python">temp = data.temp_c.reindex(dates)                                  # measured: fine up to the origin
+temp = temp.where(dates &lt;= origin, U.temp_known(RID, origin, dates))  # after it: what was known
+X["cdd"] = (temp - 22).clip(lower=0)</code></pre>
+  <div class="cols cols-2 mt-s">
+    <div class="stat"><div class="big">0.41 → 0.71</div><div class="lbl">scaled error before and after the fix</div></div>
+    <div class="callout tip small"><b>The rule.</b> For every outside variable ask what its value was on the origin day, not what it turned out to be.</div>
+  </div>
+  <aside class="notes"><p>This is the oracle of Lab 2.3, met as a fault. U.temp_known gives the normal for the day plus the anomaly measured on the origin day, fading by a fifth each day: the temperature rule of this course. In a real desk the honest input is the weather forecast archived on the origin day; if no archive exists, start one today.</p></aside>
+</section>
+
+<section class="slide" data-label="Fault 3" id="selection-on-the-test-window" data-lo="LO4">
+  <div class="kicker">Lab 4.1 · step 4</div>
+  <h2>The best setting in every test fold is known only afterwards</h2>
+  <div class="cols cols-2">
+    <table class="t small">
+      <tr><th>Training window, days</th><th class="num">2024 folds</th><th class="num">2025 folds</th></tr>
+      <tr class="hl"><td>365</td><td class="num">0.694</td><td class="num">0.683</td></tr>
+      <tr><td>548</td><td class="num">0.722</td><td class="num">0.689</td></tr>
+      <tr><td>730</td><td class="num">0.733</td><td class="num">0.682</td></tr>
+      <tr><td>1,096</td><td class="num">0.759</td><td class="num">0.711</td></tr>
+      <tr><td>1,461</td><td class="num">0.750</td><td class="num">0.717</td></tr>
+    </table>
+    <div class="stack">
+      <div class="stat"><div class="big">0.651</div><div class="lbl">as reported: the best window of each 2025 fold, averaged</div></div>
+      <div class="stat"><div class="big">0.683</div><div class="lbl">honest: one window chosen on 2024, scored on 2025</div></div>
+    </div>
+  </div>
+  <aside class="notes"><p>The colleague tried five window lengths and reported, for every fold, the one that did best on that fold. No forecaster could have made those choices in advance. The honest procedure: choose on data before the test year, then touch the test year once. Note that 0.683 is not the best number in the 2025 column either (730 days gives 0.682): the honest score is the score of the choice made beforehand, whatever the column says later.</p></aside>
+</section>
+
+<section class="slide" data-label="A test" id="a-test-for-leaking-columns" data-lo="LO4">
+  <div class="kicker">Lab 4.1 · stretch</div>
+  <h2>Change the future, and see which columns change with it</h2>
+  <div class="cols cols-2">
+    <ul class="bullets small">
+      <li>Build the features for one origin.</li>
+      <li>Replace every value after the origin by a different one and build them again.</li>
+      <li>A column that changed is reading the future.</li>
+    </ul>
+    <table class="t small">
+      <tr><th>Feature function</th><th>Columns that changed</th></tr>
+      <tr><td>As received</td><td><code>cdd</code>, <code>smooth</code></td></tr>
+      <tr><td>After fix 1</td><td><code>cdd</code></td></tr>
+      <tr class="hl"><td>After fix 2</td><td>none</td></tr>
+    </table>
+  </div>
+  <div class="callout note small mt-s"><b>What it cannot catch.</b> Selection on the test window is not in any column. That fault is found by asking how each setting was chosen.</div>
+  <aside class="notes"><p>Ten lines of code that belong in every forecasting repository as an automated test. It turns "known at the origin" from a promise into something that fails loudly. Recommend it for the capstone repository: assessors look for it under reproducibility.</p></aside>
+</section>
+
+<section class="slide" data-label="The memo" id="the-review-memo" data-lo="LO4">
+  <div class="kicker">Lab 4.1 · step 5</div>
+  <h2>The memo reports every fault with the score before and after</h2>
+  <table class="t small">
+    <tr><th>State of the backtest</th><th class="num">Scaled error</th><th>What changed</th></tr>
+    <tr><td>As received</td><td class="num">0.244</td><td></td></tr>
+    <tr><td>After fix 1</td><td class="num">0.414</td><td>feature ends 28 days before the target</td></tr>
+    <tr><td>After fix 2</td><td class="num">0.711</td><td>temperature as known at the origin</td></tr>
+    <tr class="hl"><td>After fix 3: the score to report</td><td class="num">0.683</td><td>one window, chosen on 2024</td></tr>
+    <tr><td>The floor</td><td class="num">1.061</td><td></td></tr>
+  </table>
+  <div class="callout tip small mt-s"><b>The model survives its review.</b> At 0.68 it is still the best regional model of the course. The claim of 0.24 does not.</div>
+  <aside class="notes"><p>A review memo names the fault, where it was, the fix, and the score before and after, and it ends with the one number to report. It does not blame. Point out the good news: the corrected model, with its lagged feature and a one-year window, beats the 0.77 of Lab 2.3. Reviews make results smaller and more useful.</p></aside>
+</section>
+
+<section class="slide" id="check-selection-leak" data-lo="LO4">
+  <div class="kicker">Checkpoint</div>
+  <h2>Where is the leak?</h2>
+  <div class="quiz" data-type="single" data-lo="LO4">
+    <p class="lead">An analyst backtests four models on the 13 folds of 2025. Every feature and regressor passes a known-at-the-origin test. She reports: "Our forecast scores 0.70: for each fold we use the model that was most accurate on it." What should the review memo say?</p>
+    <div class="opts">
+      <div class="opt" data-why="Accepts the claim because the columns are clean: the leak is in the choice, not in a column">Nothing: the features are clean, so the score stands</div>
+      <div class="opt" data-why="Asks for more of the same: more models chosen per fold would flatter the score further">Add more models, so that the best one per fold is better still</div>
+      <div class="opt" data-ok>The model was chosen on the test folds: choose on earlier folds and rescore</div>
+      <div class="opt" data-why="Changes the measure, not the procedure: any score is flattered by choosing after the fact">Report the pinball loss in place of the scaled error</div>
+    </div>
+    <div class="callout tip why"><b>Why.</b> Picking the winner of each fold uses the fold's outcome. An honest score comes from a choice made before the test data were seen.</div>
+  </div>
+  <aside class="notes"><p>Answer: C. This is fault 3 with models in place of windows. In the lab the flattery was 0.03; with more candidates and noisier folds it grows.</p></aside>
 </section>
 
 <section class="slide lab" id="lab-4-1" data-auto="lab" data-lab="4.1">
-  <aside class="notes">REPLACE: what to watch for while participants work, the typical problems, and the fallback for anyone who did not finish an earlier lab</aside>
+  <aside class="notes"><p>Walk the room. Each backtest takes a few seconds. Do not name the faults before participants have looked: the first task is to read the feature function. Usual problems: fixing the centred mean with a trailing mean and no shift (the check says the feature still reaches inside the horizon); choosing the window on the 2025 column in step 4. The lab is self-contained: the faulty notebook, the window results and the floor are supplied.</p></aside>
 </section>
 
-<!-- Session 2 -->
-
+<!-- ======================= SESSION 2 ======================= -->
 <section class="slide section" id="s2" data-auto="section" data-session="2"></section>
 
-<section class="slide" id="s2-idea" data-lo="LO5">
-  <div class="kicker">REPLACE: the question this slide answers</div>
-  <h2>REPLACE: one idea, stated as a sentence</h2>
+<section class="slide" data-label="Eight weeks" id="twelve-new-feeders" data-lo="LO5">
+  <div class="kicker">The cold start</div>
+  <h2>Twelve feeders with eight weeks of history, and four weeks to forecast</h2>
   <div class="cols cols-2">
-    <ul class="bullets">
-      <li>REPLACE: at most six bullets, each a complete thought</li>
-      <li>REPLACE: bold the key phrase; numbers come from the lab run, not from memory</li>
-    </ul>
-    <div class="card c-teal"><h4>In the case study</h4><p class="small mb0">REPLACE: tie the idea to the case study and its data</p></div>
+    <div class="figure">
+      <svg viewBox="0 0 560 320" role="img" aria-label="One new feeder: eight weeks of history up to the origin, then the four weeks to forecast, drawn dashed" xmlns="http://www.w3.org/2000/svg"><line x1="62" x2="548" y1="276.9" y2="276.9" stroke="#d9dee5" stroke-width="1"/><text x="54" y="281.9" text-anchor="end" font-size="15" fill="#5b6675">53</text><line x1="62" x2="548" y1="193.0" y2="193.0" stroke="#d9dee5" stroke-width="1"/><text x="54" y="198.0" text-anchor="end" font-size="15" fill="#5b6675">85</text><line x1="62" x2="548" y1="109.0" y2="109.0" stroke="#d9dee5" stroke-width="1"/><text x="54" y="114.0" text-anchor="end" font-size="15" fill="#5b6675">116</text><line x1="62" x2="548" y1="25.1" y2="25.1" stroke="#d9dee5" stroke-width="1"/><text x="54" y="30.1" text-anchor="end" font-size="15" fill="#5b6675">148</text><text x="62.0" y="313" text-anchor="middle" font-size="15" fill="#5b6675">11 Sep</text><text x="220.1" y="313" text-anchor="middle" font-size="15" fill="#5b6675">08 Oct</text><text x="384.0" y="313" text-anchor="middle" font-size="15" fill="#5b6675">05 Nov</text><text x="548.0" y="313" text-anchor="middle" font-size="15" fill="#5b6675">03 Dec</text><line x1="384.0" x2="384.0" y1="10" y2="292" stroke="#e4572e" stroke-width="1.5" stroke-dasharray="4 4"/><polyline points="62.0,82.7 67.9,76.4 73.7,71.7 79.6,47.3 85.4,36.8 91.3,31.4 97.1,68.8 103.0,25.1 108.8,65.4 114.7,68.5 120.6,88.2 126.4,116.6 132.3,124.0 138.1,115.6 144.0,77.5 149.8,120.9 155.7,134.7 161.5,91.3 167.4,95.6 173.3,126.3 179.1,105.1 185.0,94.1 190.8,102.8 196.7,106.0 202.5,116.4 208.4,134.4 214.2,154.1 220.1,148.9 226.0,140.8 231.8,146.6 237.7,142.0 243.5,158.3 249.4,162.0 255.2,145.4 261.1,137.6 266.9,153.2 272.8,170.2 278.7,184.5 284.5,207.8 290.4,196.3 296.2,148.5 302.1,127.3 307.9,168.2 313.8,202.3 319.6,205.8 325.5,214.1 331.3,212.0 337.2,195.0 343.1,202.7 348.9,185.3 354.8,207.2 360.6,190.4 366.5,197.3 372.3,209.6 378.2,215.1 384.0,205.8" fill="none" stroke="#16324f" stroke-width="2.2" stroke-linejoin="round"/><polyline points="384.0,205.8 389.9,218.4 395.8,214.9 401.6,235.9 407.5,215.9 413.3,254.9 419.2,254.3 425.0,228.0 430.9,232.5 436.7,239.6 442.6,225.2 448.5,236.4 454.3,246.5 460.2,268.6 466.0,274.3 471.9,276.9 477.7,270.2 483.6,272.3 489.4,258.0 495.3,242.3 501.2,228.2 507.0,208.9 512.9,211.4 518.7,207.0 524.6,224.2 530.4,233.3 536.3,225.2 542.1,249.7 548.0,251.6" fill="none" stroke="#8a94a3" stroke-width="2" stroke-linejoin="round" stroke-dasharray="5 4"/></svg>
+      <div class="caption">One new feeder: 56 days up to the origin of 5 November 2025, then the 28 days to forecast (dashed).</div>
+    </div>
+    <div class="stack">
+      <div class="card c-coral flat"><h4>What is missing</h4><p class="small mb0">No last year: the floor of this course does not exist. No annual season can be estimated.</p></div>
+      <div class="card c-teal flat"><h4>What exists</h4><p class="small mb0">A level, eight weekday patterns, a region, a kind, and 388 older feeders.</p></div>
+    </div>
   </div>
-  <div class="callout warn mt"><b>What goes wrong.</b> REPLACE: the failure participants will hit, and how to recognise it</div>
-  <aside class="notes">REPLACE: what to say, the demo to run, the question to ask the room, the common failure and its fix</aside>
+  <aside class="notes"><p>One per region, commissioned on 11 September 2025. Hamad needs their forecasts like any other feeder's. This is the capstone situation in small: the supplied charging hubs are between 226 and 915 days old. With no "same weekday last year", the baseline becomes "last week repeated".</p></aside>
 </section>
 
-<section class="slide" id="s2-steps" data-lo="LO5">
-  <div class="kicker">Step by step</div>
-  <h2>REPLACE: a process, shown one step per key press</h2>
-  <div class="flow">
-    <div class="step c-teal"><b>1 · REPLACE: name</b>REPLACE: what happens first</div>
-    <div class="arrow frag" data-frag="b">→</div><div class="step c-cyan frag" data-frag="b"><b>2 · REPLACE: name</b>REPLACE: the next piece</div>
-    <div class="arrow frag" data-frag="c">→</div><div class="step c-coral frag" data-frag="c"><b>3 · REPLACE: name</b>REPLACE: the result</div>
+<section class="slide" data-label="Own history" id="from-its-own-history" data-lo="LO5 LO3">
+  <div class="kicker">Lab 4.2 · step 2</div>
+  <h2>From its own eight weeks, a feeder can repeat or smooth</h2>
+  <div class="cols cols-2">
+    <div class="stat"><div class="big">1.10</div><div class="lbl">last week repeated four times</div></div>
+    <div class="stat"><div class="big">0.95</div><div class="lbl">ETS with a weekly season on 56 days</div></div>
   </div>
-  <div class="callout tip mt frag"><b>Takeaway.</b> REPLACE: the one sentence to remember</div>
-  <aside class="notes">Press once per step and say what each step adds before the next one appears. REPLACE: the example to walk through</aside>
+  <div class="callout warn mt"><b>Both are blind to the season.</b> The four weeks ahead are cooler than the eight behind. Nothing in 56 days of one feeder says so.</div>
+  <aside class="notes"><p>Scaled errors on the 12 feeders and one fold: 336 feeder-days. ETS gains by averaging eight weekday patterns where the repeat uses one. Both forecast a level that stays where it is while demand declines into winter. The information that it declines exists, in the older feeders.</p></aside>
+</section>
+
+<section class="slide" data-label="Pooling" id="borrow-the-shape" data-lo="LO5 LO3">
+  <div class="kicker">Lab 4.2 · step 3</div>
+  <h2>Borrow the shape from similar feeders; keep your own level</h2>
+  <div class="flow">
+    <div class="step c-navy"><b>1 · Similar</b>established feeders of the same region and kind</div>
+    <div class="arrow">→</div>
+    <div class="step c-teal"><b>2 · Their shape</b>each one's next 28 days from last year, divided by its recent level</div>
+    <div class="arrow">→</div>
+    <div class="step c-cyan"><b>3 · Median</b>one shape for the group</div>
+    <div class="arrow">→</div>
+    <div class="step c-coral"><b>4 · Own level</b>multiply by the new feeder's last 28 days</div>
+  </div>
+  <div class="cols cols-2 mt-s">
+    <div class="stat"><div class="big">0.92</div><div class="lbl">pooled shape of similar feeders</div></div>
+    <div class="callout tip small"><b>The new feeder supplied one number,</b> its level. The season came from between 7 and 29 neighbours.</div>
+  </div>
+  <aside class="notes"><p>Pooling by similarity is the oldest answer to the cold start. The choice of "similar" is a modelling decision: here region and kind, falling back to the region when fewer than three feeders share the kind. Ask what could go wrong: a new industrial feeder in a region whose industrial feeders are all of another trade.</p></aside>
+</section>
+
+<section class="slide" data-label="Global" id="global-model-on-new-series" data-lo="LO3">
+  <div class="kicker">Lab 4.2 · step 4</div>
+  <h2>The global model needs nothing more than 28 days of a new feeder</h2>
+  <div class="cols cols-2">
+    <ul class="bullets small">
+      <li>Trained on the 388 established feeders only.</li>
+      <li>For a new feeder <code>year_ago</code> is missing on every row. The trees route missing values by themselves.</li>
+      <li>The rest of the row exists: last week, weekday profile, calendar, expected change in cooling, region, kind.</li>
+    </ul>
+    <div class="stack">
+      <div class="stat"><div class="big">0.75</div><div class="lbl">scaled error on the 12 new feeders</div></div>
+      <div class="stat"><div class="big">60%</div><div class="lbl">coverage of its 80% interval</div></div>
+    </div>
+  </div>
+  <aside class="notes"><p>The global model is the pooled forecast taken further: it learned from every feeder how demand changes when cooling demand changes. It is the best of the measured methods, and its interval is poor: 60% where it claims 80%, worse than the 72% on established feeders. Lower accuracy of the interval on series unlike the training set is the expected failure. The pretrained forecaster is the fifth row: it needs only a context, and here the context is 56 days.</p></aside>
+</section>
+
+<section class="slide" data-label="Compare" id="short-history-comparison" data-lo="LO5 LO3">
+  <div class="kicker">Lab 4.2 · step 5 · 12 new feeders, one fold</div>
+  <h2>The methods that borrow from other series come first</h2>
+  <table class="t small">
+    <tr><th>Method</th><th>Uses</th><th class="num">Scaled error</th></tr>
+    <tr><td>Last week repeated</td><td>own 7 days</td><td class="num">1.10</td></tr>
+    <tr><td>ETS, weekly season</td><td>own 56 days</td><td class="num">0.95</td></tr>
+    <tr><td>Pooled shape</td><td>own level, neighbours' season</td><td class="num">0.92</td></tr>
+    <tr class="hl"><td>Global boosted model</td><td>own 28 days, 388 feeders' patterns</td><td class="num">0.75</td></tr>
+    <tr><td>Pretrained, zero-shot</td><td>own 56 days, pretraining</td><td class="num">your run</td></tr>
+  </table>
+  <div class="callout warn small mt-s"><b>Thin evidence.</b> 336 feeder-days in one fold. With four weeks of history ETS scored 0.85, better than with eight: that is noise, not a finding.</div>
+  <aside class="notes"><p>The pretrained row is filled from each participant's Colab run, as on Day 3; without the package the notebook prints a labelled stand-in and leaves it out of the comparison. The stretch result is the lesson on evidence: a method that improves when given less data on 12 series is telling you about the sample, not about the method.</p></aside>
+</section>
+
+<section class="slide" data-label="Tell the planner" id="what-to-tell-the-planner" data-lo="LO5">
+  <div class="kicker">Lab 4.2 · step 5</div>
+  <h2>What Hamad is told about a forecast for a new feeder</h2>
+  <div class="cols cols-2">
+    <div class="card c-teal"><h4>Say</h4><p class="small mb0">Which method. Its error on the one fold there is. That no last-year benchmark exists for these feeders. When it will be reviewed: after each further month of data.</p></div>
+    <div class="card c-coral"><h4>Do not say</h4><p class="small mb0">"The model is 80% confident." Its 80% band held on 60% of days. Until the band is rebuilt from errors, give the point forecast and the size of past misses.</p></div>
+  </div>
+  <div class="callout note mt"><b>For the capstone.</b> A new series changes the floor, the amount of evidence and the wording of the note. State all three.</div>
+  <aside class="notes"><p>This slide is LO5 in miniature: defend method, horizon and uncertainty to a planner for new series. The lab prints a three-sentence message; ask two participants to read theirs aloud and let the room say what Hamad would ask next.</p></aside>
+</section>
+
+<section class="slide" id="check-cold-start" data-lo="LO5">
+  <div class="kicker">Checkpoint</div>
+  <h2>Which forecast for a site that opened six weeks ago?</h2>
+  <div class="quiz" data-type="single" data-lo="LO5">
+    <p class="lead">A charging hub opened six weeks ago, in spring. Forty older hubs in the same city have two years of history and a clear summer rise. The planner needs the next four weeks. Which approach is the soundest starting point?</p>
+    <div class="opts">
+      <div class="opt" data-ok>The older hubs' seasonal shape at this time of year, times the new hub's level</div>
+      <div class="opt" data-why="Fits an annual pattern to six weeks: a 365-day season cannot be estimated from 42 days">A seasonal ARIMA with an annual season on the hub's six weeks</div>
+      <div class="opt" data-why="Uses the wrong level: the older hubs' mean says nothing about how busy this hub is">The average demand of the forty older hubs</div>
+      <div class="opt" data-why="Refuses the task: the planner must decide now, and a forecast with stated limits serves better than none">No forecast until the hub has a full year of data</div>
+    </div>
+    <div class="callout tip why"><b>Why.</b> A short series knows its own level and little else. The season is borrowed from series that have lived through it.</div>
+  </div>
+  <aside class="notes"><p>Answer: A. A global model across the hubs is the stronger version of the same idea, and is one of the capstone's natural method families for the charging-hub dataset.</p></aside>
 </section>
 
 <section class="slide lab" id="lab-4-2" data-auto="lab" data-lab="4.2">
-  <aside class="notes">REPLACE: what to watch for while participants work, the typical problems, and the fallback for anyone who did not finish an earlier lab</aside>
+  <aside class="notes"><p>Walk the room. Training the three quantile models on the established feeders takes under a minute. Usual problems: using days after the origin for the new feeder's level; taking the neighbours' shape in MWh without dividing by their level. The pretrained row is real only in Colab with the package of Lab 3.3 installed; elsewhere it is labelled STAND-IN and excluded. The lab starts from the data files only.</p></aside>
 </section>
 
-<!-- Session 3 -->
-
+<!-- ======================= SESSION 3 ======================= -->
 <section class="slide section" id="s3" data-auto="section" data-session="3"></section>
 
-<section class="slide" id="s3-idea" data-lo="LO3">
-  <div class="kicker">REPLACE: the question this slide answers</div>
-  <h2>REPLACE: one idea, stated as a sentence</h2>
+<section class="slide" data-label="Why average" id="why-averages-work" data-lo="LO3">
+  <div class="kicker">Combining forecasts</div>
+  <h2>Methods that err in different directions cancel part of each other's error</h2>
   <div class="cols cols-2">
-    <ul class="bullets">
-      <li>REPLACE: at most six bullets, each a complete thought</li>
-      <li>REPLACE: bold the key phrase; numbers come from the lab run, not from memory</li>
+    <ul class="bullets small">
+      <li>The error of an average is never above the average of the errors.</li>
+      <li>The gain is larger the less the methods' errors move together.</li>
+      <li>Three models from one family, fed the same inputs, cancel little.</li>
     </ul>
-    <div class="card c-teal"><h4>In the case study</h4><p class="small mb0">REPLACE: tie the idea to the case study and its data</p></div>
+    <div class="card c-teal"><h4>The three in Lab 4.3</h4><p class="small mb0">Decompose then ETS: seasons only. ARIMA with annual Fourier terms: seasons and recent errors. Regression: temperature and calendar. Three views of one series.</p></div>
   </div>
-  <div class="callout warn mt"><b>What goes wrong.</b> REPLACE: the failure participants will hit, and how to recognise it</div>
-  <aside class="notes">REPLACE: what to say, the demo to run, the question to ask the room, the common failure and its fix</aside>
+  <div class="callout note mt"><b>The simple average has no settings.</b> Nothing to tune means nothing to tune on the test window.</div>
+  <aside class="notes"><p>The first bullet is the triangle inequality applied day by day; it holds for the absolute error whatever the methods are. Forty years of forecasting competitions report the same finding: simple combinations are hard to beat, and estimated weights often do worse than equal ones because the weights carry their own estimation error.</p><p>Sources: Bates and Granger (1969), The Combination of Forecasts; Makridakis, Spiliotis and Assimakopoulos (2020), The M4 Competition.</p></aside>
 </section>
 
-<section class="slide" id="s3-steps" data-lo="LO3">
-  <div class="kicker">Step by step</div>
-  <h2>REPLACE: a process, shown one step per key press</h2>
-  <div class="flow">
-    <div class="step c-teal"><b>1 · REPLACE: name</b>REPLACE: what happens first</div>
-    <div class="arrow frag" data-frag="b">→</div><div class="step c-cyan frag" data-frag="b"><b>2 · REPLACE: name</b>REPLACE: the next piece</div>
-    <div class="arrow frag" data-frag="c">→</div><div class="step c-coral frag" data-frag="c"><b>3 · REPLACE: name</b>REPLACE: the result</div>
+<section class="slide" data-label="The year" id="average-of-three" data-lo="LO3">
+  <div class="kicker">Lab 4.3 · steps 1 and 2 · Al-Rimal, 13 folds of 2025</div>
+  <h2>Over the year the average beats two of the three, not the best one</h2>
+  <table class="t small">
+    <tr><th>Method</th><th class="num">Scaled error</th></tr>
+    <tr><td>Decompose, then ETS</td><td class="num">0.984</td></tr>
+    <tr><td>ARIMA with annual Fourier terms</td><td class="num">0.826</td></tr>
+    <tr><td>Regression: weather and calendar</td><td class="num">0.766</td></tr>
+    <tr class="hl"><td>Average of the three</td><td class="num">0.793</td></tr>
+    <tr><td>Mean of the three single scores</td><td class="num">0.859</td></tr>
+  </table>
+  <div class="callout warn small mt-s"><b>"The average lost to the regression" is a comparison made in hindsight.</b> Nobody knew in January which single method would win the year.</div>
+  <aside class="notes"><p>The average, 0.793, is well below the mean of the single scores, 0.859: that gap is the cancelling. It is above the best single method. Whether that matters depends on whether the best single method could have been named in advance, which is the next slide and the centre of the lab.</p></aside>
+</section>
+
+<section class="slide" data-label="Chosen first" id="choose-before-you-look" data-lo="LO3 LO4">
+  <div class="kicker">Lab 4.3 · step 3</div>
+  <h2>Choose the single method on early folds, then compare on late folds</h2>
+  <table class="t small">
+    <tr><th>Method</th><th class="num">6 early folds</th><th class="num">7 late folds</th></tr>
+    <tr><td>Decompose, then ETS</td><td class="num">0.895</td><td class="num">1.059</td></tr>
+    <tr><td>ARIMA with annual Fourier terms</td><td class="num">0.686</td><td class="num">0.945</td></tr>
+    <tr class="hl"><td>Regression: chosen on the early folds</td><td class="num">0.596</td><td class="num">0.913</td></tr>
+    <tr class="hl"><td>Average of the three</td><td class="num">0.652</td><td class="num">0.914</td></tr>
+  </table>
+  <div class="callout tip small mt-s"><b>A tie.</b> On the late folds the average and the honestly chosen single method differ by 0.001.</div>
+  <aside class="notes"><p>Early folds: origins from January to May. Late folds: June to December. Here the early choice happened to be the method that also won later, so the single method was given its best case, and the average still matched it. Had the early folds pointed to another method, the average would have won clearly. Report what was measured: a tie.</p></aside>
+</section>
+
+<section class="slide" data-label="Quantiles" id="average-the-quantiles" data-lo="LO3">
+  <div class="kicker">Lab 4.3 · step 4</div>
+  <h2>On the quantiles the average is the best row of the table</h2>
+  <table class="t small">
+    <tr><th>Method, all 13 folds</th><th class="num">Pinball</th><th class="num">80% covers</th><th class="num">95% covers</th></tr>
+    <tr><td>Decompose, then ETS</td><td class="num">0.243</td><td class="num">83.5%</td><td class="num">93.1%</td></tr>
+    <tr><td>ARIMA with annual Fourier terms</td><td class="num">0.190</td><td class="num">78.8%</td><td class="num">93.1%</td></tr>
+    <tr><td>Regression: weather and calendar</td><td class="num">0.208</td><td class="num">63.5%</td><td class="num">76.9%</td></tr>
+    <tr class="hl"><td>Average of the three, quantile by quantile</td><td class="num">0.184</td><td class="num">81.6%</td><td class="num">94.0%</td></tr>
+  </table>
+  <div class="callout tip small mt-s"><b>Why.</b> The regression has the best centre and intervals that are too narrow. The average keeps most of the centre and takes its width from the other two.</div>
+  <aside class="notes"><p>Each quantile column is averaged across the three methods. This is one of several ways to combine probabilistic forecasts; it is the simplest, and it keeps the quantiles in order. Coverage of 81.6% and 94.0% against nominal 80% and 95%, with no repair step: for Omar, who buys on a quantile, this is the row that matters.</p></aside>
+</section>
+
+<section class="slide" data-label="Verdict" id="the-verdict-on-averaging" data-lo="LO3 LO4">
+  <div class="kicker">Lab 4.3 · step 5</div>
+  <h2>The verdict, with its numbers and its limits</h2>
+  <div class="cols cols-3">
+    <div class="card c-navy"><h4>Point forecast</h4><p class="small mb0">A tie on the late folds: 0.914 for the average, 0.913 for the method chosen in advance.</p></div>
+    <div class="card c-teal"><h4>Quantiles</h4><p class="small mb0">The average wins: pinball 0.184 against 0.190 for the best single method, with coverage near nominal.</p></div>
+    <div class="card c-coral"><h4>Cost</h4><p class="small mb0">Three pipelines to keep running in place of one. That belongs in the scorecard of Lab 3.4.</p></div>
   </div>
-  <div class="callout tip mt frag"><b>Takeaway.</b> REPLACE: the one sentence to remember</div>
-  <aside class="notes">Press once per step and say what each step adds before the next one appears. REPLACE: the example to walk through</aside>
+  <div class="callout note mt"><b>Stretch.</b> Weights from early-fold errors (0.26, 0.34, 0.39) score 0.906 on the late folds against 0.914 for equal weights: a gain inside the noise.</div>
+  <aside class="notes"><p>The honest sentence for a report: "On seven late folds the average of three matched the single method we would have chosen in advance, and it gave better-calibrated intervals." Not: "averaging improves accuracy." Seven folds of one region do not support a general claim, and the session's title question gets the answer the data give.</p></aside>
+</section>
+
+<section class="slide" id="check-best-in-hindsight" data-lo="LO4">
+  <div class="kicker">Checkpoint</div>
+  <h2>Is this comparison fair to the average?</h2>
+  <div class="quiz" data-type="single" data-lo="LO4">
+    <p class="lead">A report says: "On the 2025 test folds the average of our four models scored 0.80. The best single model scored 0.76. We therefore deliver the best single model." What is the weakness of the argument?</p>
+    <div class="opts">
+      <div class="opt" data-why="Asks for tuning on the same folds: weights fitted to the test year would repeat the fault">The average should have used weights fitted on the 2025 folds</div>
+      <div class="opt" data-why="Changes the subject: the number of models is not what makes the comparison unfair">Four models are too few for an average to work</div>
+      <div class="opt" data-why="Attacks the measure: the same fault would remain with any score">The scaled error cannot compare an average with a single model</div>
+      <div class="opt" data-ok>"Best" was read off the test folds: the choice was not available in advance</div>
+    </div>
+    <div class="callout tip why"><b>Why.</b> The average is one forecast fixed beforehand. "The best single model" is four candidates and a choice made after seeing the results.</div>
+  </div>
+  <aside class="notes"><p>Answer: D. The repair is the lab's step 3: name the single model on earlier folds, then compare both on folds neither has touched.</p></aside>
 </section>
 
 <section class="slide lab" id="lab-4-3" data-auto="lab" data-lab="4.3">
-  <aside class="notes">REPLACE: what to watch for while participants work, the typical problems, and the fallback for anyone who did not finish an earlier lab</aside>
+  <aside class="notes"><p>Walk the room. Everything runs in seconds: the three backtests are supplied in data/reference, so nobody needs their own Day 2 results. Usual problems: averaging scores instead of forecasts in step 2; choosing the single method on all folds in step 3; averaging coverage figures instead of quantile columns in step 4. Ask each table for its verdict sentence before the debrief.</p></aside>
 </section>
 
-<!-- Session 4 -->
-
+<!-- ======================= SESSION 4 ======================= -->
 <section class="slide section" id="s4" data-auto="section" data-session="4"></section>
 
-<section class="slide" id="s4-idea" data-lo="LO5">
-  <div class="kicker">REPLACE: the question this slide answers</div>
-  <h2>REPLACE: one idea, stated as a sentence</h2>
-  <div class="cols cols-2">
-    <ul class="bullets">
-      <li>REPLACE: at most six bullets, each a complete thought</li>
-      <li>REPLACE: bold the key phrase; numbers come from the lab run, not from memory</li>
-    </ul>
-    <div class="card c-teal"><h4>In the case study</h4><p class="small mb0">REPLACE: tie the idea to the case study and its data</p></div>
+<section class="slide" data-label="Fan chart" id="the-fan-chart" data-lo="LO5">
+  <div class="kicker">Lab 4.4 · step 1 · Al-Rimal, 1 to 28 January 2026</div>
+  <h2>The planner's picture: where demand is expected, and how sure we are</h2>
+  <div class="figure">
+    <svg viewBox="0 0 760 330" role="img" aria-label="Fan chart for Al-Rimal, January 2026: eight weeks of history, the median forecast, a dark band for 8 days in 10 and a light band for 19 in 20" xmlns="http://www.w3.org/2000/svg"><line x1="62" x2="748" y1="286.4" y2="286.4" stroke="#d9dee5" stroke-width="1"/><text x="54" y="291.4" text-anchor="end" font-size="15" fill="#5b6675">1,430</text><line x1="62" x2="748" y1="199.5" y2="199.5" stroke="#d9dee5" stroke-width="1"/><text x="54" y="204.5" text-anchor="end" font-size="15" fill="#5b6675">2,113</text><line x1="62" x2="748" y1="112.5" y2="112.5" stroke="#d9dee5" stroke-width="1"/><text x="54" y="117.5" text-anchor="end" font-size="15" fill="#5b6675">2,796</text><line x1="62" x2="748" y1="25.6" y2="25.6" stroke="#d9dee5" stroke-width="1"/><text x="54" y="30.6" text-anchor="end" font-size="15" fill="#5b6675">3,479</text><text x="136.4" y="323" text-anchor="middle" font-size="15" fill="#5b6675">15 Nov</text><text x="384.3" y="323" text-anchor="middle" font-size="15" fill="#5b6675">15 Dec</text><text x="524.8" y="323" text-anchor="middle" font-size="15" fill="#5b6675">01 Jan</text><text x="640.6" y="323" text-anchor="middle" font-size="15" fill="#5b6675">15 Jan</text><text x="748.0" y="323" text-anchor="middle" font-size="15" fill="#5b6675">28 Jan</text><polygon points="524.8,94.0 533.1,125.8 541.4,108.2 549.6,90.6 557.9,93.9 566.2,94.2 574.4,92.4 582.7,42.7 591.0,74.7 599.2,57.1 607.5,39.6 615.8,43.0 624.0,43.4 632.3,41.5 640.6,79.6 648.8,111.6 657.1,94.1 665.3,76.7 673.6,80.0 681.9,80.5 690.1,78.7 698.4,56.6 706.7,88.7 714.9,71.2 723.2,53.8 731.5,57.3 739.7,57.7 748.0,56.0 748.0,232.8 739.7,234.5 731.5,234.0 723.2,230.6 714.9,248.0 706.7,265.4 698.4,233.4 690.1,240.3 681.9,242.0 673.6,241.6 665.3,238.2 657.1,255.6 648.8,273.1 640.6,241.1 632.3,253.2 624.0,255.1 615.8,254.7 607.5,251.3 599.2,268.8 591.0,286.4 582.7,254.4 574.4,218.9 566.2,220.8 557.9,220.4 549.6,217.2 541.4,234.7 533.1,252.4 524.8,220.5" fill="#00a19a" opacity="0.18"/><polygon points="524.8,119.0 533.1,150.9 541.4,133.2 549.6,115.7 557.9,118.9 566.2,119.3 574.4,117.4 582.7,103.3 591.0,135.2 599.2,117.6 607.5,100.2 615.8,103.5 624.0,103.9 632.3,102.1 640.6,106.3 648.8,138.3 657.1,120.8 665.3,103.4 673.6,106.8 681.9,107.2 690.1,105.5 698.4,86.2 706.7,118.2 714.9,100.8 723.2,83.4 731.5,86.8 739.7,87.3 748.0,85.6 748.0,196.2 739.7,197.9 731.5,197.4 723.2,194.0 714.9,211.4 706.7,228.8 698.4,196.8 690.1,184.2 681.9,186.0 673.6,185.6 665.3,182.2 657.1,199.6 648.8,217.1 640.6,185.1 632.3,207.7 624.0,209.5 615.8,209.1 607.5,205.8 599.2,223.2 591.0,240.8 582.7,208.8 574.4,184.2 566.2,186.1 557.9,185.8 549.6,182.5 541.4,200.1 533.1,217.7 524.8,185.9" fill="#00a19a" opacity="0.32"/><line x1="516.6" x2="516.6" y1="10" y2="302" stroke="#8a94a3" stroke-width="1.5" stroke-dasharray="4 4"/><polyline points="62.0,25.6 70.3,99.4 78.5,89.6 86.8,101.4 95.1,142.1 103.3,145.0 111.6,144.1 119.9,143.4 128.1,165.5 136.4,154.0 144.7,159.0 152.9,162.7 161.2,154.4 169.4,157.4 177.7,157.2 186.0,169.4 194.2,143.2 202.5,154.3 210.8,154.5 219.0,152.3 227.3,155.3 235.6,132.8 243.8,159.4 252.1,124.6 260.4,143.3 268.6,149.3 276.9,133.8 285.2,162.8 293.4,156.2 301.7,177.5 310.0,157.5 318.2,143.3 326.5,155.5 334.7,156.8 343.0,161.3 351.3,156.3 359.5,192.4 367.8,174.6 376.1,162.5 384.3,158.4 392.6,161.2 400.9,157.3 409.1,156.4 417.4,176.4 425.7,171.4 433.9,148.5 442.2,148.4 450.5,149.5 458.7,145.0 467.0,155.6 475.3,189.7 483.5,173.2 491.8,156.7 500.0,152.6 508.3,151.8 516.6,148.1" fill="none" stroke="#16324f" stroke-width="2" stroke-linejoin="round"/><polyline points="524.8,149.3 533.1,181.2 541.4,163.5 549.6,146.0 557.9,149.2 566.2,149.6 574.4,147.7 582.7,146.5 591.0,178.4 599.2,160.9 607.5,143.4 615.8,146.7 624.0,147.1 632.3,145.3 640.6,146.8 648.8,178.8 657.1,161.3 665.3,143.9 673.6,147.3 681.9,147.7 690.1,146.0 698.4,147.5 706.7,179.5 714.9,162.0 723.2,144.7 731.5,148.1 739.7,148.6 748.0,146.8" fill="none" stroke="#00a19a" stroke-width="2.4" stroke-linejoin="round"/></svg>
+    <div class="caption">Navy: the last eight weeks of 2025. Teal line: the median forecast. Dark band: 8 days in 10. Light band: 19 days in 20.</div>
   </div>
-  <div class="callout warn mt"><b>What goes wrong.</b> REPLACE: the failure participants will hit, and how to recognise it</div>
-  <aside class="notes">REPLACE: what to say, the demo to run, the question to ask the room, the common failure and its fix</aside>
+  <aside class="notes"><p>The first real forecast of the course: the origin is the last day of data and nobody has the answer. Read the chart as Omar would: he buys near the upper edge of the dark band, so the edge matters more to him than the line. The bands widen with the horizon because the errors of the backtest did. Two bands are enough; five shades of teal carry no more decision.</p></aside>
 </section>
 
-<section class="slide" id="s4-steps" data-lo="LO5">
-  <div class="kicker">Step by step</div>
-  <h2>REPLACE: a process, shown one step per key press</h2>
-  <div class="flow">
-    <div class="step c-teal"><b>1 · REPLACE: name</b>REPLACE: what happens first</div>
-    <div class="arrow frag" data-frag="b">→</div><div class="step c-cyan frag" data-frag="b"><b>2 · REPLACE: name</b>REPLACE: the next piece</div>
-    <div class="arrow frag" data-frag="c">→</div><div class="step c-coral frag" data-frag="c"><b>3 · REPLACE: name</b>REPLACE: the result</div>
+<section class="slide" data-label="Built from errors" id="bands-from-backtest-errors" data-lo="LO5 LO3">
+  <div class="kicker">Lab 4.4 · step 1</div>
+  <h2>The bands are the backtest's own errors, by week of the horizon</h2>
+  <div class="cols cols-2">
+    <pre class="code s" data-file="Lab 4.4 · step 1"><code class="language-python">week = (np.arange(28) // 7) + 1
+for q in U.QS:      # 0.025, 0.1, 0.5, 0.9, 0.975
+    out[f"q{q}"] = (point.yhat
+        + error_quantiles.loc[week, q] * scale)</code></pre>
+    <table class="t small">
+      <tr><th>Width of the dark band</th><th class="num">MWh</th></tr>
+      <tr><td>Week 1</td><td class="num">525</td></tr>
+      <tr><td>Week 4</td><td class="num">869</td></tr>
+    </table>
   </div>
-  <div class="callout tip mt frag"><b>Takeaway.</b> REPLACE: the one sentence to remember</div>
-  <aside class="notes">Press once per step and say what each step adds before the next one appears. REPLACE: the example to walk through</aside>
+  <div class="callout tip small mt-s"><b>Nothing new.</b> The point forecast is the regression of Lab 2.3. The error quantiles are those of Lab 2.4, taken from the folds of 2024 and 2025.</div>
+  <aside class="notes"><p>Scaled errors of the two backtest years are grouped by week of the horizon; their quantiles, multiplied back by the scale, are added to the point forecast. For a forecast that leaves the desk, all past folds may be used: there is no test fold left to protect. The lab supplies both backtests.</p></aside>
+</section>
+
+<section class="slide" data-label="Plain words" id="coverage-in-plain-words" data-lo="LO5">
+  <div class="kicker">Lab 4.4 · step 2</div>
+  <h2>State what the bands did, in counts a planner can check</h2>
+  <div class="cols cols-2">
+    <div class="card c-coral"><h4>Not this</h4><p class="small mb0">"The 80% prediction interval has an empirical coverage of 0.783 and the 95% interval of 0.945."</p></div>
+    <div class="card c-teal"><h4>This</h4><p class="small mb0">"In the 2025 backtest the dark band held on 78 of 100 days and the light band on 95 of 100."</p></div>
+  </div>
+  <div class="callout note mt"><b>Three rules.</b> Counts, not probabilities. What was measured, not what was intended. The period it was measured on.</div>
+  <aside class="notes"><p>The band is called an 80% band and held on 78 days in 100: say 78. A planner who is told "8 in 10" and then counts will count 78 and trust the next note more. Natural frequencies are understood more reliably than percentages by readers of every background; the source is below.</p><p>Source: Gigerenzer and Edwards (2003), Simple tools for understanding risks: from innumeracy to insight, BMJ 327.</p></aside>
+</section>
+
+<section class="slide" data-label="Six parts" id="the-forecast-note" data-lo="LO5">
+  <div class="kicker">Lab 4.4 · step 3</div>
+  <h2>A forecast note has six parts, and the planner reads the first three</h2>
+  <div class="cols cols-3 gap-s">
+    <div class="card c-navy"><h4>1 · Decision</h4><p class="small mb0">What is forecast, for which days, for which decision.</p></div>
+    <div class="card c-teal"><h4>2 · Forecast</h4><p class="small mb0">The range of the median, and the quantile the reader acts on.</p></div>
+    <div class="card c-cyan"><h4>3 · Uncertainty</h4><p class="small mb0">What the bands mean and how often they held.</p></div>
+  </div>
+  <div class="cols cols-3 gap-s mt-s">
+    <div class="card c-purple"><h4>4 · Evidence</h4><p class="small mb0">The backtest score against the floor, in one sentence.</p></div>
+    <div class="card c-coral"><h4>5 · Limits</h4><p class="small mb0">When not to use it, and when to ask for a rerun.</p></div>
+    <div class="card c-amber"><h4>6 · Source</h4><p class="small mb0">Data up to which day, the method in one line, who signs.</p></div>
+  </div>
+  <aside class="notes"><p>The order is the reader's, not the analyst's: method comes last and takes one line. The lab's note for January: the median runs between 2,257 and 2,554 MWh a day; for purchasing at the 9-in-10 level, plan for up to 3,025 MWh on the highest day. The capstone note is this structure on two pages with the fan chart.</p></aside>
+</section>
+
+<section class="slide" data-label="Limits" id="when-not-to-use-it" data-lo="LO5">
+  <div class="kicker">The part most notes leave out</div>
+  <h2>Say when the forecast should not be used</h2>
+  <div class="cols cols-2">
+    <ul class="bullets small">
+      <li><b>Outside its scope:</b> not for one feeder, not for hours within the day, not beyond 28 days.</li>
+      <li><b>When its assumptions break:</b> a declared heat wave or dust storm; a holiday date that moves.</li>
+      <li><b>What it never forecasts:</b> outages.</li>
+    </ul>
+    <div class="card c-coral"><h4>Why it protects the reader</h4><p class="small mb0">Shahad Al-Tamimi asked for the peak day three years ahead. A 28-day forecast stretched to answer her would carry these bands into a question they were never measured on.</p></div>
+  </div>
+  <div class="callout tip mt"><b>Each limit names a situation and an action:</b> do not use, or ask for a rerun.</div>
+  <aside class="notes"><p>The limits come from the course's own findings: the temperature assumption (Lab 2.3), the calendar (Lab 2.3), the outage of March 2023 (Lab 1.2), the evidence at 28 days only (Lab 1.4). A limit that cannot be traced to something measured is decoration. The lab's check counts the situations named and looks for the two coverage numbers.</p></aside>
+</section>
+
+<section class="slide" data-label="Capstone" id="capstone-brief" data-lo="LO5">
+  <div class="kicker">Lab 4.4 · step 5 · the capstone starts here</div>
+  <h2>Your capstone: a dataset, a planner's request, three families, one note</h2>
+  <div class="cols cols-2">
+    <table class="t small">
+      <tr><th>Supplied dataset</th><th>What it holds</th></tr>
+      <tr><td><code>ev_hubs.csv</code></td><td>36 charging hubs, daily energy, 226 to 915 days each</td></tr>
+      <tr><td><code>cooling_plants.csv</code></td><td>8 district-cooling plants, daily, five years</td></tr>
+      <tr><td>A public dataset</td><td>allowed when its terms permit, and you state them</td></tr>
+    </table>
+    <ul class="bullets small">
+      <li>A floor and three method families in one backtest.</li>
+      <li>A README with point and probabilistic accuracy.</li>
+      <li>A two-page planner's note with fan charts.</li>
+      <li>A public repository that runs from a clean copy.</li>
+    </ul>
+  </div>
+  <div class="callout note small mt-s"><b>Defence.</b> Eight minutes, then four of questions: the assessor moves the origin or the horizon and asks what changes.</div>
+  <aside class="notes"><p>The planner's request for each supplied dataset is in labs/capstone/README.md. The work is individual. The rubric: framing and floor 15, methods 25, backtest design 25, uncertainty and communication 25, reproducibility 10. Step 5 of the lab records the dataset, the decision, the horizon and the three families: collect these before the room leaves, and steer anyone whose three families are three variants of one.</p></aside>
+</section>
+
+<section class="slide" id="check-forecast-note" data-lo="LO5">
+  <div class="kicker">Checkpoint</div>
+  <h2>Which sentence belongs in the note?</h2>
+  <div class="quiz" data-type="single" data-lo="LO5">
+    <p class="lead">A forecast's 80% band covered 71% of days in last year's backtest. The planner buys energy at the upper edge of that band. Which sentence should the note carry?</p>
+    <div class="opts">
+      <div class="opt" data-why="States the intention as a result: the band was built for 80% and did not deliver it">"Demand will be inside the band with a probability of 80%."</div>
+      <div class="opt" data-ok>"Last year the band held on 71 days in 100; it is narrower than its name."</div>
+      <div class="opt" data-why="Hides the measurement behind a term the planner cannot act on">"The interval is approximately calibrated."</div>
+      <div class="opt" data-why="Leaves out the one fact the buyer needs: how often the edge was exceeded">"The band shows the uncertainty of the forecast."</div>
+    </div>
+    <div class="callout tip why"><b>Why.</b> The note reports what was measured, in counts. A buyer at the upper edge must know that demand went outside the band more often than the label says.</div>
+  </div>
+  <aside class="notes"><p>Answer: B. A better note still would also say what is being done about it: the band is rebuilt from backtest errors before the next issue, as in Lab 2.4.</p></aside>
 </section>
 
 <section class="slide lab" id="lab-4-4" data-auto="lab" data-lab="4.4">
-  <aside class="notes">REPLACE: what to watch for while participants work, the typical problems, and the fallback for anyone who did not finish an earlier lab</aside>
+  <aside class="notes"><p>Walk the room. The forecast runs in a few seconds. Most of the time belongs to writing: insist that the note is written in the participant's own words from the supplied facts, and that the check in step 4 passes. Read two notes aloud. Before the session ends every participant has a capstone choice recorded in step 5. The lab starts from the data files and the supplied backtests.</p></aside>
 </section>
 
-<section class="slide" id="wrap-up">
+<!-- ======================= CLOSING ======================= -->
+<section class="slide" id="wrap-up" data-label="Recap">
   <div class="kicker">Day 4 · wrap-up</div>
   <h2>Three things to keep</h2>
   <div class="cols cols-3">
-    <div class="card c-teal"><h4>Remember</h4><p class="small mb0">REPLACE: one idea participants keep</p></div>
-    <div class="card c-coral"><h4>Remember</h4><p class="small mb0">REPLACE: one idea participants keep</p></div>
-    <div class="card c-purple"><h4>Remember</h4><p class="small mb0">REPLACE: one idea participants keep</p></div>
+    <div class="card c-coral"><h4>Review before you report</h4><p class="small mb0">A score of 0.24 became 0.68 after three fixes. Features, regressors and choices must all be known at the origin.</p></div>
+    <div class="card c-teal"><h4>Borrow when history is short</h4><p class="small mb0">On eight weeks of history the methods that learn from other series came first: 0.75 against 0.95 from the feeder alone.</p></div>
+    <div class="card c-purple"><h4>Write for the reader</h4><p class="small mb0">A fan chart, coverage in counts, and the situations in which the forecast should not be used.</p></div>
   </div>
+  <aside class="notes"><p>Ask each participant for one sentence: the decision their capstone forecast serves and its horizon. Anyone who cannot say it yet stays for five minutes.</p></aside>
 </section>
 
 <section class="slide dark" id="next" data-label="Next">
   <div class="kicker">Next</div>
-  <h2>Capstone: Capstone project presentations</h2>
-  <p class="lead">REPLACE: what participants prepare before then; unfinished labs can be finished at home</p>
-  <aside class="notes">REPLACE: accounts, installs or reading participants need before the next unit</aside>
+  <h2>The capstone: your analysis, defended to a planner</h2>
+  <p class="lead">Build the backtest first and the models second. Bring a public repository that runs from a clean copy, a README with point and probabilistic accuracy against the floor, and a two-page note with fan charts. Eight minutes to present, four minutes of questions.</p>
+  <aside class="notes"><p>Remind the room of the question they will be asked: the assessor moves the forecast origin or the horizon and asks what changes in the method, the evidence and the note. A participant who built the backtest as a function of the origin and the horizon can answer by running it.</p></aside>
 </section>
