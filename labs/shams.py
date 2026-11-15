@@ -126,7 +126,7 @@ def keep(name: str, value):
     """In the solution run that writes the references (SHAMS_WRITE_REF=1), save one; always return the value."""
     if WRITE_REF:
         REF.mkdir(parents=True, exist_ok=True)
-        (REF / f"{name}.json").write_text(json.dumps(_plain(value), indent=1) + "\n", encoding="utf-8")
+        (REF / f"{name}.json").write_text(json.dumps(_plain(value), indent=1) + "\n", encoding="utf-8", newline="\n")
     return value
 
 

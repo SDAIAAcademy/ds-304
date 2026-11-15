@@ -1,158 +1,538 @@
+<!-- ======================= OPENING ======================= -->
 <section class="slide title" id="title" data-auto="title">
-  <aside class="notes">REPLACE: welcome; introduce yourself; one question to the room that calibrates the pace; the rhythm of the day</aside>
+  <aside class="notes"><p>Open with yesterday's number: the floor is 1.06, "the same weekday last year". Ask the room to bet: will exponential smoothing with a weekly season beat it at 28 days? Take a show of hands and keep the count; Session 1 answers it.</p></aside>
 </section>
 
 <section class="slide" id="agenda" data-auto="agenda"></section>
 
-<!-- Session 1 -->
-
-<section class="slide section" id="s1" data-auto="section" data-session="1"></section>
-
-<section class="slide" id="s1-idea" data-lo="LO2">
-  <div class="kicker">REPLACE: the question this slide answers</div>
-  <h2>REPLACE: one idea, stated as a sentence</h2>
-  <div class="cols cols-2">
-    <ul class="bullets">
-      <li>REPLACE: at most six bullets, each a complete thought</li>
-      <li>REPLACE: bold the key phrase; numbers come from the lab run, not from memory</li>
-    </ul>
-    <div class="card c-teal"><h4>In the case study</h4><p class="small mb0">REPLACE: tie the idea to the case study and its data</p></div>
+<section class="slide" id="review-day-1" data-lo="LO1">
+  <div class="kicker">Review · Day 1</div>
+  <h2>What does the scaled error compare?</h2>
+  <div class="quiz" data-type="single" data-lo="LO1">
+    <p class="lead">A method scores 1.3 on a region in the course's backtest. The floor scores 1.06. A colleague says: "Above 1, so it is worse than a naive forecast and useless." What is the right reading?</p>
+    <div class="opts">
+      <div class="opt" data-why="Reads 1 as the floor: 1 is the one-week-ahead in-sample error, and the floor itself is above it at 28 days">Right: any score above 1 loses to the naive forecast</div>
+      <div class="opt" data-ok>It loses to the floor, because 1.3 is above 1.06</div>
+      <div class="opt" data-why="Treats the scaled error as a percentage: it is a ratio of two errors, not a share of demand">It is wrong by 130% of demand on an average day</div>
+      <div class="opt" data-why="Dismisses the measure because the yardstick is short: the comparison with the floor is still valid">Nothing can be said: the measure does not work at 28 days</div>
+    </div>
+    <div class="callout tip why"><b>Why.</b> The yardstick is the in-sample error of "last week", one week ahead. At 28 days even the floor is above 1. A method is judged by its distance to the floor.</div>
   </div>
-  <div class="callout warn mt"><b>What goes wrong.</b> REPLACE: the failure participants will hit, and how to recognise it</div>
-  <aside class="notes">REPLACE: what to say, the demo to run, the question to ask the room, the common failure and its fix</aside>
+  <aside class="notes"><p>Answer: B. The colleague's conclusion happens to be right and the reason is wrong: had the method scored 1.02 it would also be "above 1" and would beat the floor.</p></aside>
 </section>
 
-<section class="slide" id="s1-steps" data-lo="LO2">
-  <div class="kicker">Step by step</div>
-  <h2>REPLACE: a process, shown one step per key press</h2>
-  <div class="flow">
-    <div class="step c-teal"><b>1 · REPLACE: name</b>REPLACE: what happens first</div>
-    <div class="arrow frag" data-frag="b">→</div><div class="step c-cyan frag" data-frag="b"><b>2 · REPLACE: name</b>REPLACE: the next piece</div>
-    <div class="arrow frag" data-frag="c">→</div><div class="step c-coral frag" data-frag="c"><b>3 · REPLACE: name</b>REPLACE: the result</div>
+<!-- ======================= SESSION 1 ======================= -->
+<section class="slide section" id="s1" data-auto="section" data-session="1"></section>
+
+<section class="slide" data-label="Smoothing" id="averages-that-forget" data-lo="LO2">
+  <div class="kicker">Simple exponential smoothing</div>
+  <h2>A weighted average that forgets the past at a rate you choose</h2>
+  <div class="cols cols-2">
+    <pre class="code" data-file="Lab 2.1 · step 1"><code class="language-python">def ses_level(values, alpha):
+    level = values[0]
+    for x in values[1:]:
+        level = alpha * x + (1 - alpha) * level
+    return level      # the forecast, for every h</code></pre>
+    <ul class="bullets small">
+      <li>The value k days back has the weight <code>alpha * (1 - alpha) ** k</code>.</li>
+      <li><b>alpha near 0:</b> a long memory, a smooth level.</li>
+      <li><b>alpha = 1:</b> the level is the last value. That is the naive forecast.</li>
+      <li>The forecast is flat: the same level for every day ahead.</li>
+    </ul>
   </div>
-  <div class="callout tip mt frag"><b>Takeaway.</b> REPLACE: the one sentence to remember</div>
-  <aside class="notes">Press once per step and say what each step adds before the next one appears. REPLACE: the example to walk through</aside>
+  <aside class="notes"><p>Work the three-value example of the lab on the board: 10, 20, 30 with alpha 0.5 gives levels 10, 15, 22.5. With alpha 0.3 the last 7 days carry 92% of the weight; with 0.1, 52%. The whole ETS family grows from this one line: add a trend with its own weight, add a season with its own weight.</p></aside>
+</section>
+
+<section class="slide" data-label="Alpha" id="alpha-close-to-one" data-lo="LO2">
+  <div class="kicker">Lab 2.1 · step 1</div>
+  <h2>On daily demand the best alpha is at the top of the grid</h2>
+  <div class="cols cols-2">
+    <table class="t small">
+      <tr><th>alpha</th><th class="num">One-step error, MWh</th></tr>
+      <tr><td>0.1</td><td class="num">251.0</td></tr>
+      <tr><td>0.3</td><td class="num">187.5</td></tr>
+      <tr><td>0.5</td><td class="num">170.7</td></tr>
+      <tr><td>0.7</td><td class="num">161.4</td></tr>
+      <tr><td>0.9</td><td class="num">157.3</td></tr>
+      <tr class="hl"><td>1.0</td><td class="num">156.3</td></tr>
+    </table>
+    <div class="stack">
+      <div class="card c-teal flat"><h4>Why</h4><p class="small mb0">Demand moves in weather spells that last days. Yesterday is a better guide to today than any average of the past.</p></div>
+      <div class="card c-coral flat"><h4>What it means</h4><p class="small mb0">Smoothing has nothing to smooth here. The model is close to "tomorrow equals today".</p></div>
+    </div>
+  </div>
+  <aside class="notes"><p>The error is the mean absolute one-step error inside the last three years of Al-Rimal. The fitted ETS of the next slide agrees: its alpha is 1.000 to three decimals. This is not a failure of the method; it is the method telling you the series has a wandering level. Keep the finding in mind for the 28-day score.</p></aside>
+</section>
+
+<section class="slide" data-label="ETS" id="error-trend-season" data-lo="LO2">
+  <div class="kicker">The ETS family</div>
+  <h2>Level plus an optional trend plus an optional season</h2>
+  <div class="cols cols-3 gap-s">
+    <div class="card c-navy"><h4>Error</h4><p class="small mb0">Additive or multiplicative. It decides the shape of the intervals.</p></div>
+    <div class="card c-teal"><h4>Trend</h4><p class="small mb0">None, additive, or damped: a slope that fades with the horizon.</p></div>
+    <div class="card c-cyan"><h4>Season</h4><p class="small mb0">None, additive or multiplicative, with one period: here 7 days.</p></div>
+  </div>
+  <pre class="code s mt-s" data-file="Lab 2.1 · step 2"><code class="language-python">from statsforecast.models import AutoETS
+U.sf(AutoETS(season_length=7, model="ANA"), train, h)   # additive error, no trend, additive season</code></pre>
+  <aside class="notes"><p>The three letters of the model string are error, trend, season; "Z" lets the library choose by an information criterion. One season only: ETS on daily data can hold the week, and a 365-day season is beyond it (365 seasonal states to estimate). That limit is the plot of the next two slides. U.sf is the course helper that fits one statsforecast model and returns the forecast with its 80% and 95% intervals as quantile columns.</p><p>Sources: statsforecast documentation; Forecasting: Principles and Practice, 3rd edition, chapter 8.</p></aside>
+</section>
+
+<section class="slide" data-label="It loses" id="weekly-ets-loses" data-lo="LO2">
+  <div class="kicker">Lab 2.1 · step 2</div>
+  <h2>A fitted model with intervals loses to the floor by half</h2>
+  <div class="cols cols-3">
+    <div class="stat"><div class="big">1.59</div><div class="lbl">ETS with a weekly season, 13 origins</div></div>
+    <div class="stat"><div class="big">1.06</div><div class="lbl">the floor: the same weekday last year</div></div>
+    <div class="stat"><div class="big">-0.50</div><div class="lbl">skill: it adds half again to the floor's error</div></div>
+  </div>
+  <div class="callout warn mt"><b>Why.</b> It forecasts a flat level with a weekday pattern. Over four weeks the temperature moves the level, and this model has no summer.</div>
+  <aside class="notes"><p>Return to the bet from the opening. The score, 1.59, sits beside the naive forecasts of Lab 1.4 (1.64 and 1.62), which is what an alpha of 1 predicts. Skill is 1 minus the ratio of the method's error to the floor's: positive beats the floor. The lesson is not "ETS is bad": it is that a method's class matters less than whether it can see the main pattern.</p></aside>
+</section>
+
+<section class="slide" data-label="Decompose first" id="decompose-then-smooth" data-lo="LO2">
+  <div class="kicker">Give it the summer</div>
+  <h2>Decompose, smooth what is left, put the seasons back</h2>
+  <div class="flow">
+    <div class="step c-navy"><b>1 · Log</b>seasons become additions</div>
+    <div class="arrow">→</div>
+    <div class="step c-teal"><b>2 · Decompose</b>take out the weekly and annual seasons</div>
+    <div class="arrow">→</div>
+    <div class="step c-cyan"><b>3 · ETS</b>forecast the rest: level and trend</div>
+    <div class="arrow">→</div>
+    <div class="step c-coral"><b>4 · Restore</b>add the seasons, take the exponential</div>
+  </div>
+  <pre class="code s mt-s" data-file="Lab 2.1 · step 3"><code class="language-python">model = MSTL(season_length=[7, 365], trend_forecaster=AutoETS(model="ZZN"))
+np.exp(U.sf(model, np.log(train), h))</code></pre>
+  <aside class="notes"><p>This is Lab 1.3's decomposition put to work. The seasons are forecast by repeating their last cycle; ETS forecasts the seasonally adjusted series, which is smooth enough for it. Three years of training data hold three annual cycles: the minimum for a 365-day season to be estimated at all. Taking the exponential of the quantile columns is valid because quantiles survive a monotone transform; the mean would not.</p></aside>
+</section>
+
+<section class="slide" data-label="By week" id="ets-against-the-floor" data-lo="LO2">
+  <div class="kicker">Lab 2.1 · Al-Rimal, 13 origins</div>
+  <h2>With the annual season, exponential smoothing beats the floor</h2>
+  <table class="t small">
+    <tr><th>Method</th><th class="num">Scaled error</th><th class="num">Week 1</th><th class="num">Week 2</th><th class="num">Week 3</th><th class="num">Week 4</th><th class="num">Skill</th></tr>
+    <tr><td>Floor</td><td class="num">1.06</td><td class="num">0.92</td><td class="num">0.96</td><td class="num">1.08</td><td class="num">1.28</td><td class="num">0</td></tr>
+    <tr><td>ETS, weekly season</td><td class="num">1.59</td><td class="num">1.02</td><td class="num">1.80</td><td class="num">1.48</td><td class="num">2.04</td><td class="num">-0.50</td></tr>
+    <tr class="hl"><td>Decompose, then ETS</td><td class="num">0.98</td><td class="num">0.97</td><td class="num">0.97</td><td class="num">0.85</td><td class="num">1.15</td><td class="num">0.07</td></tr>
+  </table>
+  <div class="callout tip small mt-s"><b>Read the first week.</b> There the floor still wins, 0.92 to 0.97. The gain comes in weeks 3 and 4.</div>
+  <aside class="notes"><p>A gain of 7% over the floor is modest and real. Ask where a planner would feel it: in the far end of the 28 days. The stretch task compares a damped with an undamped trend on the weekly ETS: at 28 days week 4 is 2.04 in both, because the trend is not what this model lacks.</p></aside>
+</section>
+
+<section class="slide" id="check-ets-season" data-lo="LO2">
+  <div class="kicker">Checkpoint</div>
+  <h2>Which change helps this model most?</h2>
+  <div class="quiz" data-type="single" data-lo="LO2">
+    <p class="lead">An ETS model with a weekly season forecasts a hot region's daily demand 28 days ahead. Its fitted alpha is 0.99 and it scores 1.6 against a floor of 1.1. Which change is most likely to bring it under the floor?</p>
+    <div class="opts">
+      <div class="opt" data-why="Tunes the weight the fit already chose: a lower alpha was tried by the optimiser and lost">Set alpha to 0.3 by hand for a smoother level</div>
+      <div class="opt" data-why="Adds a slope where the miss is a season: a trend extrapolates the last weeks in a straight line">Add a damped trend to the weekly model</div>
+      <div class="opt" data-why="Trains on more of the same blindness: more history does not give the model an annual season">Train on nine years, not three</div>
+      <div class="opt" data-ok>Remove the annual season by decomposition before smoothing</div>
+    </div>
+    <div class="callout tip why"><b>Why.</b> The model's error at 28 days is the summer it cannot see. A decomposition with a 365-day period hands it a series without that pattern and adds the pattern back.</div>
+  </div>
+  <aside class="notes"><p>Answer: D. Lab 2.1 measures options B and D: the damped trend leaves the score at 1.59; decomposing first gives 0.98.</p></aside>
 </section>
 
 <section class="slide lab" id="lab-2-1" data-auto="lab" data-lab="2.1">
-  <aside class="notes">REPLACE: what to watch for while participants work, the typical problems, and the fallback for anyone who did not finish an earlier lab</aside>
+  <aside class="notes"><p>Walk the room. The two backtests take about a minute together on a laptop; tell participants to read the next task while they run. Usual problems: forgetting np.exp, so the forecast is on the log scale and the score is enormous; fitting the decomposition on demand and not its logarithm. The lab starts from the data files and the supplied floor (data/reference/bt_floor.csv): nobody needs their own Lab 1.4.</p></aside>
 </section>
 
-<!-- Session 2 -->
-
+<!-- ======================= SESSION 2 ======================= -->
 <section class="slide section" id="s2" data-auto="section" data-session="2"></section>
 
-<section class="slide" id="s2-idea" data-lo="LO2">
-  <div class="kicker">REPLACE: the question this slide answers</div>
-  <h2>REPLACE: one idea, stated as a sentence</h2>
-  <div class="cols cols-2">
-    <ul class="bullets">
-      <li>REPLACE: at most six bullets, each a complete thought</li>
-      <li>REPLACE: bold the key phrase; numbers come from the lab run, not from memory</li>
-    </ul>
-    <div class="card c-teal"><h4>In the case study</h4><p class="small mb0">REPLACE: tie the idea to the case study and its data</p></div>
+<section class="slide" data-label="AR, I, MA" id="arima-three-parts" data-lo="LO2">
+  <div class="kicker">ARIMA</div>
+  <h2>Difference until the level stops wandering, then model the memory</h2>
+  <div class="cols cols-3 gap-s">
+    <div class="card c-navy"><h4>I · differencing</h4><p class="small mb0">Work on changes, not levels. A seasonal difference subtracts the same weekday of last week.</p></div>
+    <div class="card c-teal"><h4>AR · autoregression</h4><p class="small mb0">Today depends on the last few days, each with a coefficient.</p></div>
+    <div class="card c-cyan"><h4>MA · moving average</h4><p class="small mb0">Today depends on the last few forecast errors.</p></div>
   </div>
-  <div class="callout warn mt"><b>What goes wrong.</b> REPLACE: the failure participants will hit, and how to recognise it</div>
-  <aside class="notes">REPLACE: what to say, the demo to run, the question to ask the room, the common failure and its fix</aside>
+  <div class="callout tip mt"><b>Written as.</b> ARIMA(p, d, q)(P, D, Q) with a period m: the first bracket for day-to-day memory, the second for week-to-week.</div>
+  <aside class="notes"><p>Where ETS describes a series by components, ARIMA describes it by its correlations. The two families overlap: simple exponential smoothing is ARIMA(0,1,1). For this course one model is enough: ARIMA(1,0,1)(0,1,1) with a period of 7, which is one seasonal difference with a short memory around it.</p><p>Sources: Forecasting: Principles and Practice, 3rd edition, chapter 9.</p></aside>
 </section>
 
-<section class="slide" id="s2-steps" data-lo="LO2">
-  <div class="kicker">Step by step</div>
-  <h2>REPLACE: a process, shown one step per key press</h2>
-  <div class="flow">
-    <div class="step c-teal"><b>1 · REPLACE: name</b>REPLACE: what happens first</div>
-    <div class="arrow frag" data-frag="b">→</div><div class="step c-cyan frag" data-frag="b"><b>2 · REPLACE: name</b>REPLACE: the next piece</div>
-    <div class="arrow frag" data-frag="c">→</div><div class="step c-coral frag" data-frag="c"><b>3 · REPLACE: name</b>REPLACE: the result</div>
+<section class="slide" data-label="Autocorrelation" id="autocorrelation-before-after" data-lo="LO2">
+  <div class="kicker">Lab 2.2 · step 1</div>
+  <h2>The autocorrelation says whether differencing has done its work</h2>
+  <table class="t small">
+    <tr><th>Lag in days</th><th class="num">1</th><th class="num">2</th><th class="num">3</th><th class="num">4</th><th class="num">5</th><th class="num">6</th><th class="num">7</th></tr>
+    <tr><td>Demand</td><td class="num">0.98</td><td class="num">0.97</td><td class="num">0.96</td><td class="num">0.95</td><td class="num">0.94</td><td class="num">0.94</td><td class="num">0.94</td></tr>
+    <tr><td>After a seasonal difference</td><td class="num">0.83</td><td class="num">0.59</td><td class="num">0.40</td><td class="num">0.24</td><td class="num">0.08</td><td class="num">-0.09</td><td class="num">-0.21</td></tr>
+  </table>
+  <div class="cols cols-2 mt-s">
+    <div class="callout warn small"><b>Before.</b> Correlations that stay near 1: the level wanders. Nothing to model yet.</div>
+    <div class="callout tip small"><b>After.</b> Memory that dies out in five days, and a dip at lag 7: a short AR part and a seasonal MA term.</div>
   </div>
-  <div class="callout tip mt frag"><b>Takeaway.</b> REPLACE: the one sentence to remember</div>
-  <aside class="notes">Press once per step and say what each step adds before the next one appears. REPLACE: the example to walk through</aside>
+  <aside class="notes"><p>The autocorrelation at lag k is the correlation of the series with itself k days earlier, here on the three training years of the last fold. Reading orders from such a table is a craft; the practical rule is enough: difference until the correlations die out quickly, then keep the model small. The negative value at lag 7 after a seasonal difference is the usual sign that a seasonal moving-average term is needed.</p></aside>
+</section>
+
+<section class="slide" data-label="Same blindness" id="weekly-arima-loses-too" data-lo="LO2">
+  <div class="kicker">Lab 2.2 · step 2</div>
+  <h2>The weekly ARIMA has the same blindness as the weekly ETS</h2>
+  <div class="cols cols-2">
+    <pre class="code s" data-file="Lab 2.2"><code class="language-python">from statsforecast.models import ARIMA
+
+def weekly_arima():
+    return ARIMA(order=(1, 0, 1),
+                 seasonal_order=(0, 1, 1),
+                 season_length=7)
+
+U.sf(weekly_arima(), train, h)</code></pre>
+    <div class="stack">
+      <div class="stat"><div class="big">1.62</div><div class="lbl">scaled error, against 1.59 for the weekly ETS and 1.06 for the floor</div></div>
+      <div class="callout warn small"><b>Two families, one miss.</b> Neither can see the summer through a period of 7.</div>
+    </div>
+  </div>
+  <aside class="notes"><p>Fitted coefficients on the last fold: AR 0.98, MA 0.29, seasonal MA -0.93. An AR coefficient of 0.98 is the same message as alpha = 1: the level is close to a random walk. When two different model families fail by the same amount, the cause is in what they are given, not in the families.</p></aside>
+</section>
+
+<section class="slide" data-label="Residuals" id="residuals-must-be-noise" data-lo="LO2">
+  <div class="kicker">Diagnostics</div>
+  <h2>If the residuals still hold a pattern, the model has not finished</h2>
+  <div class="cols cols-2">
+    <ul class="bullets small">
+      <li><b>Residuals</b> are the one-step errors inside the training data.</li>
+      <li>A finished model leaves noise: no autocorrelation.</li>
+      <li>The <b>Ljung-Box test</b> asks whether the first 14 autocorrelations together are larger than noise gives.</li>
+      <li>A small p-value: a pattern is left, and the model's intervals, which assume noise, cannot be trusted.</li>
+    </ul>
+    <div class="stack">
+      <div class="stat"><div class="big">0.0001</div><div class="lbl">p-value of the weekly ARIMA: not noise</div></div>
+      <pre class="code s" data-file="Lab 2.2 · step 3"><code class="language-python">acorr_ljungbox(residuals, lags=[14],
+               model_df=3)["lb_pvalue"]</code></pre>
+    </div>
+  </div>
+  <aside class="notes"><p>This is LO2's evidence: residual diagnostics beside the score. model_df is the number of fitted ARMA coefficients, here three. Two cautions for the room. A passed test is necessary and not sufficient: it looks one step ahead inside the training data, and the forecast is 28 steps ahead outside it. And with a thousand residuals the test finds small patterns: read the p-value with the plot.</p><p>Sources: statsmodels documentation; Forecasting: Principles and Practice, 3rd edition, residual diagnostics.</p></aside>
+</section>
+
+<section class="slide" data-label="Fourier" id="annual-fourier-terms" data-lo="LO2">
+  <div class="kicker">Lab 2.2 · step 4</div>
+  <h2>Two pairs of annual waves give ARIMA the summer</h2>
+  <div class="cols cols-2">
+    <pre class="code s" data-file="Lab 2.2"><code class="language-python">def fourier(dates, K=2):
+    t = days_since_2017(dates)
+    return DataFrame({
+        f"{f}{k}": getattr(np, f)(
+            2 * np.pi * k * t / 365.25)
+        for k in (1, 2)
+        for f in ("sin", "cos")})
+
+U.sf(weekly_arima(), train, h,
+     fourier(train.index), fourier(future))</code></pre>
+    <div class="stack">
+      <div class="stat"><div class="big">0.83</div><div class="lbl">scaled error: 22% under the floor</div></div>
+      <div class="stat"><div class="big">0.62</div><div class="lbl">Ljung-Box p-value: the residuals pass</div></div>
+    </div>
+  </div>
+  <aside class="notes"><p>A sine and a cosine with a period of one year, and a second pair with half that period, are four columns that can draw a smooth annual shape. They depend on the date only, so they are known for every future day: they are regressors the model can be given for the horizon. This is the first regression with ARIMA errors of the course; Session 3 adds the regressors that carry real information.</p></aside>
+</section>
+
+<section class="slide" data-label="The record" id="arima-record" data-lo="LO2">
+  <div class="kicker">Lab 2.2 · the record</div>
+  <h2>Score and diagnostics, side by side, against the floor</h2>
+  <table class="t small">
+    <tr><th>Model</th><th class="num">Scaled error</th><th class="num">Week 1</th><th class="num">Week 4</th><th class="num">Ljung-Box p</th></tr>
+    <tr><td>Floor</td><td class="num">1.06</td><td class="num">0.92</td><td class="num">1.28</td><td class="num"></td></tr>
+    <tr><td>ARIMA, weekly</td><td class="num">1.62</td><td class="num">1.06</td><td class="num">2.10</td><td class="num">0.0001</td></tr>
+    <tr class="hl"><td>ARIMA, weekly + annual Fourier</td><td class="num">0.83</td><td class="num">0.71</td><td class="num">0.87</td><td class="num">0.62</td></tr>
+  </table>
+  <div class="callout note small mt-s"><b>Automatic order search.</b> On two folds it scored 0.82 against 0.85 for the fixed orders, and took 53 seconds. A small gain for a large cost: know what the search buys before you run it 400 times.</div>
+  <aside class="notes"><p>The stretch task of Lab 2.2 lets AutoARIMA choose the orders. The run time is from the course's run on a laptop and will differ on other machines; the point is the ratio. On Day 3 the same question returns with 400 feeders, where per-series search becomes the dominant cost.</p></aside>
+</section>
+
+<section class="slide" id="check-residual-test" data-lo="LO2">
+  <div class="kicker">Checkpoint</div>
+  <h2>What does this diagnostic tell you?</h2>
+  <div class="quiz" data-type="single" data-lo="LO2">
+    <p class="lead">A seasonal ARIMA is fitted to three years of daily demand. The Ljung-Box p-value of its residuals is 0.0003 and its backtest score is close to the floor. What do you do next?</p>
+    <div class="opts">
+      <div class="opt" data-ok>Look for the pattern left in the residuals and give the model a term for it</div>
+      <div class="opt" data-why="Reads a small p-value as a pass: here a small value means the residuals are not noise">Report the model: a p-value this small shows the fit is significant</div>
+      <div class="opt" data-why="Fixes the test and not the model: more lags change the statistic, not what the model misses">Rerun the test with more lags until it passes</div>
+      <div class="opt" data-why="Throws away a diagnosis: a failed test says where to improve the model, not that the family is wrong">Drop ARIMA and move to another model family</div>
+    </div>
+    <div class="callout tip why"><b>Why.</b> A small p-value says the one-step errors still hold structure. Find it and add it: in the lab it was the annual season.</div>
+  </div>
+  <aside class="notes"><p>Answer: A. Option B is the classic misreading: in most tests a small p-value is the "interesting" result, and here the interesting result is bad news.</p></aside>
 </section>
 
 <section class="slide lab" id="lab-2-2" data-auto="lab" data-lab="2.2">
-  <aside class="notes">REPLACE: what to watch for while participants work, the typical problems, and the fallback for anyone who did not finish an earlier lab</aside>
+  <aside class="notes"><p>Walk the room. Usual problems: passing the origin to a function that does not take it (the backtest helper passes it only to functions whose third argument is named origin); Fourier columns built for the training days only, so the forecast fails for lack of future regressors; residuals tested with their first seven values, which the seasonal difference leaves at zero. The lab starts from the data files and the supplied floor.</p></aside>
 </section>
 
-<!-- Session 3 -->
-
+<!-- ======================= SESSION 3 ======================= -->
 <section class="slide section" id="s3" data-auto="section" data-session="3"></section>
 
-<section class="slide" id="s3-idea" data-lo="LO2">
-  <div class="kicker">REPLACE: the question this slide answers</div>
-  <h2>REPLACE: one idea, stated as a sentence</h2>
-  <div class="cols cols-2">
-    <ul class="bullets">
-      <li>REPLACE: at most six bullets, each a complete thought</li>
-      <li>REPLACE: bold the key phrase; numbers come from the lab run, not from memory</li>
-    </ul>
-    <div class="card c-teal"><h4>In the case study</h4><p class="small mb0">REPLACE: tie the idea to the case study and its data</p></div>
+<section class="slide" data-label="Dynamic regression" id="regression-with-arima-errors" data-lo="LO2">
+  <div class="kicker">Dynamic regression</div>
+  <h2>A regression explains what it can; ARIMA models what is left</h2>
+  <div class="flow">
+    <div class="step c-navy"><b>Demand</b>MWh per day</div>
+    <div class="arrow">=</div>
+    <div class="step c-teal"><b>Coefficients × regressors</b>temperature, Ramadan, Eid, national days</div>
+    <div class="arrow">+</div>
+    <div class="step c-coral"><b>An ARIMA series</b>the week, the memory, the noise</div>
   </div>
-  <div class="callout warn mt"><b>What goes wrong.</b> REPLACE: the failure participants will hit, and how to recognise it</div>
-  <aside class="notes">REPLACE: what to say, the demo to run, the question to ask the room, the common failure and its fix</aside>
+  <div class="callout warn mt"><b>The condition.</b> Every regressor must be available for the future days, at the origin. That one sentence is this session.</div>
+  <aside class="notes"><p>An ordinary regression on time series leaves correlated errors, and its standard errors and intervals are then wrong; fitting the regression and the ARIMA part together fixes that. The coefficients read like any regression's: MWh per unit of the regressor. Yesterday's remainder told us which regressors are missing: the temperature and the moving calendar.</p><p>Sources: Forecasting: Principles and Practice, 3rd edition, dynamic regression models.</p></aside>
 </section>
 
-<section class="slide" id="s3-steps" data-lo="LO2">
-  <div class="kicker">Step by step</div>
-  <h2>REPLACE: a process, shown one step per key press</h2>
-  <div class="flow">
-    <div class="step c-teal"><b>1 · REPLACE: name</b>REPLACE: what happens first</div>
-    <div class="arrow frag" data-frag="b">→</div><div class="step c-cyan frag" data-frag="b"><b>2 · REPLACE: name</b>REPLACE: the next piece</div>
-    <div class="arrow frag" data-frag="c">→</div><div class="step c-coral frag" data-frag="c"><b>3 · REPLACE: name</b>REPLACE: the result</div>
+<section class="slide" data-label="Regressors" id="cooling-degrees-and-calendar" data-lo="LO2">
+  <div class="kicker">Lab 2.3 · step 1</div>
+  <h2>Five columns carry the weather and the calendar</h2>
+  <table class="t small">
+    <tr><th>Date</th><th class="num">Cooling degrees</th><th class="num">Heating degrees</th><th class="num">Ramadan</th><th class="num">Eid</th><th class="num">National</th></tr>
+    <tr><td>28 March 2025</td><td class="num">2.1</td><td class="num">0</td><td class="num">1</td><td class="num">0</td><td class="num">0</td></tr>
+    <tr><td>29 March 2025</td><td class="num">0</td><td class="num">0</td><td class="num">1</td><td class="num">0.4</td><td class="num">0</td></tr>
+    <tr class="hl"><td>30 March 2025, first day of Eid</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">1.0</td><td class="num">0</td></tr>
+    <tr><td>31 March 2025</td><td class="num">0.9</td><td class="num">0</td><td class="num">0</td><td class="num">0.9</td><td class="num">0</td></tr>
+    <tr><td>1 April 2025</td><td class="num">1.1</td><td class="num">0</td><td class="num">0</td><td class="num">0.7</td><td class="num">0</td></tr>
+  </table>
+  <p class="small mt-s">Cooling degrees: <code>max(0, temp - 22)</code>. Heating degrees: <code>max(0, 16 - temp)</code>. The Eid column is a weight: 1 on the first day, lower on the eve and the days after.</p>
+  <aside class="notes"><p>Why degrees and not the temperature: demand does not respond to temperature in a straight line. Below about 22 °C in this region cooling is off and temperature barely matters; the transform makes the relation close to linear. The Eid weights are a modelling choice made by the course's calendar file: a window with a shape, so that one coefficient scales the whole holiday. The stretch task tests the alternative of one regressor per Eid.</p></aside>
+</section>
+
+<section class="slide" data-label="Known at the origin" id="known-at-the-origin" data-lo="LO2 LO4">
+  <div class="kicker">The rule</div>
+  <h2>The calendar is known for the future. The temperature is not.</h2>
+  <div class="cols cols-2">
+    <div class="card c-teal"><h4>Known at the origin</h4><p class="small mb0">Dates, weekdays, Ramadan, both Eids, national days. Use the true future values.</p></div>
+    <div class="card c-coral"><h4>Not known at the origin</h4><p class="small mb0">Any measured quantity: temperature, prices, the demand of another region. Only a forecast of it may be used.</p></div>
   </div>
-  <div class="callout tip mt frag"><b>Takeaway.</b> REPLACE: the one sentence to remember</div>
-  <aside class="notes">Press once per step and say what each step adds before the next one appears. REPLACE: the example to walk through</aside>
+  <div class="callout tip mt"><b>In the labs.</b> The future temperature is the normal for the date plus the anomaly of the origin day, fading by a fifth each day. That is what a desk without a weather service can know.</div>
+  <aside class="notes"><p>The helper U.temp_known implements the last line. It is a deliberately simple weather forecast: persistence that decays. A real desk would use a weather provider's forecast and must then backtest with the forecasts that were issued at each origin, not with the measured temperatures: archives of issued forecasts are the hard thing to get. The slide serves LO2 and prepares LO4: using the measured temperature is the second of Day 4's three leaks.</p></aside>
+</section>
+
+<section class="slide" data-label="The gain" id="gain-on-eid-days" data-lo="LO2">
+  <div class="kicker">Lab 2.3 · step 3 · 13 origins, 11 Eid days</div>
+  <h2>The calendar moves the Eid days from 1.34 to 0.80</h2>
+  <table class="t small">
+    <tr><th>Model</th><th class="num">All days</th><th class="num">Eid days</th><th class="num">Other days</th></tr>
+    <tr><td>Floor</td><td class="num">1.06</td><td class="num">2.17</td><td class="num">1.03</td></tr>
+    <tr><td>Regression, weather only</td><td class="num">0.90</td><td class="num">1.34</td><td class="num">0.89</td></tr>
+    <tr class="hl"><td>Regression, weather + calendar</td><td class="num">0.77</td><td class="num">0.80</td><td class="num">0.77</td></tr>
+  </table>
+  <div class="callout tip small mt-s"><b>Score the days that matter apart.</b> The overall gain from the calendar includes Ramadan and national days; on Eid days alone the error falls by 40%.</div>
+  <aside class="notes"><p>This is the session's headline and LO2's second piece of evidence. With the calendar, the model is as good on Eid days as on any other day: the holiday has stopped being a surprise. Eleven days is a small sample; say so. The direction is not in doubt, the second decimal is.</p></aside>
+</section>
+
+<section class="slide" data-label="One fold" id="the-eid-fold" data-lo="LO2">
+  <div class="kicker">The fold that holds Eid al-Fitr 2025</div>
+  <h2>Only the model that was given the calendar follows the dip</h2>
+  <div class="figure">
+    <svg viewBox="0 0 760 300" role="img" aria-label="The fold that holds Eid al-Fitr 2025: the floor and the weather-only model miss the dip, the model with the calendar follows it" xmlns="http://www.w3.org/2000/svg"><rect x="112.8" y="10" width="101.6" height="262" fill="#e4572e" opacity="0.15"/><line x1="62" x2="748" y1="258.0" y2="258.0" stroke="#d9dee5" stroke-width="1"/><text x="54" y="263.0" text-anchor="end" font-size="15" fill="#5b6675">1,998</text><line x1="62" x2="748" y1="180.0" y2="180.0" stroke="#d9dee5" stroke-width="1"/><text x="54" y="185.0" text-anchor="end" font-size="15" fill="#5b6675">2,506</text><line x1="62" x2="748" y1="102.0" y2="102.0" stroke="#d9dee5" stroke-width="1"/><text x="54" y="107.0" text-anchor="end" font-size="15" fill="#5b6675">3,014</text><line x1="62" x2="748" y1="24.0" y2="24.0" stroke="#d9dee5" stroke-width="1"/><text x="54" y="29.0" text-anchor="end" font-size="15" fill="#5b6675">3,522</text><text x="62.0" y="293" text-anchor="middle" font-size="15" fill="#5b6675">27 Mar</text><text x="290.7" y="293" text-anchor="middle" font-size="15" fill="#5b6675">05 Apr</text><text x="519.3" y="293" text-anchor="middle" font-size="15" fill="#5b6675">14 Apr</text><text x="748.0" y="293" text-anchor="middle" font-size="15" fill="#5b6675">23 Apr</text><polyline points="62.0,172.7 87.4,162.0 112.8,216.7 138.2,258.0 163.6,232.6 189.0,211.1 214.4,225.8 239.9,203.1 265.3,232.7 290.7,199.7 316.1,144.1 341.5,106.5 366.9,87.1 392.3,97.5 417.7,121.7 443.1,158.9 468.5,165.9 493.9,138.6 519.3,104.9 544.7,100.8 570.1,85.3 595.6,77.8 621.0,109.3 646.4,79.8 671.8,62.8 697.2,79.2 722.6,39.3 748.0,24.0" fill="none" stroke="#16324f" stroke-width="2.2" stroke-linejoin="round"/><polyline points="62.0,200.1 87.4,216.8 112.8,147.3 138.2,123.7 163.6,151.3 189.0,130.6 214.4,145.9 239.9,111.8 265.3,187.5 290.7,204.3 316.1,190.0 341.5,161.3 366.9,197.0 392.3,229.2 417.7,209.8 443.1,215.1 468.5,152.9 493.9,103.8 519.3,83.4 544.7,97.6 570.1,134.4 595.6,149.2 621.0,198.0 646.4,186.1 671.8,145.3 697.2,107.5 722.6,48.6 748.0,29.4" fill="none" stroke="#8a94a3" stroke-width="2" stroke-linejoin="round" stroke-dasharray="6 4"/><polyline points="62.0,166.1 87.4,194.0 112.8,177.9 138.2,155.1 163.6,150.4 189.0,149.4 214.4,147.2 239.9,138.4 265.3,167.8 290.7,151.0 316.1,131.0 341.5,127.0 366.9,124.7 392.3,122.8 417.7,114.3 443.1,145.8 468.5,129.1 493.9,107.3 519.3,103.4 544.7,101.1 570.1,99.2 595.6,90.6 621.0,120.2 646.4,105.4 671.8,83.5 697.2,79.6 722.6,77.2 748.0,75.2" fill="none" stroke="#e4572e" stroke-width="2" stroke-linejoin="round" stroke-dasharray="2 3"/><polyline points="62.0,167.4 87.4,194.4 112.8,209.3 138.2,251.0 163.6,235.0 189.0,213.7 214.4,181.2 239.9,132.0 265.3,161.0 290.7,140.5 316.1,123.0 341.5,118.0 366.9,115.3 392.3,113.2 417.7,104.3 443.1,135.7 468.5,115.5 493.9,96.2 519.3,91.3 544.7,88.7 570.1,86.6 595.6,77.8 621.0,107.2 646.4,89.1 671.8,69.8 697.2,64.8 722.6,62.2 748.0,60.2" fill="none" stroke="#00a19a" stroke-width="2.4" stroke-linejoin="round"/></svg>
+    <div class="caption">Al-Rimal, origin 26 March 2025. Navy: demand. Grey dashes: the floor. Coral dots: weather only. Teal: weather and calendar. Shaded: Eid al-Fitr.</div>
+  </div>
+  <aside class="notes"><p>Read the floor first: it has its own dip, later in the fold, where Eid was in 2024. The weather-only model sails through the holiday. The model with the calendar drops with demand and comes back with it. Also visible: all three drift from demand in the last week, where the temperature they assumed was wrong. That is the next slide.</p></aside>
+</section>
+
+<section class="slide" data-label="The oracle" id="honest-against-oracle" data-lo="LO2 LO4">
+  <div class="kicker">Lab 2.3 · step 4</div>
+  <h2>With the temperature measured later, the score flatters by 0.22</h2>
+  <div class="cols cols-2">
+    <table class="t small">
+      <tr><th>Future temperature</th><th class="num">Scaled error</th><th class="num">Week 1</th><th class="num">Week 4</th></tr>
+      <tr><td>Known at the origin</td><td class="num">0.77</td><td class="num">0.62</td><td class="num">0.81</td></tr>
+      <tr><td>Measured later</td><td class="num">0.55</td><td class="num">0.39</td><td class="num">0.66</td></tr>
+    </table>
+    <div class="stack">
+      <div class="card c-coral flat"><h4>0.55 is not a score</h4><p class="small mb0">No forecaster has next week's measured temperature. Report 0.77.</p></div>
+      <div class="card c-teal flat"><h4>The gap is useful</h4><p class="small mb0">It is what a perfect weather forecast would be worth to the desk.</p></div>
+    </div>
+  </div>
+  <aside class="notes"><p>The lab makes participants commit the error on purpose, with one argument (oracle=True), so that they recognise its signature: a score that is too good, most of all in the first week. On Day 4 the same error is hidden in a notebook among two others. Ask: how would you notice it in a colleague's work? A regressor table that has measured values on dates after the origin.</p></aside>
+</section>
+
+<section class="slide" data-label="Coefficients" id="coefficients-in-mwh" data-lo="LO2">
+  <div class="kicker">Lab 2.3 · step 5</div>
+  <h2>The coefficients are sentences a planner can check</h2>
+  <div class="cols cols-3">
+    <div class="stat"><div class="big">+147</div><div class="lbl">MWh per cooling degree: 4.2% of a mean day</div></div>
+    <div class="stat"><div class="big">-599</div><div class="lbl">MWh on the first day of Eid: 17% of a mean day</div></div>
+    <div class="stat"><div class="big">-296</div><div class="lbl">MWh on a national day</div></div>
+  </div>
+  <div class="callout note small mt"><b>One Eid regressor or two?</b> With separate regressors for the two Eids the overall score is 0.75, and the Eid days get worse: 1.00 against 0.80. Half the examples per coefficient.</div>
+  <aside class="notes"><p>Coefficients from the last fold's three training years; mean daily demand there is 3,538 MWh. A planner can sanity-check these: does one degree move demand by about 4%? Does Eid take about a sixth off? If a coefficient has the wrong sign, the model is wrong whatever its score. The stretch result is the unflattering kind worth keeping: a richer model with fewer examples per parameter did worse where it was meant to help. Three years hold three of each Eid.</p></aside>
+</section>
+
+<section class="slide" id="check-future-regressor" data-lo="LO2">
+  <div class="kicker">Checkpoint</div>
+  <h2>Which regressor may use its true future values?</h2>
+  <div class="quiz" data-type="single" data-lo="LO2">
+    <p class="lead">You forecast a region's demand 28 days ahead with a regression with ARIMA errors. In the backtest, which of these regressors may be filled with its true values for the 28 test days?</p>
+    <div class="opts">
+      <div class="opt" data-why="Uses a measurement from the future: the temperature of a test day is not known at the origin">The measured daily temperature</div>
+      <div class="opt" data-why="Uses another unknown series: the neighbour's demand on a test day is as unknown as this region's">The demand of the neighbouring region</div>
+      <div class="opt" data-ok>The first day of Eid al-Adha in the official calendar</div>
+      <div class="opt" data-why="Uses a quantity fixed only after the day: the spot price is set by the demand being forecast">The spot price of energy on each day</div>
+    </div>
+    <div class="callout tip why"><b>Why.</b> A calendar date is known at the origin. Every measured quantity must be replaced by what was known or forecast at the origin.</div>
+  </div>
+  <aside class="notes"><p>Answer: C. A fair follow-up: is the Eid date really known 28 days ahead? The official announcement depends on the moon sighting and can differ by a day from the computed calendar. For a 28-day horizon the computed date is used and the possible one-day shift belongs in the "when not to use" part of the forecast note.</p></aside>
 </section>
 
 <section class="slide lab" id="lab-2-3" data-auto="lab" data-lab="2.3">
-  <aside class="notes">REPLACE: what to watch for while participants work, the typical problems, and the fallback for anyone who did not finish an earlier lab</aside>
+  <aside class="notes"><p>Walk the room. Each backtest takes 10 to 15 seconds. Usual problems: the future regressors built without passing the origin, which silently uses the measured temperature (the honest and the oracle score then agree: a useful accident to discuss); holidays=False forgotten in the weather-only model. The lab starts from the data files and the supplied floor.</p></aside>
 </section>
 
-<!-- Session 4 -->
-
+<!-- ======================= SESSION 4 ======================= -->
 <section class="slide section" id="s4" data-auto="section" data-session="4"></section>
 
-<section class="slide" id="s4-idea" data-lo="LO3">
-  <div class="kicker">REPLACE: the question this slide answers</div>
-  <h2>REPLACE: one idea, stated as a sentence</h2>
-  <div class="cols cols-2">
-    <ul class="bullets">
-      <li>REPLACE: at most six bullets, each a complete thought</li>
-      <li>REPLACE: bold the key phrase; numbers come from the lab run, not from memory</li>
-    </ul>
-    <div class="card c-teal"><h4>In the case study</h4><p class="small mb0">REPLACE: tie the idea to the case study and its data</p></div>
+<section class="slide" data-label="A promise" id="interval-is-a-promise" data-lo="LO2 LO3">
+  <div class="kicker">Probabilistic forecasts</div>
+  <h2>An 80% interval is a promise about frequency, and it can be checked</h2>
+  <div class="cols cols-3 gap-s">
+    <div class="card c-navy"><h4>Quantile</h4><p class="small mb0">The 0.9 quantile is a value demand stays under on 9 days in 10.</p></div>
+    <div class="card c-teal"><h4>Interval</h4><p class="small mb0">The 80% interval runs from the 0.1 to the 0.9 quantile.</p></div>
+    <div class="card c-coral"><h4>Coverage</h4><p class="small mb0">The share of actual values that fell inside. For an 80% interval it should be near 80%.</p></div>
   </div>
-  <div class="callout warn mt"><b>What goes wrong.</b> REPLACE: the failure participants will hit, and how to recognise it</div>
-  <aside class="notes">REPLACE: what to say, the demo to run, the question to ask the room, the common failure and its fix</aside>
+  <div class="callout warn mt"><b>What goes wrong.</b> Intervals are printed by every library and checked by almost nobody. Too narrow, and the planner is surprised twice as often as promised.</div>
+  <aside class="notes"><p>Connect to Day 1: Omar needs the 0.8 quantile, Hamad the 0.9. They act on the quantiles, so a quantile that is wrong costs money directly. Participants met intervals by simulation in DS-201; the new part is that a forecast's interval can be scored against what happened, fold by fold.</p></aside>
 </section>
 
-<section class="slide" id="s4-steps" data-lo="LO3">
-  <div class="kicker">Step by step</div>
-  <h2>REPLACE: a process, shown one step per key press</h2>
-  <div class="flow">
-    <div class="step c-teal"><b>1 · REPLACE: name</b>REPLACE: what happens first</div>
-    <div class="arrow frag" data-frag="b">→</div><div class="step c-cyan frag" data-frag="b"><b>2 · REPLACE: name</b>REPLACE: the next piece</div>
-    <div class="arrow frag" data-frag="c">→</div><div class="step c-coral frag" data-frag="c"><b>3 · REPLACE: name</b>REPLACE: the result</div>
+<section class="slide" data-label="Coverage" id="coverage-of-three-models" data-lo="LO2 LO3">
+  <div class="kicker">Lab 2.4 · step 1 · 364 test days</div>
+  <h2>The most accurate model keeps its promise least</h2>
+  <table class="t small">
+    <tr><th>Model</th><th class="num">Scaled error</th><th class="num">80% interval covers</th><th class="num">95% interval covers</th></tr>
+    <tr><td>Decompose, then ETS</td><td class="num">0.98</td><td class="num">83.5%</td><td class="num">93.1%</td></tr>
+    <tr><td>ARIMA + annual Fourier</td><td class="num">0.83</td><td class="num">78.8%</td><td class="num">93.1%</td></tr>
+    <tr class="hl"><td>Regression: weather + calendar</td><td class="num">0.77</td><td class="num">63.5%</td><td class="num">76.9%</td></tr>
+  </table>
+  <div class="callout warn small mt-s"><b>Read the last row.</b> Its "95%" interval is missed on almost one day in four.</div>
+  <aside class="notes"><p>The three backtests are supplied as reference files, so the lab does not depend on anyone's Day 2 morning. Ask the room for a reason before the next slide. The answer: the regression's interval is computed as if the future regressors were known. The calendar is. The temperature is not, and its uncertainty is the largest one in the forecast.</p></aside>
+</section>
+
+<section class="slide" data-label="Too narrow" id="narrow-band-wide-band" data-lo="LO2 LO3">
+  <div class="kicker">One summer fold, origin 16 July 2025</div>
+  <h2>The model's own band is thin; the rebuilt band admits what is unknown</h2>
+  <div class="cols cols-2">
+    <div class="figure">
+      <svg viewBox="0 0 520 300" role="img" aria-label="One summer fold: the model's own 80% interval is a thin band and demand leaves it on many days" xmlns="http://www.w3.org/2000/svg"><line x1="62" x2="508" y1="257.2" y2="257.2" stroke="#d9dee5" stroke-width="1"/><text x="54" y="262.2" text-anchor="end" font-size="15" fill="#5b6675">4,837</text><line x1="62" x2="508" y1="179.7" y2="179.7" stroke="#d9dee5" stroke-width="1"/><text x="54" y="184.7" text-anchor="end" font-size="15" fill="#5b6675">5,247</text><line x1="62" x2="508" y1="102.3" y2="102.3" stroke="#d9dee5" stroke-width="1"/><text x="54" y="107.3" text-anchor="end" font-size="15" fill="#5b6675">5,657</text><line x1="62" x2="508" y1="24.8" y2="24.8" stroke="#d9dee5" stroke-width="1"/><text x="54" y="29.8" text-anchor="end" font-size="15" fill="#5b6675">6,067</text><text x="62.0" y="293" text-anchor="middle" font-size="15" fill="#5b6675">17 Jul</text><text x="210.7" y="293" text-anchor="middle" font-size="15" fill="#5b6675">26 Jul</text><text x="359.3" y="293" text-anchor="middle" font-size="15" fill="#5b6675">04 Aug</text><text x="508.0" y="293" text-anchor="middle" font-size="15" fill="#5b6675">13 Aug</text><polygon points="62.0,87.3 78.5,148.2 95.0,122.7 111.6,94.3 128.1,89.1 144.6,91.1 161.1,79.0 177.6,82.6 194.1,144.8 210.7,120.1 227.2,92.2 243.7,87.3 260.2,89.6 276.7,77.5 293.3,81.5 309.8,146.6 326.3,121.9 342.8,94.0 359.3,91.8 375.9,94.0 392.4,81.9 408.9,88.6 425.4,151.0 441.9,129.0 458.4,101.1 475.0,98.9 491.5,101.0 508.0,91.6 508.0,186.6 491.5,195.6 475.0,192.9 458.4,194.4 441.9,221.6 425.4,242.7 408.9,179.2 392.4,170.6 375.9,182.1 359.3,179.1 342.8,180.4 326.3,207.2 309.8,230.6 293.3,164.0 276.7,157.6 260.2,168.5 243.7,165.1 227.2,168.4 210.7,194.6 194.1,217.2 177.6,152.4 161.1,144.8 144.6,154.8 128.1,150.2 111.6,152.2 95.0,176.7 78.5,197.3 62.0,129.8" fill="#00a19a" opacity="0.3"/><polyline points="62.0,108.6 78.5,172.8 95.0,149.7 111.6,123.2 128.1,119.6 144.6,123.0 161.1,111.9 177.6,117.5 194.1,181.0 210.7,157.4 227.2,130.3 243.7,126.2 260.2,129.0 276.7,117.6 293.3,122.7 309.8,188.6 326.3,164.6 342.8,137.2 359.3,135.5 375.9,138.0 392.4,126.3 408.9,133.9 425.4,196.9 441.9,175.3 458.4,147.8 475.0,145.9 491.5,148.3 508.0,139.1" fill="none" stroke="#00a19a" stroke-width="2" stroke-linejoin="round"/><polyline points="62.0,110.9 78.5,134.0 95.0,90.4 111.6,73.6 128.1,77.7 144.6,97.5 161.1,113.2 177.6,176.9 194.1,272.0 210.7,205.0 227.2,167.1 243.7,119.2 260.2,120.2 276.7,126.3 293.3,104.2 309.8,165.5 326.3,151.3 342.8,110.0 359.3,101.1 375.9,99.9 392.4,124.8 408.9,86.5 425.4,129.1 441.9,46.9 458.4,24.8 475.0,42.2 491.5,104.8 508.0,101.0" fill="none" stroke="#16324f" stroke-width="2" stroke-linejoin="round"/></svg>
+      <div class="caption">The model's own 80% interval. Demand (navy) is inside on 16 of 28 days.</div>
+    </div>
+    <div class="figure">
+      <svg viewBox="0 0 520 300" role="img" aria-label="The same fold with the interval rebuilt from the errors of earlier folds: wider, and demand stays inside on most days" xmlns="http://www.w3.org/2000/svg"><line x1="62" x2="508" y1="257.2" y2="257.2" stroke="#d9dee5" stroke-width="1"/><text x="54" y="262.2" text-anchor="end" font-size="15" fill="#5b6675">4,837</text><line x1="62" x2="508" y1="179.7" y2="179.7" stroke="#d9dee5" stroke-width="1"/><text x="54" y="184.7" text-anchor="end" font-size="15" fill="#5b6675">5,247</text><line x1="62" x2="508" y1="102.3" y2="102.3" stroke="#d9dee5" stroke-width="1"/><text x="54" y="107.3" text-anchor="end" font-size="15" fill="#5b6675">5,657</text><line x1="62" x2="508" y1="24.8" y2="24.8" stroke="#d9dee5" stroke-width="1"/><text x="54" y="29.8" text-anchor="end" font-size="15" fill="#5b6675">6,067</text><text x="62.0" y="293" text-anchor="middle" font-size="15" fill="#5b6675">17 Jul</text><text x="210.7" y="293" text-anchor="middle" font-size="15" fill="#5b6675">26 Jul</text><text x="359.3" y="293" text-anchor="middle" font-size="15" fill="#5b6675">04 Aug</text><text x="508.0" y="293" text-anchor="middle" font-size="15" fill="#5b6675">13 Aug</text><polygon points="62.0,64.2 78.5,128.4 95.0,105.3 111.6,78.9 128.1,75.3 144.6,78.6 161.1,67.6 177.6,32.8 194.1,96.3 210.7,72.7 227.2,45.6 243.7,41.5 260.2,44.3 276.7,32.8 293.3,61.3 309.8,127.2 326.3,103.2 342.8,75.8 359.3,74.1 375.9,76.7 392.4,64.9 408.9,48.1 425.4,111.1 441.9,89.5 458.4,62.0 475.0,60.1 491.5,62.5 508.0,53.3 508.0,211.2 491.5,220.3 475.0,218.0 458.4,219.8 441.9,247.4 425.4,268.9 408.9,206.0 392.4,179.0 375.9,190.7 359.3,188.2 342.8,189.9 326.3,217.2 309.8,241.3 293.3,175.4 276.7,174.8 260.2,186.2 243.7,183.4 227.2,187.5 210.7,214.6 194.1,238.2 177.6,174.7 161.1,154.1 144.6,165.2 128.1,161.8 111.6,165.4 95.0,191.9 78.5,215.0 62.0,150.8" fill="#00a19a" opacity="0.3"/><polyline points="62.0,108.6 78.5,172.8 95.0,149.7 111.6,123.2 128.1,119.6 144.6,123.0 161.1,111.9 177.6,117.5 194.1,181.0 210.7,157.4 227.2,130.3 243.7,126.2 260.2,129.0 276.7,117.6 293.3,122.7 309.8,188.6 326.3,164.6 342.8,137.2 359.3,135.5 375.9,138.0 392.4,126.3 408.9,133.9 425.4,196.9 441.9,175.3 458.4,147.8 475.0,145.9 491.5,148.3 508.0,139.1" fill="none" stroke="#00a19a" stroke-width="2" stroke-linejoin="round"/><polyline points="62.0,110.9 78.5,134.0 95.0,90.4 111.6,73.6 128.1,77.7 144.6,97.5 161.1,113.2 177.6,176.9 194.1,272.0 210.7,205.0 227.2,167.1 243.7,119.2 260.2,120.2 276.7,126.3 293.3,104.2 309.8,165.5 326.3,151.3 342.8,110.0 359.3,101.1 375.9,99.9 392.4,124.8 408.9,86.5 425.4,129.1 441.9,46.9 458.4,24.8 475.0,42.2 491.5,104.8 508.0,101.0" fill="none" stroke="#16324f" stroke-width="2" stroke-linejoin="round"/></svg>
+      <div class="caption">Rebuilt from the errors of earlier folds. Inside on 21 of 28 days.</div>
+    </div>
   </div>
-  <div class="callout tip mt frag"><b>Takeaway.</b> REPLACE: the one sentence to remember</div>
-  <aside class="notes">Press once per step and say what each step adds before the next one appears. REPLACE: the example to walk through</aside>
+  <aside class="notes"><p>Same fold, same point forecast (teal), same scale on both charts. The left band is what the library printed. The right band is built in Lab 2.4 step 4. One fold proves nothing about coverage; the table two slides on has all thirteen.</p></aside>
+</section>
+
+<section class="slide" data-label="Pinball" id="pinball-loss" data-lo="LO2 LO3">
+  <div class="kicker">The score for a quantile</div>
+  <h2>Pinball loss charges a quantile unequally for its two kinds of miss</h2>
+  <div class="cols cols-2">
+    <pre class="code s" data-file="Lab 2.4 · step 3"><code class="language-python">def pinball(y, q, tau):
+    return np.mean(np.where(
+        y >= q,
+        tau * (y - q),          # too low
+        (1 - tau) * (q - y)))   # too high
+
+pinball([10], [8], 0.9)    # 1.8
+pinball([10], [12], 0.9)   # 0.2</code></pre>
+    <ul class="bullets small">
+      <li>A 0.9 quantile pays nine times as much for being too low as for being too high.</li>
+      <li>That is the cost structure of Day 1's planner: the quantile <b>is</b> the cost ratio.</li>
+      <li>At 0.5 it is half the absolute error. Lower is better.</li>
+      <li>Averaged over several quantiles it scores the whole forecast distribution.</li>
+    </ul>
+  </div>
+  <aside class="notes"><p>Pinball loss is also called quantile loss. It rewards a quantile that is both calibrated and sharp: a very wide interval has perfect coverage and a poor pinball loss. That is why the course reports both. In the scorecard of Day 3 pinball loss is averaged over the five quantiles and divided by the same scale as the point error.</p><p>Sources: Forecasting: Principles and Practice, 3rd edition, evaluating distributional forecast accuracy.</p></aside>
+</section>
+
+<section class="slide" data-label="Ranking changes" id="pinball-changes-the-ranking" data-lo="LO2 LO3">
+  <div class="kicker">Lab 2.4 · step 3 · scaled pinball loss</div>
+  <h2>By pinball loss the ranking of the three models changes</h2>
+  <table class="t small">
+    <tr><th>Model</th><th class="num">q 0.025</th><th class="num">q 0.1</th><th class="num">q 0.5</th><th class="num">q 0.9</th><th class="num">q 0.975</th><th class="num">Mean</th></tr>
+    <tr><td>Decompose, then ETS</td><td class="num">0.102</td><td class="num">0.269</td><td class="num">0.492</td><td class="num">0.255</td><td class="num">0.097</td><td class="num">0.243</td></tr>
+    <tr class="hl"><td>ARIMA + annual Fourier</td><td class="num">0.065</td><td class="num">0.209</td><td class="num">0.413</td><td class="num">0.193</td><td class="num">0.069</td><td class="num">0.190</td></tr>
+    <tr><td>Regression: weather + calendar</td><td class="num">0.134</td><td class="num">0.246</td><td class="num">0.383</td><td class="num">0.197</td><td class="num">0.083</td><td class="num">0.209</td></tr>
+  </table>
+  <div class="callout tip small mt-s"><b>Read by column.</b> The regression wins at the median and loses at both ends: its extreme quantiles sit too close to the middle.</div>
+  <aside class="notes"><p>The best point forecast is not the best probabilistic forecast. Which model is "best" depends on what the planner uses: the median, or the 0.8 quantile. The repair on the next slide keeps the regression's good median and replaces its quantiles.</p></aside>
+</section>
+
+<section class="slide" data-label="Rebuild" id="intervals-from-backtest-errors" data-lo="LO2 LO3">
+  <div class="kicker">Lab 2.4 · step 4</div>
+  <h2>Rebuild the interval from the errors the backtest already made</h2>
+  <div class="cols cols-2">
+    <ol class="bullets small">
+      <li>Collect the scaled errors of all <b>earlier</b> folds, by week of the horizon.</li>
+      <li>Take their quantiles: 0.025, 0.1, 0.5, 0.9, 0.975.</li>
+      <li>New quantile = point forecast + error quantile × scale.</li>
+      <li>Use at least a year of folds: summer errors are larger than winter errors.</li>
+    </ol>
+    <table class="t small">
+      <tr><th>Regression, 13 folds of 2025</th><th class="num">Own</th><th class="num">Rebuilt</th></tr>
+      <tr><td>80% interval covers</td><td class="num">63.5%</td><td class="num">78.3%</td></tr>
+      <tr><td>95% interval covers</td><td class="num">76.9%</td><td class="num">94.5%</td></tr>
+      <tr><td>Scaled pinball loss</td><td class="num">0.208</td><td class="num">0.192</td></tr>
+      <tr><td>Mean width of the 80% interval</td><td class="num">436 MWh</td><td class="num">677 MWh</td></tr>
+    </table>
+  </div>
+  <aside class="notes"><p>The errors of a backtest contain everything that was unknown at the origin, the weather included, at the right horizon. The calibration uses the same model's backtest over 2024 (supplied) plus the 2025 folds before each origin: only earlier folds, or the interval itself would leak. The first version of this lab calibrated each fold on the 2025 folds before it only, winter errors for summer forecasts, and repaired almost nothing: coverage went from 51% to 57%. Tell that story; it is why step 4 says "a year". This idea is known as conformal prediction in its general form.</p></aside>
+</section>
+
+<section class="slide" data-label="As measured" id="report-coverage-as-measured" data-lo="LO2 LO3">
+  <div class="kicker">Honest reporting</div>
+  <h2>Report the coverage you measured, not the one on the label</h2>
+  <div class="cols cols-2">
+    <table class="t small">
+      <tr><th>Rebuilt 80% interval</th><th class="num">Covers</th></tr>
+      <tr><td>Horizon week 1</td><td class="num">72.5%</td></tr>
+      <tr><td>Horizon week 2</td><td class="num">69.2%</td></tr>
+      <tr><td>Horizon week 3</td><td class="num">82.4%</td></tr>
+      <tr><td>Horizon week 4</td><td class="num">89.0%</td></tr>
+    </table>
+    <ul class="bullets small">
+      <li>Overall 78.3%: close to the promise. By week it still moves from 69% to 89%.</li>
+      <li>364 days can show that an interval is broken, and repair most of it. They cannot tune it to a decimal.</li>
+      <li>The purchasing quantile, 0.8: demand stayed under it on 81.0% of days.</li>
+    </ul>
+  </div>
+  <aside class="notes"><p>The forecast note of Day 4 will carry this sentence: "In the 2025 backtest the 80% band held on 78% of days." That is a measured statement a planner can rely on, and it is more useful than "80% interval". The stretch task checks the single quantile Omar buys on.</p></aside>
+</section>
+
+<section class="slide" id="check-coverage-reading" data-lo="LO3">
+  <div class="kicker">Checkpoint</div>
+  <h2>Which forecast would you hand to the planner?</h2>
+  <div class="quiz" data-type="single" data-lo="LO3">
+    <p class="lead">Model A: scaled error 0.75, its 80% interval covers 62% of days. Model B: scaled error 0.80, its 80% interval covers 79%. The planner buys on the 0.8 quantile. What do you deliver?</p>
+    <div class="opts">
+      <div class="opt" data-why="Ranks by the point score alone: the planner acts on a quantile, and this model's quantiles are too close to the middle">Model A as it is: it has the lower error</div>
+      <div class="opt" data-ok>Model B, or model A with intervals rebuilt from its backtest errors</div>
+      <div class="opt" data-why="Widens by guesswork: an arbitrary factor has no measured coverage behind it">Model A with every interval doubled in width</div>
+      <div class="opt" data-why="Averages two numbers that measure different things: coverage is not improved by mixing in a point score">Neither: average the two scaled errors and report 0.775</div>
+    </div>
+    <div class="callout tip why"><b>Why.</b> A quantile that is not calibrated costs the planner on every purchase. Use intervals that hold, or repair the better point forecast from its own backtest errors.</div>
+  </div>
+  <aside class="notes"><p>Answer: B. Both halves of the answer are acceptable in the capstone; what is not acceptable is delivering an interval whose coverage was never measured.</p></aside>
 </section>
 
 <section class="slide lab" id="lab-2-4" data-auto="lab" data-lab="2.4">
-  <aside class="notes">REPLACE: what to watch for while participants work, the typical problems, and the fallback for anyone who did not finish an earlier lab</aside>
+  <aside class="notes"><p>Walk the room. This lab is fast: every cell runs in seconds. Usual problems in step 4: using all folds, the fold's own included (coverage then looks perfect: ask why that is a leak); quantiles of raw errors without dividing by the scale; forgetting to group by horizon week. The lab starts from four supplied backtests in data/reference: nobody needs their own Labs 2.1 to 2.3.</p></aside>
 </section>
 
-<section class="slide" id="wrap-up">
+<!-- ======================= CLOSING ======================= -->
+<section class="slide" id="wrap-up" data-label="Recap">
   <div class="kicker">Day 2 · wrap-up</div>
   <h2>Three things to keep</h2>
   <div class="cols cols-3">
-    <div class="card c-teal"><h4>Remember</h4><p class="small mb0">REPLACE: one idea participants keep</p></div>
-    <div class="card c-coral"><h4>Remember</h4><p class="small mb0">REPLACE: one idea participants keep</p></div>
-    <div class="card c-purple"><h4>Remember</h4><p class="small mb0">REPLACE: one idea participants keep</p></div>
+    <div class="card c-teal"><h4>What a model can see</h4><p class="small mb0">Weekly ETS and weekly ARIMA both score about 1.6. Given the annual season they score 0.98 and 0.83. The input mattered more than the family.</p></div>
+    <div class="card c-coral"><h4>Known at the origin</h4><p class="small mb0">The Hijri calendar is; the temperature is not. The calendar took Eid days from 1.34 to 0.80. The measured temperature would have flattered the score by 0.22.</p></div>
+    <div class="card c-purple"><h4>Intervals are measured</h4><p class="small mb0">The best point forecast covered 63.5% with its 80% interval. Rebuilt from a year of backtest errors: 78.3%.</p></div>
   </div>
+  <aside class="notes"><p>Ask each table which of today's three models they would run every Thursday, and what it would cost to keep running. That question is Day 3's last session.</p></aside>
 </section>
 
 <section class="slide dark" id="next" data-label="Next">
   <div class="kicker">Next</div>
   <h2>Day 3: Many series and pretrained models</h2>
-  <p class="lead">REPLACE: what participants prepare before then; unfinished labs can be finished at home</p>
-  <aside class="notes">REPLACE: accounts, installs or reading participants need before the next unit</aside>
+  <p class="lead">From one region to 400 feeders: forecasts that add up, one boosted model trained across all series, a pretrained forecaster that has never seen your data, and a scorecard to choose among them. Lab 3.3 runs best in Colab: have a Google account ready.</p>
+  <aside class="notes"><p>Lab 3.3 downloads a small open-weight forecaster into the Colab runtime; locally the notebook runs with a labelled stand-in. Ask participants to open Colab once tonight to see that their account works. Every Day 3 lab starts from the data files and supplied reference results.</p></aside>
 </section>

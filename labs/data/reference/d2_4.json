@@ -1,0 +1,83 @@
+{
+ "coverage": {
+  "decompose, then ETS": {
+   "80%": 0.835,
+   "95%": 0.931
+  },
+  "ARIMA + annual Fourier": {
+   "80%": 0.788,
+   "95%": 0.931
+  },
+  "regression: weather + calendar": {
+   "80%": 0.635,
+   "95%": 0.769
+  }
+ },
+ "by_week": {
+  "decompose, then ETS": {
+   "week 1": 0.604,
+   "week 2": 0.846,
+   "week 3": 0.923,
+   "week 4": 0.967
+  },
+  "ARIMA + annual Fourier": {
+   "week 1": 0.802,
+   "week 2": 0.681,
+   "week 3": 0.835,
+   "week 4": 0.835
+  },
+  "regression: weather + calendar": {
+   "week 1": 0.626,
+   "week 2": 0.538,
+   "week 3": 0.725,
+   "week 4": 0.648
+  }
+ },
+ "pinball": {
+  "decompose, then ETS": {
+   "q0.025": 0.102,
+   "q0.1": 0.269,
+   "q0.5": 0.492,
+   "q0.9": 0.255,
+   "q0.975": 0.097,
+   "mean": 0.243
+  },
+  "ARIMA + annual Fourier": {
+   "q0.025": 0.065,
+   "q0.1": 0.209,
+   "q0.5": 0.413,
+   "q0.9": 0.193,
+   "q0.975": 0.069,
+   "mean": 0.19
+  },
+  "regression: weather + calendar": {
+   "q0.025": 0.134,
+   "q0.1": 0.246,
+   "q0.5": 0.383,
+   "q0.9": 0.197,
+   "q0.975": 0.083,
+   "mean": 0.209
+  }
+ },
+ "report": {
+  "model's own intervals": {
+   "80% coverage": 0.635,
+   "95% coverage": 0.769,
+   "pinball (scaled)": 0.208,
+   "mean width of the 80% interval, MWh": 436.0
+  },
+  "rebuilt from earlier folds": {
+   "80% coverage": 0.783,
+   "95% coverage": 0.945,
+   "pinball (scaled)": 0.192,
+   "mean width of the 80% interval, MWh": 677.0
+  }
+ },
+ "under_q80": 0.8104,
+ "new_by_week": [
+  0.725,
+  0.692,
+  0.824,
+  0.89
+ ]
+}
