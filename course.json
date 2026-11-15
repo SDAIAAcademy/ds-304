@@ -1,7 +1,7 @@
 {
   "$schema": "https://sdaiaacademy.github.io/engine/schemas/course.schema.json",
   "engine": "1",
-  "id": "forecasting",
+  "id": "ds-304",
   "code": "DS-304",
   "version": "2027.1.0",
   "lang": "en",
@@ -24,8 +24,8 @@
     "Resamples and reshapes time-indexed data in a dataframe"
   ],
   "site": {
-    "url": "https://sdaiaacademy.github.io/forecasting/",
-    "repo": "SDAIAAcademy/forecasting"
+    "url": "https://sdaiaacademy.github.io/ds-304/",
+    "repo": "SDAIAAcademy/ds-304"
   },
   "outcomes": [
     {
