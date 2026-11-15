@@ -1,0 +1,50 @@
+{
+ "gain": {
+  "floor": {
+   "all days": 1.061,
+   "Eid days": 2.166,
+   "other days": 1.026
+  },
+  "weather only": {
+   "all days": 0.901,
+   "Eid days": 1.339,
+   "other days": 0.887
+  },
+  "weather + calendar": {
+   "all days": 0.766,
+   "Eid days": 0.796,
+   "other days": 0.765
+  }
+ },
+ "honest": 0.7662,
+ "oracle": 0.547,
+ "coef": {
+  "cdd": 147.1,
+  "hdd": 31.5,
+  "ramadan": 8.7,
+  "eid": -599.0,
+  "national": -296.1
+ },
+ "per_degree": 4.1582,
+ "eid_day": -16.9324,
+ "n_eid": 11,
+ "mean_demand": 3537.6019,
+ "scores": {
+  "mase": 0.766,
+  "pinball": 0.208,
+  "cover80": 0.635,
+  "cover95": 0.769
+ },
+ "weeks_honest": [
+  0.624,
+  1.016,
+  0.616,
+  0.808
+ ],
+ "weeks_oracle": [
+  0.387,
+  0.594,
+  0.546,
+  0.661
+ ]
+}

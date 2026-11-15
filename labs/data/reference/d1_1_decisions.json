@@ -1,0 +1,17 @@
+{
+ "A": {
+  "decision": "How much energy to nominate for each of the next 28 days, per region",
+  "too_low": "Buy the gap on the spot market at about three times the contract price",
+  "too_high": "Resell the surplus at about half price"
+ },
+ "B": {
+  "decision": "On which day of next week feeder F017 can be taken out for maintenance",
+  "too_low": "Neighbouring feeders overload on the chosen day: customers lose supply",
+  "too_high": "A safe day is refused and the maintenance waits"
+ },
+ "C": {
+  "decision": "How much transformer capacity to add in Al-Rimal over three years",
+  "too_low": "The peak summer day exceeds capacity: load shedding",
+  "too_high": "Capital spent a year or two early"
+ }
+}

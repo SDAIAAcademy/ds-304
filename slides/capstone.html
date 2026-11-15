@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en" dir="ltr" data-ax="deck" data-track="data-science">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Capstone · Capstone project presentations · Forecasting and Time Series</title>
+<meta name="generator" content="SDAIA Academy engine 1.0.0">
+<link rel="icon" href="../_engine/icon.svg">
+<link rel="alternate" type="text/markdown" href="capstone.md">
+<link rel="describedby" href="../llms.txt">
+<link rel="stylesheet" href="../_engine/academy.css">
+</head>
+<body>
+<div class="deck" data-course="Forecasting and Time Series" data-track="data-science" data-day="Capstone">
+<section class="slide title" id="title" data-auto="title" data-label="Welcome" data-n="1">
+  <div class="kicker">SDAIA Academy · Forecasting and Time Series</div>
+  <h1>Capstone project presentations</h1>
+  <p class="lead mt">Capstone: An eight-minute defence each, then four minutes of questions in which the assessor moves the forecast origin or the horizon</p>
+  <div class="meta"><span class="track">Data Science Track</span><span>4 teaching days + capstone day</span><span>8 min talk and demo · 4 min Q&amp;A</span><span>DS-304</span></div>
+  <aside class="notes"><p>Today is theirs: keep your own talking to the opening and the closing. Before the first defence, confirm the running order, that every repository link opens, and that each presenter can share a screen and run their backtest from it.</p></aside>
+</section>
+
+<section class="slide" id="agenda" data-label="Agenda" data-n="2">
+  <div class="kicker">Capstone</div>
+  <h2>How the day runs</h2>
+  <div class="agenda">
+    <div class="item now"><div><b>Expectations and final prep</b><small>the rubric, the format of the defence, a last run from a clean copy</small></div></div>
+    <div class="item"><div><b>Defences</b><small>eight minutes each, then four minutes of questions</small></div></div>
+    <div class="item"><div><b>Review and closing</b><small>peer feedback, the trainer's review, the follow-up task</small></div></div>
+  </div>
+  <aside class="notes"><p>The defences are individual. With a full room, split into two parallel rooms with one assessor each and bring everyone together for the review.</p></aside>
+</section>
+
+<section class="slide" id="rubric" data-label="The rubric" data-n="3">
+  <div class="kicker">How the work is scored</div>
+  <h2>The rubric</h2>
+  <div class="bars">
+    <div class="row"><span>Framing and floor</span><div class="bar c-teal" style="--w:60%"></div><span class="val">15%</span></div>
+    <div class="row"><span>Methods</span><div class="bar c-cyan" style="--w:100%"></div><span class="val">25%</span></div>
+    <div class="row"><span>Backtest design</span><div class="bar c-coral" style="--w:100%"></div><span class="val">25%</span></div>
+    <div class="row"><span>Uncertainty and communication</span><div class="bar c-purple" style="--w:100%"></div><span class="val">25%</span></div>
+    <div class="row"><span>Reproducibility</span><div class="bar c-amber" style="--w:40%"></div><span class="val">10%</span></div>
+  </div>
+  <div class="callout tip mt"><b>Every claim is read against the floor.</b> A score without the floor beside it, or an interval without its measured coverage, earns nothing.</div>
+  <aside class="notes"><p>Full marks, criterion by criterion. Framing and floor: the decision, the horizon and the cost of each kind of error are stated, and the floor is the strongest naive method for the data. Methods: three families that differ in what they can see. Backtest design: rolling origins, an argument or a test that nothing after the origin is used, no selection on the test folds. Uncertainty and communication: coverage in counts, a note with limits. Reproducibility: runs from a clean copy, numbers traceable to files, licences stated.</p></aside>
+</section>
+
+<section class="slide" id="format" data-label="Format" data-n="4">
+  <div class="kicker">Format of the defence</div>
+  <h2>Eight minutes to present, four minutes of questions</h2>
+  <div class="cols cols-4 gap-s">
+    <div class="card c-navy"><h4>1 · The decision</h4><p class="small mb0">Who reads the forecast, what they decide, the horizon, the floor.</p></div>
+    <div class="card c-teal"><h4>2 · What you built</h4><p class="small mb0">The backtest and three method families: what each can see.</p></div>
+    <div class="card c-cyan"><h4>3 · What you measured</h4><p class="small mb0">The scorecard: point and probabilistic accuracy against the floor.</p></div>
+    <div class="card c-coral"><h4>4 · The note</h4><p class="small mb0">The fan chart, coverage in counts, when not to use it.</p></div>
+  </div>
+  <div class="callout note mt"><b>Peer feedback.</b> After each defence, everyone writes one strength, one question and one suggestion.</div>
+  <aside class="notes"><p>Two minutes for each part is a fair guide. Stop a presenter who spends four minutes on model internals: the rubric gives methods a quarter of the marks and the planner none of their attention.</p></aside>
+</section>
+
+<section class="slide" id="the-question" data-label="The question" data-n="5">
+  <div class="kicker">The four minutes of questions</div>
+  <h2>The assessor moves the origin or the horizon: predict, then show</h2>
+  <div class="cols cols-3">
+    <div class="card c-teal"><h4>The origin moves</h4><p class="small mb0">"Forecast from the day before the last holiday. What happens to the error and to the note?"</p></div>
+    <div class="card c-coral"><h4>The horizon moves</h4><p class="small mb0">"The planner needs twice the horizon. What changes in the features, the floor and the bands?"</p></div>
+    <div class="card c-purple"><h4>The history shrinks</h4><p class="small mb0">"This series is six weeks old. Which of your families still works?"</p></div>
+  </div>
+  <div class="callout tip mt"><b>First say what you expect and why. Then run it.</b> A prediction that turns out wrong and is explained scores above a run without a prediction.</div>
+  <aside class="notes"><p>This is the authenticity check of the course: the participant predicts the effect, then shows it from their own repository. Ask one question per participant and let them run the backtest live; a backtest written as a function of the origin and the horizon answers in under a minute. If the run cannot be made, ask for the reasoning and note it under reproducibility.</p></aside>
+</section>
+
+<section class="slide order" id="running-order" data-label="Running order" data-n="6">
+  <div class="kicker">Running order</div>
+  <h2>Who presents when</h2>
+  <table class="t small">
+    <tr><th>#</th><th>Presenter</th><th>Dataset and decision</th></tr>
+    <tr><td>1</td><td><input placeholder="name"></td><td><input placeholder="dataset · decision"></td></tr>
+    <tr><td>2</td><td><input placeholder="name"></td><td><input placeholder="dataset · decision"></td></tr>
+    <tr><td>3</td><td><input placeholder="name"></td><td><input placeholder="dataset · decision"></td></tr>
+    <tr><td>4</td><td><input placeholder="name"></td><td><input placeholder="dataset · decision"></td></tr>
+    <tr><td>5</td><td><input placeholder="name"></td><td><input placeholder="dataset · decision"></td></tr>
+    <tr><td>6</td><td><input placeholder="name"></td><td><input placeholder="dataset · decision"></td></tr>
+    <tr><td>7</td><td><input placeholder="name"></td><td><input placeholder="dataset · decision"></td></tr>
+    <tr><td>8</td><td><input placeholder="name"></td><td><input placeholder="dataset · decision"></td></tr>
+  </table>
+  <aside class="notes"><p>Type the names in at the start; the fields can be edited live and are not saved, so keep the list in your notes too. The dataset and decision come from step 5 of Lab 4.4.</p></aside>
+</section>
+
+<section class="slide dark" id="final-prep" data-label="Before the first defence" data-n="7">
+  <div class="kicker">Before the first defence</div>
+  <h1>Final prep · 20 minutes</h1>
+  <div class="timer" data-minutes="20"></div>
+  <p class="lead">Run your analysis once from a clean copy. Open the note. Try one other origin.</p>
+  <aside class="notes"><p>Press T to start the timer. Breaks are not slides: press B when the room needs one. Walk the room and check that each repository is public and that its README shows the table of results.</p></aside>
+</section>
+
+<section class="slide dark presenting" id="now-presenting" data-label="Now presenting" data-n="8">
+  <div class="kicker center">Now presenting</div>
+  <div class="center"><input placeholder="Presenter · dataset"></div>
+  <div class="timers mt">
+    <div><h3>Defence</h3><div class="timer" data-minutes="8"></div></div>
+    <div><h3>Questions</h3><div class="timer" data-minutes="4"></div></div>
+  </div>
+  <aside class="notes"><p>Type the presenter's name and press T to start the timer. Reuse this slide for every presenter. Score the rubric during the defence and the live question straight after it, before the next presenter starts.</p></aside>
+</section>
+
+<section class="slide" id="review" data-label="Trainer review" data-n="9">
+  <div class="kicker">Trainer review</div>
+  <h2>What the defences showed</h2>
+  <div class="cols cols-3">
+    <div class="card c-teal"><h4>Strongest patterns</h4><p class="small mb0">What several analyses got right: floors, backtests, notes.</p></div>
+    <div class="card c-coral"><h4>Common gaps</h4><p class="small mb0">What most would fix next. Usual ones: coverage never measured, a choice made on the test folds.</p></div>
+    <div class="card c-purple"><h4>One surprise</h4><p class="small mb0">A result nobody expected, and what explained it.</p></div>
+  </div>
+  <aside class="notes"><p>Fill these in from your scoring notes during the last break. Name analyses for strengths; keep gaps anonymous. If a floor won somewhere, say so with respect: reporting that honestly is full marks for framing.</p></aside>
+</section>
+
+<section class="slide" id="what-next" data-label="After the course" data-n="10">
+  <div class="kicker">After the course</div>
+  <h2>Keep going</h2>
+  <ul class="bullets">
+    <li><b>The follow-up task:</b> backtest one forecast from your workplace, or a public one, against a seasonal-naive floor, and send the table.</li>
+    <li><b>Your repository stays yours:</b> keep it running from a clean copy and add the next family you named today.</li>
+    <li><b>At work:</b> archive what was known on each origin day, starting now. An honest backtest next year depends on it.</li>
+    <li><b>Read on:</b> Forecasting: Principles and Practice, chapters 11 and 13, for weighted reconciliation and practical issues.</li>
+  </ul>
+  <aside class="notes"><p>The follow-up task is tracked: say how and by when the table is sent, as your delivery team has set it. If the forecast is from the workplace, remind participants that the data stay inside their entity: the table of scores is what is shared, never the series.</p><p>Source: Hyndman and Athanasopoulos, Forecasting: Principles and Practice, 3rd edition.</p></aside>
+</section>
+
+<section class="slide dark" id="thanks" data-label="Thank you" data-n="11">
+  <div class="kicker">SDAIA Academy</div>
+  <h1>Thank you</h1>
+  <p class="lead">Forecasting and Time Series</p>
+  <aside class="notes"><p>Thank the room, and thank the participants who showed a floor that won or a fault they found in their own backtest: that is the habit the course is for.</p></aside>
+</section>
+</div>
+<script type="application/json" id="academy-data">{"v":1,"engine":"1.0.0","build":{"at":"2026-11-15T03:25:22Z","version":"2027.1.0","commit":"7561300"},"course":{"id":"ds-304","code":"DS-304","title":"Forecasting and Time Series","track":"data-science","lang":"en","dir":"ltr","url":"https://sdaiaacademy.github.io/ds-304/","repo":"SDAIAAcademy/ds-304","home":"../index.html"},"deck":{"id":"capstone","kind":"capstone","day":5,"label":"Capstone","title":"Capstone project presentations","prev":"day4.html","next":null,"md":"capstone.md","alt":{}},"sessions":[],"slides":[{"id":"title","n":1,"title":"Capstone project presentations","kind":"title","session":0,"hash":"d325a1d8","md":"#### [capstone#title] Capstone project presentations\n\n*SDAIA Academy · Forecasting and Time Series*\n\nCapstone: An eight-minute defence each, then four minutes of questions in which the assessor moves the forecast origin or the horizon\n\nData Science Track · 4 teaching days + capstone day · 8 min talk and demo · 4 min Q&A · DS-304","notes":"Today is theirs: keep your own talking to the opening and the closing. Before the first defence, confirm the running order, that every repository link opens, and that each presenter can share a screen and run their backtest from it.","minutes":null,"lo":[]},{"id":"agenda","n":2,"title":"How the day runs","kind":"content","session":0,"hash":"99c9c875","md":"#### [capstone#agenda] How the day runs\n\n*Capstone*\n\n- **Expectations and final prep**: the rubric, the format of the defence, a last run from a clean copy\n- **Defences**: eight minutes each, then four minutes of questions\n- **Review and closing**: peer feedback, the trainer's review, the follow-up task","notes":"The defences are individual. With a full room, split into two parallel rooms with one assessor each and bring everyone together for the review.","minutes":null,"lo":[]},{"id":"rubric","n":3,"title":"The rubric","kind":"content","session":0,"hash":"2f3f3670","md":"#### [capstone#rubric] The rubric\n\n*How the work is scored*\n\n| Item | Value |\n| --- | --- |\n| Framing and floor | 15% |\n| Methods | 25% |\n| Backtest design | 25% |\n| Uncertainty and communication | 25% |\n| Reproducibility | 10% |\n\n> **Every claim is read against the floor.** A score without the floor beside it, or an interval without its measured coverage, earns nothing.","notes":"Full marks, criterion by criterion. Framing and floor: the decision, the horizon and the cost of each kind of error are stated, and the floor is the strongest naive method for the data. Methods: three families that differ in what they can see. Backtest design: rolling origins, an argument or a test that nothing after the origin is used, no selection on the test folds. Uncertainty and communication: coverage in counts, a note with limits. Reproducibility: runs from a clean copy, numbers traceable to files, licences stated.","minutes":null,"lo":[]},{"id":"format","n":4,"title":"Eight minutes to present, four minutes of questions","kind":"content","session":0,"hash":"d3e5a2f3","md":"#### [capstone#format] Eight minutes to present, four minutes of questions\n\n*Format of the defence*\n\n- **1 · The decision.** Who reads the forecast, what they decide, the horizon, the floor.\n- **2 · What you built.** The backtest and three method families: what each can see.\n- **3 · What you measured.** The scorecard: point and probabilistic accuracy against the floor.\n- **4 · The note.** The fan chart, coverage in counts, when not to use it.\n\n> **Peer feedback.** After each defence, everyone writes one strength, one question and one suggestion.","notes":"Two minutes for each part is a fair guide. Stop a presenter who spends four minutes on model internals: the rubric gives methods a quarter of the marks and the planner none of their attention.","minutes":null,"lo":[]},{"id":"the-question","n":5,"title":"The assessor moves the origin or the horizon: predict, then show","kind":"content","session":0,"hash":"93f21006","md":"#### [capstone#the-question] The assessor moves the origin or the horizon: predict, then show\n\n*The four minutes of questions*\n\n- **The origin moves.** \"Forecast from the day before the last holiday. What happens to the error and to the note?\"\n- **The horizon moves.** \"The planner needs twice the horizon. What changes in the features, the floor and the bands?\"\n- **The history shrinks.** \"This series is six weeks old. Which of your families still works?\"\n\n> **First say what you expect and why. Then run it.** A prediction that turns out wrong and is explained scores above a run without a prediction.","notes":"This is the authenticity check of the course: the participant predicts the effect, then shows it from their own repository. Ask one question per participant and let them run the backtest live; a backtest written as a function of the origin and the horizon answers in under a minute. If the run cannot be made, ask for the reasoning and note it under reproducibility.","minutes":null,"lo":[]},{"id":"running-order","n":6,"title":"Who presents when","kind":"order","session":0,"hash":"42242db2","md":"#### [capstone#running-order] Who presents when\n\n*Running order*\n\n| # | Presenter | Dataset and decision |\n| --- | --- | --- |\n| 1 |  |  |\n| 2 |  |  |\n| 3 |  |  |\n| 4 |  |  |\n| 5 |  |  |\n| 6 |  |  |\n| 7 |  |  |\n| 8 |  |  |","notes":"Type the names in at the start; the fields can be edited live and are not saved, so keep the list in your notes too. The dataset and decision come from step 5 of Lab 4.4.","minutes":null,"lo":[]},{"id":"final-prep","n":7,"title":"Final prep · 20 minutes","kind":"content","session":0,"hash":"7fb71e96","md":"#### [capstone#final-prep] Final prep · 20 minutes\n\n*Before the first defence*\n\nRun your analysis once from a clean copy. Open the note. Try one other origin.","notes":"Press T to start the timer. Breaks are not slides: press B when the room needs one. Walk the room and check that each repository is public and that its README shows the table of results.","minutes":null,"lo":[]},{"id":"now-presenting","n":8,"title":"Defence","kind":"presenting","session":0,"hash":"e8d29c75","md":"#### [capstone#now-presenting] Defence\n\n*Now presenting*\n\n##### Questions","notes":"Type the presenter's name and press T to start the timer. Reuse this slide for every presenter. Score the rubric during the defence and the live question straight after it, before the next presenter starts.","minutes":null,"lo":[]},{"id":"review","n":9,"title":"What the defences showed","kind":"content","session":0,"hash":"93cc6656","md":"#### [capstone#review] What the defences showed\n\n*Trainer review*\n\n- **Strongest patterns.** What several analyses got right: floors, backtests, notes.\n- **Common gaps.** What most would fix next. Usual ones: coverage never measured, a choice made on the test folds.\n- **One surprise.** A result nobody expected, and what explained it.","notes":"Fill these in from your scoring notes during the last break. Name analyses for strengths; keep gaps anonymous. If a floor won somewhere, say so with respect: reporting that honestly is full marks for framing.","minutes":null,"lo":[]},{"id":"what-next","n":10,"title":"Keep going","kind":"content","session":0,"hash":"c4916f68","md":"#### [capstone#what-next] Keep going\n\n*After the course*\n\n- **The follow-up task:** backtest one forecast from your workplace, or a public one, against a seasonal-naive floor, and send the table.\n- **Your repository stays yours:** keep it running from a clean copy and add the next family you named today.\n- **At work:** archive what was known on each origin day, starting now. An honest backtest next year depends on it.\n- **Read on:** Forecasting: Principles and Practice, chapters 11 and 13, for weighted reconciliation and practical issues.","notes":"The follow-up task is tracked: say how and by when the table is sent, as your delivery team has set it. If the forecast is from the workplace, remind participants that the data stay inside their entity: the table of scores is what is shared, never the series.\n\nSource: Hyndman and Athanasopoulos, Forecasting: Principles and Practice, 3rd edition.","minutes":null,"lo":[]},{"id":"thanks","n":11,"title":"Thank you","kind":"content","session":0,"hash":"f809eac2","md":"#### [capstone#thanks] Thank you\n\n*SDAIA Academy*\n\nForecasting and Time Series","notes":"Thank the room, and thank the participants who showed a floor that won or a fault they found in their own backtest: that is the habit the course is for.","minutes":null,"lo":[]}],"activities":[],"ai":{"context":{"course":"../context/course.md","courseJs":"../context/course.js","day":"capstone.md","llms":"../llms.txt"},"tasks":[],"tools":[]},"bridge":{"allowedOrigins":[]},"features":{},"strings":{}}</script>
+<script src="../_engine/academy.js"></script>
+</body>
+</html>

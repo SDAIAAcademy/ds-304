@@ -1,0 +1,55 @@
+{
+ "table": {
+  "floor (same weekday last year)": {
+   "MASE": 1.061,
+   "week 1": 0.92,
+   "week 2": 0.963,
+   "week 3": 1.082,
+   "week 4": 1.279,
+   "ljung_box_p": null
+  },
+  "ARIMA, weekly": {
+   "MASE": 1.617,
+   "week 1": 1.057,
+   "week 2": 1.807,
+   "week 3": 1.501,
+   "week 4": 2.103,
+   "ljung_box_p": 0.0001
+  },
+  "ARIMA, weekly + annual Fourier": {
+   "MASE": 0.826,
+   "week 1": 0.706,
+   "week 2": 1.0,
+   "week 3": 0.725,
+   "week 4": 0.871,
+   "ljung_box_p": 0.6234
+  }
+ },
+ "acf_raw7": 0.9438,
+ "acf_d7": [
+  0.8276,
+  0.5888,
+  0.4038,
+  0.239,
+  0.0812,
+  -0.0863,
+  -0.208
+ ],
+ "coef": {
+  "ar1": 0.9812,
+  "ma1": 0.2884,
+  "sma1": -0.9268
+ },
+ "scores_four": {
+  "mase": 0.826,
+  "pinball": 0.19,
+  "cover80": 0.788,
+  "cover95": 0.931
+ },
+ "scores_arima": {
+  "mase": 1.617,
+  "pinball": 0.383,
+  "cover80": 0.791,
+  "cover95": 0.953
+ }
+}

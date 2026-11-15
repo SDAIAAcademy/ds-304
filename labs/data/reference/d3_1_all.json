@@ -1,0 +1,102 @@
+{
+ "table": {
+  "R01": {
+   "name": "Al-Rimal",
+   "feeders: bottom-up": 1.216,
+   "feeders: top-down": 0.692,
+   "feeders: least squares": 0.784,
+   "region: bottom-up": 1.554,
+   "region: regional model": 0.665
+  },
+  "R02": {
+   "name": "Al-Sahil",
+   "feeders: bottom-up": 0.982,
+   "feeders: top-down": 0.818,
+   "feeders: least squares": 0.861,
+   "region: bottom-up": 1.02,
+   "region: regional model": 0.643
+  },
+  "R03": {
+   "name": "Al-Jabal",
+   "feeders: bottom-up": 0.566,
+   "feeders: top-down": 0.57,
+   "feeders: least squares": 0.57,
+   "region: bottom-up": 0.285,
+   "region: regional model": 0.31
+  },
+  "R04": {
+   "name": "Al-Wadi",
+   "feeders: bottom-up": 0.744,
+   "feeders: top-down": 0.879,
+   "feeders: least squares": 0.953,
+   "region: bottom-up": 0.727,
+   "region: regional model": 0.889
+  },
+  "R05": {
+   "name": "Al-Dana",
+   "feeders: bottom-up": 0.722,
+   "feeders: top-down": 0.65,
+   "feeders: least squares": 0.651,
+   "region: bottom-up": 0.634,
+   "region: regional model": 0.463
+  },
+  "R06": {
+   "name": "Al-Ghadeer",
+   "feeders: bottom-up": 0.527,
+   "feeders: top-down": 0.559,
+   "feeders: least squares": 0.579,
+   "region: bottom-up": 0.366,
+   "region: regional model": 0.446
+  },
+  "R07": {
+   "name": "Al-Safa",
+   "feeders: bottom-up": 1.553,
+   "feeders: top-down": 0.847,
+   "feeders: least squares": 1.059,
+   "region: bottom-up": 1.899,
+   "region: regional model": 0.716
+  },
+  "R08": {
+   "name": "Al-Badia",
+   "feeders: bottom-up": 1.319,
+   "feeders: top-down": 0.592,
+   "feeders: least squares": 0.941,
+   "region: bottom-up": 1.566,
+   "region: regional model": 0.371
+  },
+  "R09": {
+   "name": "Al-Marjan",
+   "feeders: bottom-up": 0.654,
+   "feeders: top-down": 0.881,
+   "feeders: least squares": 0.979,
+   "region: bottom-up": 0.577,
+   "region: regional model": 0.89
+  },
+  "R10": {
+   "name": "Al-Qimma",
+   "feeders: bottom-up": 0.525,
+   "feeders: top-down": 0.497,
+   "feeders: least squares": 0.491,
+   "region: bottom-up": 0.267,
+   "region: regional model": 0.191
+  },
+  "R11": {
+   "name": "Al-Mina",
+   "feeders: bottom-up": 0.859,
+   "feeders: top-down": 0.797,
+   "feeders: least squares": 0.817,
+   "region: bottom-up": 0.748,
+   "region: regional model": 0.375
+  },
+  "R12": {
+   "name": "Al-Hazm",
+   "feeders: bottom-up": 0.803,
+   "feeders: top-down": 0.613,
+   "feeders: least squares": 0.643,
+   "region: bottom-up": 0.736,
+   "region: regional model": 0.321
+  }
+ },
+ "helped": 8,
+ "region_better": 8
+}

@@ -1,0 +1,144 @@
+{
+ "card": {
+  "floor: same weekday last year": {
+   "mase": 0.753,
+   "pinball": null,
+   "cover80": null,
+   "seconds": 0.0,
+   "fits": 776,
+   "measured": true,
+   "skill": 0.0,
+   "s_per_1000": 0.0,
+   "upkeep": 1,
+   "what must be kept working": "nothing to fit; needs one year of history",
+   "licence": "none needed"
+  },
+  "ETS, weekly season, per feeder": {
+   "mase": 0.898,
+   "pinball": 0.346,
+   "cover80": 0.956,
+   "seconds": 140.3,
+   "fits": 776,
+   "measured": true,
+   "skill": -0.193,
+   "s_per_1000": 180.8,
+   "upkeep": 2,
+   "what must be kept working": "a fit per feeder at every run",
+   "licence": "Apache-2.0 (statsforecast)"
+  },
+  "decompose then ETS, per feeder": {
+   "mase": 0.726,
+   "pinball": 0.252,
+   "cover80": 0.876,
+   "seconds": 1461.6,
+   "fits": 776,
+   "measured": true,
+   "skill": 0.036,
+   "s_per_1000": 1883.5,
+   "upkeep": 3,
+   "what must be kept working": "a slow fit per feeder at every run; three years of history",
+   "licence": "Apache-2.0 (statsforecast)"
+  },
+  "one boosted model, all feeders": {
+   "mase": 0.622,
+   "pinball": 0.196,
+   "cover80": 0.721,
+   "seconds": 48.6,
+   "fits": 4,
+   "measured": true,
+   "skill": 0.174,
+   "s_per_1000": 62.6,
+   "upkeep": 3,
+   "what must be kept working": "a feature pipeline and one training job; retrain as data arrives",
+   "licence": "MIT (LightGBM)"
+  },
+  "pretrained, zero-shot": {
+   "mase": 1.17,
+   "pinball": 0.356,
+   "cover80": 0.732,
+   "seconds": 0.4,
+   "fits": 0,
+   "measured": false,
+   "skill": -0.554,
+   "s_per_1000": 0.5,
+   "upkeep": 2,
+   "what must be kept working": "a pinned model version and its runtime; no training",
+   "licence": "Apache-2.0 (Chronos-Bolt)"
+  }
+ },
+ "by_fold": {
+  "floor: same weekday last year": [
+   0.878,
+   0.628
+  ],
+  "ETS, weekly season, per feeder": [
+   1.071,
+   0.725
+  ],
+  "decompose then ETS, per feeder": [
+   0.84,
+   0.612
+  ],
+  "one boosted model, all feeders": [
+   0.73,
+   0.515
+  ],
+  "pretrained, zero-shot": [
+   1.547,
+   0.794
+  ]
+ },
+ "criteria": {
+  "floor: same weekday last year": {
+   "skill": 0.526,
+   "pinball": 0.0,
+   "coverage_gap": 0.0,
+   "log_time": 1.0,
+   "upkeep": 1.0
+  },
+  "ETS, weekly season, per feeder": {
+   "skill": 0.0,
+   "pinball": 0.0,
+   "coverage_gap": 0.0,
+   "log_time": 0.238,
+   "upkeep": 0.5
+  },
+  "decompose then ETS, per feeder": {
+   "skill": 0.624,
+   "pinball": 0.627,
+   "coverage_gap": 1.0,
+   "log_time": 0.0,
+   "upkeep": 0.0
+  },
+  "one boosted model, all feeders": {
+   "skill": 1.0,
+   "pinball": 1.0,
+   "coverage_gap": 0.962,
+   "log_time": 0.346,
+   "upkeep": 0.0
+  }
+ },
+ "ranking": {
+  "floor: same weekday last year": {
+   "purchasing (Omar): buys on a quantile, 12 regions": 0.305,
+   "operations (Hamad): 400 feeders, a small team": 0.631
+  },
+  "ETS, weekly season, per feeder": {
+   "purchasing (Omar): buys on a quantile, 12 regions": 0.074,
+   "operations (Hamad): 400 feeders, a small team": 0.198
+  },
+  "decompose then ETS, per feeder": {
+   "purchasing (Omar): buys on a quantile, 12 regions": 0.575,
+   "operations (Hamad): 400 feeders, a small team": 0.35
+  },
+  "one boosted model, all feeders": {
+   "purchasing (Omar): buys on a quantile, 12 regions": 0.827,
+   "operations (Hamad): 400 feeders, a small team": 0.565
+  }
+ },
+ "winners": {
+  "purchasing (Omar): buys on a quantile, 12 regions": "one boosted model, all feeders",
+  "operations (Hamad): 400 feeders, a small team": "floor: same weekday last year"
+ },
+ "pretrained_live": false
+}

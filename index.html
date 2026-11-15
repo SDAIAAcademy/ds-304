@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en" dir="ltr" data-ax="page" data-track="data-science">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Forecasting and Time Series · SDAIA Academy</title>
+<meta name="generator" content="SDAIA Academy engine 1.0.0">
+<meta name="description" content="Forecast daily demand with a backtest behind every number, and hand the planner a fan chart they can act on">
+<link rel="icon" href="_engine/icon.svg">
+<link rel="alternate" type="text/markdown" href="index.md">
+<link rel="describedby" href="llms.txt">
+<link rel="stylesheet" href="_engine/academy.css">
+</head>
+<body>
+<header>
+<div class="wrap">
+<div class="top"><div class="logo" id="logo"></div><nav><a href="slides/day1.html">Slides</a><a href="practice.html">Practice</a><a href="index.md" type="text/markdown">Markdown</a></nav></div>
+<div class="kicker">Data Science Track · SDAIA Academy · DS-304</div>
+<h1>Forecasting and Time Series<span class="sub ar" lang="ar" dir="rtl">التنبؤ والسلاسل الزمنية</span></h1>
+<p>Forecast daily demand with a backtest behind every number, and hand the planner a fan chart they can act on</p>
+<div class="meta"><span class="track">Data Science Track</span><span>4 teaching days + capstone day</span><span>26 hours</span><span>Level 300</span><span>Data Science · Associate badge</span></div>
+</div>
+</header>
+<main class="wrap">
+<h2>About the course</h2>
+<p>Participants forecast with the discipline of a backtest. On synthetic daily electricity demand from Shams Power, a fictional distributor with 12 regions and 400 feeders, they decompose series, set a seasonal-naive benchmark floor, fit exponential smoothing and ARIMA-family models with weather and Hijri holidays, train one boosted model across many series, reconcile feeder and regional forecasts and run pretrained zero-shot forecasters as baselines. Every method is scored by rolling-origin cross-validation with point and probabilistic measures and reaches the planner as a fan chart.</p>
+<p><b>Who it is for:</b> Specialists. Analysts and data scientists who have completed the level 200 set or can show equivalent work: an analysis or model they built, validated and can explain.</p>
+<p><b>Format:</b> Intensive: 4 teaching days of four sessions and a capstone day, with guided pre-work and a tracked follow-up task</p>
+<h2>The case study</h2>
+<div class="note info"><b>Shams Power.</b> Shams Power is a fictional electricity distributor with 12 regions and 400 feeders. Its forecast desk, Marqab, owes the load planners a 28-day daily forecast per region for energy purchasing, with honest intervals. Participants work on nine years of synthetic daily demand with temperature and a Hijri and Gregorian calendar: Eid dips that move through the year, a level shift, an outage, twelve new feeders and a notebook with three seeded leaks. All data is synthetic and generated with a fixed seed.</div>
+<h2>The course</h2>
+<div class="day">
+<div class="day-head c-teal"><div><div class="t">Day 1 · 4 sessions · 4 labs</div><h3>Look, frame and set the floor</h3></div><a class="btn" href="slides/day1.html">Open the slides</a></div>
+<div class="scroll"><table>
+<tr><th>Session</th><th>Topic</th><th>Lab</th></tr>
+<tr><td>1</td><td><b>What is forecast, and why</b><br>A forecast serves a decision: fix the horizon, the level and the cost of each kind of error before any model<ul><li>Separate a forecast from a plan and a target</li><li>Fix horizon, granularity and level from the decision</li><li>Turn the cost of over- and under-forecasting into a target quantile</li></ul></td><td><a href="labs/D1_1_write_horizon_error.ipynb">Lab 1.1 · Frame three requests</a> <span class="muted">(25 min)</span><br><a href="https://colab.research.google.com/github/SDAIAAcademy/ds-304/blob/main/labs/D1_1_write_horizon_error.ipynb">Open in Colab</a></td></tr>
+<tr><td>2</td><td><b>Seeing structure</b><br>Look before you model: weekly, annual and Hijri patterns show at different time scales<ul><li>Plot a series at three time scales and name what each shows</li><li>Measure the weekday profile and the Eid dip</li><li>Explain why a Hijri holiday is not a seasonal pattern</li></ul></td><td><a href="labs/D1_2_plot_one_region.ipynb">Lab 1.2 · Three time scales</a> <span class="muted">(25 min)</span><br><a href="https://colab.research.google.com/github/SDAIAAcademy/ds-304/blob/main/labs/D1_2_plot_one_region.ipynb">Open in Colab</a></td></tr>
+<tr><td>3</td><td><b>Decomposition</b><br>Decomposition splits a series into trend, seasons and remainder, and gives each a strength you can compare<ul><li>Decompose a series with weekly and annual seasons</li><li>Compute the strength of trend and of seasonality</li><li>Read the remainder for holidays, outages and breaks</li></ul></td><td><a href="labs/D1_3_decompose_regional_demand.ipynb">Lab 1.3 · Decompose and measure strength</a> <span class="muted">(25 min)</span><br><a href="https://colab.research.google.com/github/SDAIAAcademy/ds-304/blob/main/labs/D1_3_decompose_regional_demand.ipynb">Open in Colab</a></td></tr>
+<tr><td>4</td><td><b>The benchmark floor</b><br>No method counts until it beats the best naive forecast in a rolling-origin backtest<ul><li>Write naive and seasonal-naive forecasts</li><li>Run a rolling-origin backtest over 28-day horizons</li><li>Report scaled errors by horizon and name the floor</li></ul></td><td><a href="labs/D1_4_backtest_naive_seasonal.ipynb">Lab 1.4 · The benchmark floor (AI-off)</a> <span class="muted">(25 min)</span><br><a href="https://colab.research.google.com/github/SDAIAAcademy/ds-304/blob/main/labs/D1_4_backtest_naive_seasonal.ipynb">Open in Colab</a></td></tr>
+</table></div>
+</div>
+<div class="day">
+<div class="day-head c-cyan"><div><div class="t">Day 2 · 4 sessions · 4 labs</div><h3>Statistical forecasters</h3></div><a class="btn" href="slides/day2.html">Open the slides</a></div>
+<div class="scroll"><table>
+<tr><th>Session</th><th>Topic</th><th>Lab</th></tr>
+<tr><td>1</td><td><b>Exponential smoothing</b><br>Exponential smoothing forecasts from weighted averages that forget; it needs help to see the annual season<ul><li>Compute simple exponential smoothing by hand</li><li>Fit ETS models with a weekly season</li><li>Combine a decomposition with ETS and score it against the floor</li></ul></td><td><a href="labs/D2_1_fit_exponential_smoothing.ipynb">Lab 2.1 · Exponential smoothing against the floor</a> <span class="muted">(25 min)</span><br><a href="https://colab.research.google.com/github/SDAIAAcademy/ds-304/blob/main/labs/D2_1_fit_exponential_smoothing.ipynb">Open in Colab</a></td></tr>
+<tr><td>2</td><td><b>ARIMA-family models</b><br>ARIMA models the correlation left after differencing; the residuals say whether it has finished<ul><li>Difference a series and read its autocorrelation</li><li>Fit a seasonal ARIMA model</li><li>Check residuals with a portmanteau test before trusting intervals</li></ul></td><td><a href="labs/D2_2_fit_seasonal_arima.ipynb">Lab 2.2 · A seasonal ARIMA with checked residuals</a> <span class="muted">(25 min)</span><br><a href="https://colab.research.google.com/github/SDAIAAcademy/ds-304/blob/main/labs/D2_2_fit_seasonal_arima.ipynb">Open in Colab</a></td></tr>
+<tr><td>3</td><td><b>Weather and moving holidays</b><br>Regression with ARIMA errors brings in what you know about the future: the calendar always, the weather only in part<ul><li>Build cooling-degree and Hijri holiday regressors</li><li>Fit a regression with ARIMA errors</li><li>Separate what is known at the origin from what is measured later</li></ul></td><td><a href="labs/D2_3_add_temperature_hijri.ipynb">Lab 2.3 · Weather and Hijri regressors</a> <span class="muted">(25 min)</span><br><a href="https://colab.research.google.com/github/SDAIAAcademy/ds-304/blob/main/labs/D2_3_add_temperature_hijri.ipynb">Open in Colab</a></td></tr>
+<tr><td>4</td><td><b>Intervals that hold</b><br>An interval is a promise about frequency: measure whether 80% intervals hold 80% of the time<ul><li>Measure the coverage of 80% and 95% intervals in a backtest</li><li>Score quantiles with pinball loss</li><li>Rebuild intervals from backtest errors when the model's are too narrow</li></ul></td><td><a href="labs/D2_4_measure_80_95.ipynb">Lab 2.4 · Interval coverage in the backtest</a> <span class="muted">(25 min)</span><br><a href="https://colab.research.google.com/github/SDAIAAcademy/ds-304/blob/main/labs/D2_4_measure_80_95.ipynb">Open in Colab</a></td></tr>
+</table></div>
+</div>
+<div class="day">
+<div class="day-head c-coral"><div><div class="t">Day 3 · 4 sessions · 4 labs</div><h3>Many series and pretrained models</h3></div><a class="btn" href="slides/day3.html">Open the slides</a></div>
+<div class="scroll"><table>
+<tr><th>Session</th><th>Topic</th><th>Lab</th></tr>
+<tr><td>1</td><td><b>Many series and hierarchies</b><br>Forecasts made level by level do not add up; reconciliation makes them coherent and often better<ul><li>Forecast every series of a two-level hierarchy</li><li>Reconcile bottom-up, top-down and by least squares</li><li>Compare errors at the feeder and the regional level</li></ul></td><td><a href="labs/D3_1_fit_per_feeder.ipynb">Lab 3.1 · Feeders that add up to their region</a> <span class="muted">(25 min)</span><br><a href="https://colab.research.google.com/github/SDAIAAcademy/ds-304/blob/main/labs/D3_1_fit_per_feeder.ipynb">Open in Colab</a></td></tr>
+<tr><td>2</td><td><b>Global boosted forecasters</b><br>One boosted model trained across all feeders learns shared patterns from features known at the origin<ul><li>Build lag and calendar features that use nothing after the origin</li><li>Train one boosted model on scaled targets across series</li><li>Backtest it with point and quantile scores on held-out weeks</li></ul></td><td><a href="labs/D3_2_backtest_one_boosted.ipynb">Lab 3.2 · One boosted model across feeders</a> <span class="muted">(25 min)</span><br><a href="https://colab.research.google.com/github/SDAIAAcademy/ds-304/blob/main/labs/D3_2_backtest_one_boosted.ipynb">Open in Colab</a></td></tr>
+<tr><td>3</td><td><b>Pretrained zero-shot forecasters</b><br>A pretrained forecaster needs no training on your data: measure it like any other baseline, and read its licence<ul><li>Run a pretrained forecaster zero-shot on held-out weeks</li><li>Record accuracy, quantile scores and run time</li><li>Read a model card for licence and permitted use</li></ul></td><td><a href="labs/D3_3_run_pretrained_forecaster.ipynb">Lab 3.3 · A pretrained forecaster, zero-shot</a> <span class="muted">(25 min)</span><br><a href="https://colab.research.google.com/github/SDAIAAcademy/ds-304/blob/main/labs/D3_3_run_pretrained_forecaster.ipynb">Open in Colab</a></td></tr>
+<tr><td>4</td><td><b>Choosing among families</b><br>Accuracy is one column: choose a method family on accuracy, cost, licence and upkeep together<ul><li>Compute skill against the floor for every method</li><li>Weigh accuracy against run time, upkeep and licence</li><li>Defend the simplest method within noise of the best</li></ul></td><td><a href="labs/D3_4_fill_scorecard_accuracy.ipynb">Lab 3.4 · The scorecard</a> <span class="muted">(25 min)</span><br><a href="https://colab.research.google.com/github/SDAIAAcademy/ds-304/blob/main/labs/D3_4_fill_scorecard_accuracy.ipynb">Open in Colab</a></td></tr>
+</table></div>
+</div>
+<div class="day">
+<div class="day-head c-purple"><div><div class="t">Day 4 · 4 sessions · 4 labs</div><h3>Review and communicate</h3></div><a class="btn" href="slides/day4.html">Open the slides</a></div>
+<div class="scroll"><table>
+<tr><th>Session</th><th>Topic</th><th>Lab</th></tr>
+<tr><td>1</td><td><b>Leakage across time</b><br>A backtest leaks when anything after the origin reaches the forecast: a feature, a regressor or the choice of model<ul><li>Find features and regressors that use data after the origin</li><li>Recognise selection on the test window</li><li>Correct a backtest and report the score before and after</li></ul></td><td><a href="labs/D4_1_find_three_seeded.ipynb">Lab 4.1 · Three leaks in a backtest</a> <span class="muted">(25 min)</span><br><a href="https://colab.research.google.com/github/SDAIAAcademy/ds-304/blob/main/labs/D4_1_find_three_seeded.ipynb">Open in Colab</a></td></tr>
+<tr><td>2</td><td><b>New and short series</b><br>A series with eight weeks of history borrows strength from its neighbours, from a global model or from pretraining<ul><li>Forecast a short series from its own history</li><li>Pool information from similar series</li><li>Compare pooled, global and pretrained forecasts on a new series</li></ul></td><td><a href="labs/D4_2_forecast_feeder_eight.ipynb">Lab 4.2 · Feeders with eight weeks of history</a> <span class="muted">(25 min)</span><br><a href="https://colab.research.google.com/github/SDAIAAcademy/ds-304/blob/main/labs/D4_2_forecast_feeder_eight.ipynb">Open in Colab</a></td></tr>
+<tr><td>3</td><td><b>Combining forecasts</b><br>An average of different methods is hard to beat, and "the best single method" is only known afterwards<ul><li>Average forecasts from different method families</li><li>Choose the best single method without looking at the test folds</li><li>Combine quantiles and check coverage</li></ul></td><td><a href="labs/D4_3_test_whether_average.ipynb">Lab 4.3 · Does the average beat the best?</a> <span class="muted">(25 min)</span><br><a href="https://colab.research.google.com/github/SDAIAAcademy/ds-304/blob/main/labs/D4_3_test_whether_average.ipynb">Open in Colab</a></td></tr>
+<tr><td>4</td><td><b>Fan charts and forecast notes</b><br>The planner reads a fan chart and a short note: the forecast, how often the bands held, and when not to use it<ul><li>Draw a fan chart from quantile forecasts</li><li>State interval coverage in plain words</li><li>Write a forecast note that says when not to use the forecast</li></ul></td><td><a href="labs/D4_4_draw_fan_chart.ipynb">Lab 4.4 · Fan chart and planner's note</a> <span class="muted">(25 min)</span><br><a href="https://colab.research.google.com/github/SDAIAAcademy/ds-304/blob/main/labs/D4_4_draw_fan_chart.ipynb">Open in Colab</a></td></tr>
+</table></div>
+</div>
+<div class="day">
+<div class="day-head c-amber"><div><div class="t">Capstone</div><h3>Capstone project presentations</h3></div><a class="btn" href="slides/capstone.html">Open the slides</a></div>
+<div class="scroll"><table><tr><td>An eight-minute defence each, then four minutes of questions in which the assessor moves the forecast origin or the horizon</td></tr></table></div>
+</div>
+<h2>Capstone</h2>
+<div class="two">
+<div><p>A forecasting analysis on a supplied or public dataset with three method families backtested against the floor, in a public repository whose README reports point and probabilistic accuracy, plus a two-page planner's note; eight-minute defence plus questions</p><p><b>What you submit:</b> A link to a public GitHub repository holding the analysis, a README that reports point and probabilistic accuracy against the floor, the run logs and the two-page planner's note</p><p><b>Format:</b> 8 min talk and demo · 4 min Q&amp;A</p></div>
+<div><h3>Rubric</h3><div class="bar c-teal"><span>Framing and floor<i style="--w:60%"></i></span><b>15%</b></div><div class="bar c-cyan"><span>Methods<i style="--w:100%"></i></span><b>25%</b></div><div class="bar c-coral"><span>Backtest design<i style="--w:100%"></i></span><b>25%</b></div><div class="bar c-purple"><span>Uncertainty and communication<i style="--w:100%"></i></span><b>25%</b></div><div class="bar c-amber"><span>Reproducibility<i style="--w:40%"></i></span><b>10%</b></div></div>
+</div>
+<h2>Outcomes</h2>
+<p>By the end of the course, participants can:</p>
+<div class="day"><div class="scroll"><table>
+<tr><th></th><th>Outcomes</th><th>Level</th><th>Evidence</th></tr>
+<tr><td><b>LO1</b></td><td>Apply decomposition and a seasonal-naive benchmark floor scored by rolling-origin cross-validation, given regional daily demand with weekly and annual seasonality</td><td>Applied</td><td>a backtest table of scaled errors by horizon</td></tr>
+<tr><td><b>LO2</b></td><td>Implement exponential smoothing, ARIMA-family and dynamic regression models with temperature and moving-holiday terms, given the regional series and a Hijri and Gregorian calendar</td><td>Applied</td><td>residual diagnostics and scores against the floor</td></tr>
+<tr><td><b>LO3</b></td><td>Measure point and quantile accuracy of a global boosted model and a pretrained zero-shot forecaster against statistical models, given 400 feeder series with eight weeks held out</td><td>Applied</td><td>a scorecard of scaled error, pinball loss, coverage, run time and licence terms</td></tr>
+<tr><td><b>LO4</b></td><td>Review a forecast evaluation for leakage across time and selection on the test window, and correct it, given a notebook with three seeded faults</td><td>Performance</td><td>a review memo and a corrected backtest</td></tr>
+<tr><td><b>LO5</b></td><td>Build a forecasting analysis for new series and defend method, horizon and uncertainty to a planner, given a supplied dataset and a planner's request</td><td>Performance</td><td>a repository and a two-page note with fan charts, defended live</td></tr>
+</table></div></div>
+<h2>Tools</h2>
+<div class="grid">
+<div class="card c-teal"><h3>Analysis language and notebooks</h3><p>Python with Jupyter or marimo · R with Quarto</p></div>
+<div class="card c-cyan"><h3>Statistical forecasting</h3><p>statsforecast · fable for R · statsmodels</p></div>
+<div class="card c-coral"><h3>Machine learning forecasting</h3><p>LightGBM with lag features · sktime · Darts</p></div>
+<div class="card c-purple"><h3>Pretrained forecaster as a baseline</h3><p>the Chronos family of open-weight forecasters · TimesFM · AutoGluon time series</p></div>
+</div>
+<h2>Before you start</h2>
+<h3>Prerequisites</h3>
+<ul><li>DS-201 Statistical Inference by Simulation</li><li>DS-204 Machine Learning for Tabular Data: Baselines and Validation</li><li>Resamples and reshapes time-indexed data in a dataframe</li></ul>
+<div class="note tip">The labs are notebooks. Open each one in Google Colab from the table above, or clone the repository and run them locally.</div>
+<h2>Sources</h2>
+<h3>Textbook</h3>
+<ul><li><a href="https://otexts.com/fpp3/">Hyndman and Athanasopoulos: Forecasting: Principles and Practice, 3rd edition</a></li><li><a href="https://otexts.com/fpp3/accuracy.html">FPP3: evaluating point forecast accuracy (scaled errors)</a></li><li><a href="https://otexts.com/fpp3/tscv.html">FPP3: time series cross-validation</a></li><li><a href="https://otexts.com/fpp3/stlfeatures.html">FPP3: STL features (strength of trend and seasonality)</a></li><li><a href="https://otexts.com/fpp3/dynamic.html">FPP3: dynamic regression models</a></li><li><a href="https://otexts.com/fpp3/reconciliation.html">FPP3: forecast reconciliation</a></li><li><a href="https://otexts.com/fpp3/combinations.html">FPP3: forecast combinations</a></li></ul>
+<h3>Libraries</h3>
+<ul><li><a href="https://nixtlaverse.nixtla.io/statsforecast/index.html">statsforecast documentation</a></li><li><a href="https://www.statsmodels.org/stable/generated/statsmodels.tsa.seasonal.MSTL.html">statsmodels: MSTL decomposition</a></li><li><a href="https://lightgbm.readthedocs.io/en/stable/Parameters.html">LightGBM parameters (quantile objective)</a></li><li><a href="https://auto.gluon.ai/stable/tutorials/timeseries/index.html">AutoGluon time series</a></li></ul>
+<h3>Pretrained forecasters and their licences</h3>
+<ul><li><a href="https://huggingface.co/amazon/chronos-bolt-tiny">Chronos-Bolt tiny: model card (Apache-2.0)</a></li><li><a href="https://huggingface.co/amazon/chronos-2">Chronos-2: model card (Apache-2.0)</a></li><li><a href="https://huggingface.co/google/timesfm-2.5-200m-pytorch">TimesFM 2.5: model card (Apache-2.0)</a></li><li><a href="https://huggingface.co/Salesforce/moirai-2.0-R-small">Moirai 2.0 small: model card (CC-BY-NC-4.0)</a></li><li><a href="https://arxiv.org/abs/2403.07815">Ansari and others: Chronos: Learning the Language of Time Series</a></li><li><a href="https://arxiv.org/abs/2510.15821">Ansari and others: Chronos-2: From Univariate to Universal Forecasting</a></li><li><a href="https://arxiv.org/abs/2310.10688">Das and others: A decoder-only foundation model for time-series forecasting (TimesFM)</a></li><li><a href="https://arxiv.org/abs/2402.02592">Woo and others: Unified Training of Universal Time Series Forecasting Transformers (Moirai)</a></li></ul>
+<h3>Research on evaluation, combination and communication</h3>
+<ul><li><a href="https://doi.org/10.1057/jors.1969.103">Bates and Granger (1969): The Combination of Forecasts</a></li><li><a href="https://doi.org/10.1145/2382577.2382579">Kaufman, Rosset, Perlich and Stitelman (2012): Leakage in data mining</a></li><li><a href="https://doi.org/10.1080/01621459.2018.1448825">Wickramasuriya, Athanasopoulos and Hyndman (2019): Optimal forecast reconciliation through trace minimization</a></li><li><a href="https://doi.org/10.1016/j.ijforecast.2019.04.014">Makridakis, Spiliotis and Assimakopoulos (2020): The M4 Competition</a></li><li><a href="https://doi.org/10.1016/j.ijforecast.2021.11.013">Makridakis, Spiliotis and Assimakopoulos (2022): M5 accuracy competition</a></li><li><a href="https://doi.org/10.1136/bmj.327.7417.741">Gigerenzer and Edwards (2003): Simple tools for understanding risks</a></li></ul>
+<h3>National references</h3>
+<ul><li><a href="https://sdaia.gov.sa/en/SDAIA/about/Documents/PersonalDataProtectionLaw.pdf">Personal Data Protection Law</a></li><li><a href="https://sdaia.gov.sa/en/SDAIA/about/Documents/ImplementingRegulationPersonalDataProtectionLaw.pdf">Implementing Regulation of the Personal Data Protection Law</a></li><li><a href="https://sdaia.gov.sa/en/SDAIA/about/Documents/OpenDataPolicy.pdf">Open Data Policy (National Data Management Office)</a></li><li><a href="https://sdaia.gov.sa/en/SDAIA/about/Documents/ai-principles.pdf">Principles of AI Ethics</a></li></ul>
+<h2>Files and links</h2>
+<div class="files">
+<a href="practice.html"><b>practice.html</b><span>Practice questions with feedback</span></a>
+<a href="index.md"><b>index.md</b><span>This page as Markdown, for an AI assistant</span></a>
+<a href="llms.txt"><b>llms.txt</b><span>The course for AI assistants (llms.txt)</span></a>
+<a href="https://github.com/SDAIAAcademy/ds-304"><b>SDAIAAcademy/ds-304</b><span>The course repository</span></a>
+</div>
+</main>
+<footer><div class="wrap">SDAIA Academy · Data Science Track · Forecasting and Time Series<br><span class="muted">Course version 2027.1.0 · engine 1.0.0 · built 2026-11-15 · commit 7561300</span></div></footer>
+<script type="application/json" id="academy-data">{"v":1,"engine":"1.0.0","build":{"at":"2026-11-15T03:25:22Z","version":"2027.1.0","commit":"7561300"},"course":{"id":"ds-304","code":"DS-304","title":"Forecasting and Time Series","track":"data-science","lang":"en","dir":"ltr","url":"https://sdaiaacademy.github.io/ds-304/","repo":"SDAIAAcademy/ds-304","home":"index.html"},"ai":{"context":{"course":"context/course.md","courseJs":"context/course.js","day":null,"llms":"llms.txt"},"tasks":[],"tools":[]},"features":{},"strings":{}}</script>
+<script src="_engine/academy.js"></script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+{
+ "all_year": {
+  "decompose, then ETS": 0.984,
+  "ARIMA + annual Fourier": 0.826,
+  "regression: weather + calendar": 0.766,
+  "average of three": 0.793
+ },
+ "halves": {
+  "decompose, then ETS": {
+   "early folds": 0.895,
+   "late folds": 1.059
+  },
+  "ARIMA + annual Fourier": {
+   "early folds": 0.686,
+   "late folds": 0.945
+  },
+  "regression: weather + calendar": {
+   "early folds": 0.596,
+   "late folds": 0.913
+  },
+  "average of three": {
+   "early folds": 0.652,
+   "late folds": 0.914
+  }
+ },
+ "chosen": "regression: weather + calendar",
+ "chosen_late": 0.9125,
+ "avg_late": 0.9138,
+ "wins": false,
+ "best_late_in_hindsight": "regression: weather + calendar",
+ "prob": {
+  "decompose, then ETS": {
+   "mase": 0.984,
+   "pinball": 0.243,
+   "cover80": 0.835,
+   "cover95": 0.931
+  },
+  "ARIMA + annual Fourier": {
+   "mase": 0.826,
+   "pinball": 0.19,
+   "cover80": 0.788,
+   "cover95": 0.931
+  },
+  "regression: weather + calendar": {
+   "mase": 0.766,
+   "pinball": 0.208,
+   "cover80": 0.635,
+   "cover95": 0.769
+  },
+  "average of three": {
+   "mase": 0.793,
+   "pinball": 0.184,
+   "cover80": 0.816,
+   "cover95": 0.94
+  }
+ },
+ "weights": {
+  "decompose, then ETS": 0.2626,
+  "ARIMA + annual Fourier": 0.3427,
+  "regression: weather + calendar": 0.3948
+ },
+ "weighted_late": 0.9057
+}

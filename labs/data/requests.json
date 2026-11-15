@@ -1,0 +1,26 @@
+[
+ {
+  "id": "A",
+  "who": "Omar Al-Khuzaim, energy purchasing lead",
+  "text": "Every Thursday I nominate the energy we buy for each of the next 28 days, per region. If we are short on a day I buy the gap on the spot market at about three times the contract price. If we are long, I resell the surplus at about half price. What will demand be?",
+  "cost_under": 2.0,
+  "cost_over": 0.5,
+  "data_delay_days": 2
+ },
+ {
+  "id": "B",
+  "who": "Hamad Al-Dawsari, network operations engineer",
+  "text": "I can take a feeder out for maintenance next week only on a day when its neighbours can carry its load. For feeder F017, how high could daily demand go on each of the next 7 days?",
+  "cost_under": 9.0,
+  "cost_over": 1.0,
+  "data_delay_days": 1
+ },
+ {
+  "id": "C",
+  "who": "Shahad Al-Tamimi, load planning manager",
+  "text": "The board decides in March on new transformer capacity for Al-Rimal. How high will the peak summer day be in each of the next three years?",
+  "cost_under": 4.0,
+  "cost_over": 1.0,
+  "data_delay_days": 30
+ }
+]

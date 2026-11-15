@@ -1,0 +1,23 @@
+{
+ "naive (last day)": {
+  "MASE": 1.642,
+  "week 1": 1.086,
+  "week 2": 1.868,
+  "week 3": 1.545,
+  "week 4": 2.067
+ },
+ "last week (m=7)": {
+  "MASE": 1.616,
+  "week 1": 1.179,
+  "week 2": 1.77,
+  "week 3": 1.464,
+  "week 4": 2.05
+ },
+ "same weekday last year (m=364)": {
+  "MASE": 1.061,
+  "week 1": 0.92,
+  "week 2": 0.963,
+  "week 3": 1.082,
+  "week 4": 1.279
+ }
+}

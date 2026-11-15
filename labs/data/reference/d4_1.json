@@ -1,0 +1,33 @@
+{
+ "scores": {
+  "as received": 0.244,
+  "after fix 1 (feature)": 0.414,
+  "after fix 2 (regressor)": 0.711,
+  "as reported with per-fold selection": 0.651,
+  "after fix 3 (selection)": 0.683
+ },
+ "chosen": 365,
+ "floor": 1.061,
+ "by_window": {
+  "365": {
+   "2024 (used to choose)": 0.694,
+   "2025 (test)": 0.683
+  },
+  "548": {
+   "2024 (used to choose)": 0.722,
+   "2025 (test)": 0.689
+  },
+  "730": {
+   "2024 (used to choose)": 0.733,
+   "2025 (test)": 0.682
+  },
+  "1096": {
+   "2024 (used to choose)": 0.759,
+   "2025 (test)": 0.711
+  },
+  "1461": {
+   "2024 (used to choose)": 0.75,
+   "2025 (test)": 0.717
+  }
+ }
+}

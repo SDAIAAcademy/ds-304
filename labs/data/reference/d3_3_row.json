@@ -1,0 +1,18 @@
+{
+ "method": "pretrained, zero-shot",
+ "model": "STAND-IN (weekday profile, not a pretrained model)",
+ "live": false,
+ "mase": 1.17,
+ "pinball": 0.356,
+ "cover80": 0.732,
+ "by_fold": [
+  1.547,
+  0.794
+ ],
+ "seconds": 0.4,
+ "fits": 0,
+ "forecasts": 776,
+ "licence": "apache-2.0",
+ "floor": 0.753,
+ "skill": -0.554
+}

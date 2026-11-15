@@ -1,0 +1,1095 @@
+{
+  "v": 1,
+  "engine": "1.0.0",
+  "build": {
+    "at": "2026-11-15T03:25:22Z",
+    "version": "2027.1.0",
+    "commit": "7561300"
+  },
+  "lang": "en",
+  "dir": "ltr",
+  "langs": [
+    "en"
+  ],
+  "alt": {},
+  "course": {
+    "id": "ds-304",
+    "code": "DS-304",
+    "version": "2027.1.0",
+    "title": "Forecasting and Time Series",
+    "tagline": "Forecast daily demand with a backtest behind every number, and hand the planner a fan chart they can act on",
+    "description": "Participants forecast with the discipline of a backtest. On synthetic daily electricity demand from Shams Power, a fictional distributor with 12 regions and 400 feeders, they decompose series, set a seasonal-naive benchmark floor, fit exponential smoothing and ARIMA-family models with weather and Hijri holidays, train one boosted model across many series, reconcile feeder and regional forecasts and run pretrained zero-shot forecasters as baselines. Every method is scored by rolling-origin cross-validation with point and probabilistic measures and reaches the planner as a fan chart.",
+    "track": "data-science",
+    "track_name": "Data Science Track",
+    "level": 300,
+    "badge": {
+      "name": "Data Science",
+      "level": "Associate"
+    },
+    "audience": "Specialists. Analysts and data scientists who have completed the level 200 set or can show equivalent work: an analysis or model they built, validated and can explain.",
+    "prerequisites": [
+      "DS-201 Statistical Inference by Simulation",
+      "DS-204 Machine Learning for Tabular Data: Baselines and Validation",
+      "Resamples and reshapes time-indexed data in a dataframe"
+    ],
+    "url": "https://sdaiaacademy.github.io/ds-304/",
+    "repo": "SDAIAAcademy/ds-304",
+    "home": "../index.html",
+    "format": "intensive",
+    "format_note": "Intensive: 4 teaching days of four sessions and a capstone day, with guided pre-work and a tracked follow-up task",
+    "shape": "4 teaching days + capstone day",
+    "hours": {
+      "instruction": 6,
+      "lab": 7,
+      "guided_self_study": 6,
+      "assessment": 1,
+      "capstone": 6,
+      "total": 26
+    },
+    "unit": "day",
+    "outcomes": [
+      {
+        "id": "LO1",
+        "text": "Apply decomposition and a seasonal-naive benchmark floor scored by rolling-origin cross-validation, given regional daily demand with weekly and annual seasonality",
+        "level": "Applied",
+        "evidence": "a backtest table of scaled errors by horizon"
+      },
+      {
+        "id": "LO2",
+        "text": "Implement exponential smoothing, ARIMA-family and dynamic regression models with temperature and moving-holiday terms, given the regional series and a Hijri and Gregorian calendar",
+        "level": "Applied",
+        "evidence": "residual diagnostics and scores against the floor"
+      },
+      {
+        "id": "LO3",
+        "text": "Measure point and quantile accuracy of a global boosted model and a pretrained zero-shot forecaster against statistical models, given 400 feeder series with eight weeks held out",
+        "level": "Applied",
+        "evidence": "a scorecard of scaled error, pinball loss, coverage, run time and licence terms"
+      },
+      {
+        "id": "LO4",
+        "text": "Review a forecast evaluation for leakage across time and selection on the test window, and correct it, given a notebook with three seeded faults",
+        "level": "Performance",
+        "evidence": "a review memo and a corrected backtest"
+      },
+      {
+        "id": "LO5",
+        "text": "Build a forecasting analysis for new series and defend method, horizon and uncertainty to a planner, given a supplied dataset and a planner's request",
+        "level": "Performance",
+        "evidence": "a repository and a two-page note with fan charts, defended live"
+      }
+    ],
+    "case_study": {
+      "name": "Shams Power",
+      "summary": "Shams Power is a fictional electricity distributor with 12 regions and 400 feeders. Its forecast desk, Marqab, owes the load planners a 28-day daily forecast per region for energy purchasing, with honest intervals. Participants work on nine years of synthetic daily demand with temperature and a Hijri and Gregorian calendar: Eid dips that move through the year, a level shift, an outage, twelve new feeders and a notebook with three seeded leaks. All data is synthetic and generated with a fixed seed."
+    },
+    "days": [
+      {
+        "id": "day1",
+        "kind": "day",
+        "n": 1,
+        "number": 1,
+        "label": "Day 1",
+        "title": "Look, frame and set the floor",
+        "subtitle": "From a planner's request to a series you have looked at and a floor every later method must beat",
+        "shape": "4 sessions · 4 labs",
+        "deck": "../slides/day1.html",
+        "md": "../slides/day1.md",
+        "url": "https://sdaiaacademy.github.io/ds-304/slides/day1.html",
+        "sessions": [
+          {
+            "n": 1,
+            "label": "Session 1",
+            "title": "What is forecast, and why",
+            "summary": "A forecast serves a decision: fix the horizon, the level and the cost of each kind of error before any model",
+            "outcomes": [
+              "Separate a forecast from a plan and a target",
+              "Fix horizon, granularity and level from the decision",
+              "Turn the cost of over- and under-forecasting into a target quantile"
+            ],
+            "lo": [
+              "LO5"
+            ],
+            "minutes": 50,
+            "lab": {
+              "id": "1.1",
+              "title": "Frame three requests",
+              "summary": "Turn three requests from Shams Power planners into a forecast frame each: the decision, horizon, level, error measure and target quantile.",
+              "minutes": 25,
+              "href": "../labs/D1_1_write_horizon_error.ipynb",
+              "steps": [
+                {
+                  "text": "Read the three requests and name the decision behind each",
+                  "minutes": 5
+                },
+                {
+                  "text": "Set horizon, granularity and level for each",
+                  "minutes": 6
+                },
+                {
+                  "text": "Turn the cost of each error into a target quantile",
+                  "minutes": 6
+                },
+                {
+                  "text": "Count the days the data delay takes from the horizon",
+                  "minutes": 4
+                },
+                {
+                  "text": "Write one framing line per request and swap it",
+                  "minutes": 4
+                }
+              ],
+              "stretch": "Frame a fourth request from your own workplace"
+            }
+          },
+          {
+            "n": 2,
+            "label": "Session 2",
+            "title": "Seeing structure",
+            "summary": "Look before you model: weekly, annual and Hijri patterns show at different time scales",
+            "outcomes": [
+              "Plot a series at three time scales and name what each shows",
+              "Measure the weekday profile and the Eid dip",
+              "Explain why a Hijri holiday is not a seasonal pattern"
+            ],
+            "lo": [
+              "LO1"
+            ],
+            "minutes": 50,
+            "lab": {
+              "id": "1.2",
+              "title": "Three time scales",
+              "summary": "Plot Al-Rimal's demand over nine years, one year and four weeks, shade Ramadan and Eid, and measure the weekday profile and the Eid dip of every year.",
+              "minutes": 25,
+              "href": "../labs/D1_2_plot_one_region.ipynb",
+              "steps": [
+                {
+                  "text": "Plot nine years and name the trend and the annual shape",
+                  "minutes": 5
+                },
+                {
+                  "text": "Plot one year against temperature",
+                  "minutes": 5
+                },
+                {
+                  "text": "Plot four weeks and compute the weekday profile",
+                  "minutes": 6
+                },
+                {
+                  "text": "Shade Ramadan and Eid and measure the Eid dip per year",
+                  "minutes": 6
+                },
+                {
+                  "text": "Find the dip that is not a holiday",
+                  "minutes": 3
+                }
+              ],
+              "stretch": "Repeat for Al-Jabal, a cool mountain region, and compare"
+            }
+          },
+          {
+            "n": 3,
+            "label": "Session 3",
+            "title": "Decomposition",
+            "summary": "Decomposition splits a series into trend, seasons and remainder, and gives each a strength you can compare",
+            "outcomes": [
+              "Decompose a series with weekly and annual seasons",
+              "Compute the strength of trend and of seasonality",
+              "Read the remainder for holidays, outages and breaks"
+            ],
+            "lo": [
+              "LO1"
+            ],
+            "minutes": 50,
+            "lab": {
+              "id": "1.3",
+              "title": "Decompose and measure strength",
+              "summary": "Decompose regional demand into trend, weekly season, annual season and remainder, compute the strength of each for the 12 regions and read what the remainder holds.",
+              "minutes": 25,
+              "href": "../labs/D1_3_decompose_regional_demand.ipynb",
+              "steps": [
+                {
+                  "text": "Decompose log demand with weekly and annual periods",
+                  "minutes": 6
+                },
+                {
+                  "text": "Compute the strength of trend and of each season",
+                  "minutes": 6
+                },
+                {
+                  "text": "Rank the 12 regions by seasonal strength",
+                  "minutes": 5
+                },
+                {
+                  "text": "Read the largest remainder days and name them",
+                  "minutes": 5
+                },
+                {
+                  "text": "Find the region whose trend breaks",
+                  "minutes": 3
+                }
+              ],
+              "stretch": "Decompose one feeder and compare its strengths with its region"
+            }
+          },
+          {
+            "n": 4,
+            "label": "Session 4",
+            "title": "The benchmark floor",
+            "summary": "No method counts until it beats the best naive forecast in a rolling-origin backtest",
+            "outcomes": [
+              "Write naive and seasonal-naive forecasts",
+              "Run a rolling-origin backtest over 28-day horizons",
+              "Report scaled errors by horizon and name the floor"
+            ],
+            "lo": [
+              "LO1"
+            ],
+            "minutes": 50,
+            "lab": {
+              "id": "1.4",
+              "title": "The benchmark floor (AI-off)",
+              "summary": "Write the rolling origins, the naive forecasts and the scaled error yourself, without AI, and backtest three naive methods over 13 origins of 28 days to set the floor.",
+              "minutes": 25,
+              "href": "../labs/D1_4_backtest_naive_seasonal.ipynb",
+              "steps": [
+                {
+                  "text": "Write the rolling origins",
+                  "minutes": 5
+                },
+                {
+                  "text": "Write the naive and seasonal-naive forecasts",
+                  "minutes": 5
+                },
+                {
+                  "text": "Write the scaled error",
+                  "minutes": 5
+                },
+                {
+                  "text": "Backtest three naive methods over 13 origins",
+                  "minutes": 6
+                },
+                {
+                  "text": "Read the error by horizon week and name the floor",
+                  "minutes": 4
+                }
+              ],
+              "stretch": "Score the Eid days separately from the other days"
+            }
+          }
+        ]
+      },
+      {
+        "id": "day2",
+        "kind": "day",
+        "n": 2,
+        "number": 2,
+        "label": "Day 2",
+        "title": "Statistical forecasters",
+        "subtitle": "Exponential smoothing, ARIMA and regression with weather and Hijri holidays, each scored against the floor",
+        "shape": "4 sessions · 4 labs",
+        "deck": "../slides/day2.html",
+        "md": "../slides/day2.md",
+        "url": "https://sdaiaacademy.github.io/ds-304/slides/day2.html",
+        "sessions": [
+          {
+            "n": 1,
+            "label": "Session 1",
+            "title": "Exponential smoothing",
+            "summary": "Exponential smoothing forecasts from weighted averages that forget; it needs help to see the annual season",
+            "outcomes": [
+              "Compute simple exponential smoothing by hand",
+              "Fit ETS models with a weekly season",
+              "Combine a decomposition with ETS and score it against the floor"
+            ],
+            "lo": [
+              "LO2"
+            ],
+            "minutes": 50,
+            "lab": {
+              "id": "2.1",
+              "title": "Exponential smoothing against the floor",
+              "summary": "Write simple exponential smoothing, fit ETS with a weekly season, add the annual season through a decomposition and score all of them against the floor.",
+              "minutes": 25,
+              "href": "../labs/D2_1_fit_exponential_smoothing.ipynb",
+              "steps": [
+                {
+                  "text": "Write simple exponential smoothing by hand",
+                  "minutes": 6
+                },
+                {
+                  "text": "Fit ETS with a weekly season and score it",
+                  "minutes": 6
+                },
+                {
+                  "text": "Add the annual season: decompose, then smooth",
+                  "minutes": 6
+                },
+                {
+                  "text": "Compare with the floor by horizon week",
+                  "minutes": 4
+                },
+                {
+                  "text": "Read the smoothing weights",
+                  "minutes": 3
+                }
+              ],
+              "stretch": "Compare a damped trend with an undamped one at 28 days"
+            }
+          },
+          {
+            "n": 2,
+            "label": "Session 2",
+            "title": "ARIMA-family models",
+            "summary": "ARIMA models the correlation left after differencing; the residuals say whether it has finished",
+            "outcomes": [
+              "Difference a series and read its autocorrelation",
+              "Fit a seasonal ARIMA model",
+              "Check residuals with a portmanteau test before trusting intervals"
+            ],
+            "lo": [
+              "LO2"
+            ],
+            "minutes": 50,
+            "lab": {
+              "id": "2.2",
+              "title": "A seasonal ARIMA with checked residuals",
+              "summary": "Difference the series, fit a seasonal ARIMA model, test its residuals, add annual Fourier terms and score each step against the floor.",
+              "minutes": 25,
+              "href": "../labs/D2_2_fit_seasonal_arima.ipynb",
+              "steps": [
+                {
+                  "text": "Difference the series and read the autocorrelation",
+                  "minutes": 5
+                },
+                {
+                  "text": "Fit a seasonal ARIMA and score it",
+                  "minutes": 6
+                },
+                {
+                  "text": "Test the residuals for leftover correlation",
+                  "minutes": 5
+                },
+                {
+                  "text": "Add annual Fourier terms and score again",
+                  "minutes": 6
+                },
+                {
+                  "text": "Record both scores against the floor",
+                  "minutes": 3
+                }
+              ],
+              "stretch": "Let an automatic search choose the orders and compare time and score"
+            }
+          },
+          {
+            "n": 3,
+            "label": "Session 3",
+            "title": "Weather and moving holidays",
+            "summary": "Regression with ARIMA errors brings in what you know about the future: the calendar always, the weather only in part",
+            "outcomes": [
+              "Build cooling-degree and Hijri holiday regressors",
+              "Fit a regression with ARIMA errors",
+              "Separate what is known at the origin from what is measured later"
+            ],
+            "lo": [
+              "LO2"
+            ],
+            "minutes": 50,
+            "lab": {
+              "id": "2.3",
+              "title": "Weather and Hijri regressors",
+              "summary": "Add temperature and Ramadan, Eid and national-day regressors to the ARIMA model, measure the gain on Eid days, and compare an honest temperature with the one measured later.",
+              "minutes": 25,
+              "href": "../labs/D2_3_add_temperature_hijri.ipynb",
+              "steps": [
+                {
+                  "text": "Build cooling degrees and holiday regressors",
+                  "minutes": 5
+                },
+                {
+                  "text": "Fit the regression with weather only",
+                  "minutes": 5
+                },
+                {
+                  "text": "Add Ramadan, Eid and national days; measure the gain on Eid days",
+                  "minutes": 6
+                },
+                {
+                  "text": "Compare the honest temperature with the one measured later",
+                  "minutes": 6
+                },
+                {
+                  "text": "Read the coefficients in MWh",
+                  "minutes": 3
+                }
+              ],
+              "stretch": "Give Eid al-Fitr and Eid al-Adha separate regressors"
+            }
+          },
+          {
+            "n": 4,
+            "label": "Session 4",
+            "title": "Intervals that hold",
+            "summary": "An interval is a promise about frequency: measure whether 80% intervals hold 80% of the time",
+            "outcomes": [
+              "Measure the coverage of 80% and 95% intervals in a backtest",
+              "Score quantiles with pinball loss",
+              "Rebuild intervals from backtest errors when the model's are too narrow"
+            ],
+            "lo": [
+              "LO2",
+              "LO3"
+            ],
+            "minutes": 50,
+            "lab": {
+              "id": "2.4",
+              "title": "Interval coverage in the backtest",
+              "summary": "Measure the 80% and 95% coverage of three supplied backtests by horizon week, score their quantiles with pinball loss and rebuild the intervals from the errors of earlier folds.",
+              "minutes": 25,
+              "href": "../labs/D2_4_measure_80_95.ipynb",
+              "steps": [
+                {
+                  "text": "Compute 80% and 95% coverage for three models",
+                  "minutes": 5
+                },
+                {
+                  "text": "Break coverage down by horizon week",
+                  "minutes": 4
+                },
+                {
+                  "text": "Score each quantile with pinball loss",
+                  "minutes": 5
+                },
+                {
+                  "text": "Rebuild the intervals from the errors of earlier folds",
+                  "minutes": 8
+                },
+                {
+                  "text": "Report coverage before and after",
+                  "minutes": 3
+                }
+              ],
+              "stretch": "Check the single quantile the purchasing lead needs"
+            }
+          }
+        ]
+      },
+      {
+        "id": "day3",
+        "kind": "day",
+        "n": 3,
+        "number": 3,
+        "label": "Day 3",
+        "title": "Many series and pretrained models",
+        "subtitle": "Four hundred feeders: forecasts that add up, one model for all series, and a pretrained model as a baseline",
+        "shape": "4 sessions · 4 labs",
+        "deck": "../slides/day3.html",
+        "md": "../slides/day3.md",
+        "url": "https://sdaiaacademy.github.io/ds-304/slides/day3.html",
+        "sessions": [
+          {
+            "n": 1,
+            "label": "Session 1",
+            "title": "Many series and hierarchies",
+            "summary": "Forecasts made level by level do not add up; reconciliation makes them coherent and often better",
+            "outcomes": [
+              "Forecast every series of a two-level hierarchy",
+              "Reconcile bottom-up, top-down and by least squares",
+              "Compare errors at the feeder and the regional level"
+            ],
+            "lo": [
+              "LO2",
+              "LO3"
+            ],
+            "minutes": 50,
+            "lab": {
+              "id": "3.1",
+              "title": "Feeders that add up to their region",
+              "summary": "Forecast every feeder of one region and the region itself, show that the forecasts disagree, reconcile them three ways and compare errors at both levels.",
+              "minutes": 25,
+              "href": "../labs/D3_1_fit_per_feeder.ipynb",
+              "steps": [
+                {
+                  "text": "Forecast every feeder of one region, and the region",
+                  "minutes": 6
+                },
+                {
+                  "text": "Show that the forecasts do not add up",
+                  "minutes": 3
+                },
+                {
+                  "text": "Reconcile bottom-up and top-down",
+                  "minutes": 6
+                },
+                {
+                  "text": "Reconcile by least squares",
+                  "minutes": 6
+                },
+                {
+                  "text": "Compare errors at both levels",
+                  "minutes": 4
+                }
+              ],
+              "stretch": "Repeat for all 12 regions"
+            }
+          },
+          {
+            "n": 2,
+            "label": "Session 2",
+            "title": "Global boosted forecasters",
+            "summary": "One boosted model trained across all feeders learns shared patterns from features known at the origin",
+            "outcomes": [
+              "Build lag and calendar features that use nothing after the origin",
+              "Train one boosted model on scaled targets across series",
+              "Backtest it with point and quantile scores on held-out weeks"
+            ],
+            "lo": [
+              "LO3"
+            ],
+            "minutes": 50,
+            "lab": {
+              "id": "3.2",
+              "title": "One boosted model across feeders",
+              "summary": "Train one LightGBM model on lag and calendar features across the feeders, backtest it on the eight held-out weeks against per-feeder floors and add quantile models.",
+              "minutes": 25,
+              "href": "../labs/D3_2_backtest_one_boosted.ipynb",
+              "steps": [
+                {
+                  "text": "Read the frame: one row per feeder, origin and horizon day",
+                  "minutes": 4
+                },
+                {
+                  "text": "Train one boosted model on scaled targets",
+                  "minutes": 6
+                },
+                {
+                  "text": "Backtest on eight held-out weeks against the floor",
+                  "minutes": 6
+                },
+                {
+                  "text": "Train quantile models and measure coverage",
+                  "minutes": 6
+                },
+                {
+                  "text": "Read the feature importances",
+                  "minutes": 3
+                }
+              ],
+              "stretch": "Train without scaling the target and compare"
+            }
+          },
+          {
+            "n": 3,
+            "label": "Session 3",
+            "title": "Pretrained zero-shot forecasters",
+            "summary": "A pretrained forecaster needs no training on your data: measure it like any other baseline, and read its licence",
+            "outcomes": [
+              "Run a pretrained forecaster zero-shot on held-out weeks",
+              "Record accuracy, quantile scores and run time",
+              "Read a model card for licence and permitted use"
+            ],
+            "lo": [
+              "LO3"
+            ],
+            "minutes": 50,
+            "lab": {
+              "id": "3.3",
+              "title": "A pretrained forecaster, zero-shot",
+              "summary": "Run a small pretrained forecaster zero-shot on the feeders, time it, score it on the eight held-out weeks, and record the licence of four models from three families, from their model cards.",
+              "minutes": 25,
+              "href": "../labs/D3_3_run_pretrained_forecaster.ipynb",
+              "steps": [
+                {
+                  "text": "Load the forecaster and forecast one feeder",
+                  "minutes": 5
+                },
+                {
+                  "text": "Forecast the feeders zero-shot and time the run",
+                  "minutes": 6
+                },
+                {
+                  "text": "Score point, quantile and coverage on the held-out weeks",
+                  "minutes": 6
+                },
+                {
+                  "text": "Record the licence of four models from three families",
+                  "minutes": 5
+                },
+                {
+                  "text": "Write the scorecard row",
+                  "minutes": 3
+                }
+              ],
+              "stretch": "Shorten the context to eight weeks and score again"
+            }
+          },
+          {
+            "n": 4,
+            "label": "Session 4",
+            "title": "Choosing among families",
+            "summary": "Accuracy is one column: choose a method family on accuracy, cost, licence and upkeep together",
+            "outcomes": [
+              "Compute skill against the floor for every method",
+              "Weigh accuracy against run time, upkeep and licence",
+              "Defend the simplest method within noise of the best"
+            ],
+            "lo": [
+              "LO3"
+            ],
+            "minutes": 50,
+            "lab": {
+              "id": "3.4",
+              "title": "The scorecard",
+              "summary": "Fill a scorecard of accuracy, cost and licence for five method families from the measured results, rank them under two planners' weightings and write the choice.",
+              "minutes": 25,
+              "href": "../labs/D3_4_fill_scorecard_accuracy.ipynb",
+              "steps": [
+                {
+                  "text": "Load the measured results of five methods",
+                  "minutes": 3
+                },
+                {
+                  "text": "Compute skill against the floor",
+                  "minutes": 5
+                },
+                {
+                  "text": "Add run time, upkeep and licence",
+                  "minutes": 5
+                },
+                {
+                  "text": "Rank under two planners' weightings",
+                  "minutes": 7
+                },
+                {
+                  "text": "Write the choice and what would change it",
+                  "minutes": 5
+                }
+              ],
+              "stretch": "Change one weight until the ranking flips, and say what that weight would mean"
+            }
+          }
+        ]
+      },
+      {
+        "id": "day4",
+        "kind": "day",
+        "n": 4,
+        "number": 4,
+        "label": "Day 4",
+        "title": "Review and communicate",
+        "subtitle": "Review a backtest for leaks, forecast series with little history, combine methods and write the note the planner reads",
+        "shape": "4 sessions · 4 labs",
+        "deck": "../slides/day4.html",
+        "md": "../slides/day4.md",
+        "url": "https://sdaiaacademy.github.io/ds-304/slides/day4.html",
+        "sessions": [
+          {
+            "n": 1,
+            "label": "Session 1",
+            "title": "Leakage across time",
+            "summary": "A backtest leaks when anything after the origin reaches the forecast: a feature, a regressor or the choice of model",
+            "outcomes": [
+              "Find features and regressors that use data after the origin",
+              "Recognise selection on the test window",
+              "Correct a backtest and report the score before and after"
+            ],
+            "lo": [
+              "LO4"
+            ],
+            "minutes": 50,
+            "lab": {
+              "id": "4.1",
+              "title": "Three leaks in a backtest",
+              "summary": "Review a backtest with three seeded faults, fix each one, and write a review memo with the score before and after every fix.",
+              "minutes": 25,
+              "href": "../labs/D4_1_find_three_seeded.ipynb",
+              "steps": [
+                {
+                  "text": "Run the faulty backtest and record its score",
+                  "minutes": 3
+                },
+                {
+                  "text": "Find and fix the feature that sees the future",
+                  "minutes": 6
+                },
+                {
+                  "text": "Find and fix the regressor not known at the origin",
+                  "minutes": 6
+                },
+                {
+                  "text": "Find and fix the selection on the test window",
+                  "minutes": 6
+                },
+                {
+                  "text": "Write the review memo with before and after",
+                  "minutes": 4
+                }
+              ],
+              "stretch": "Write a test that fails when a feature uses a day after the origin"
+            }
+          },
+          {
+            "n": 2,
+            "label": "Session 2",
+            "title": "New and short series",
+            "summary": "A series with eight weeks of history borrows strength from its neighbours, from a global model or from pretraining",
+            "outcomes": [
+              "Forecast a short series from its own history",
+              "Pool information from similar series",
+              "Compare pooled, global and pretrained forecasts on a new series"
+            ],
+            "lo": [
+              "LO5",
+              "LO3"
+            ],
+            "minutes": 50,
+            "lab": {
+              "id": "4.2",
+              "title": "Feeders with eight weeks of history",
+              "summary": "Forecast the twelve new feeders from their first eight weeks with their own history, a pooled profile, the global model and the pretrained forecaster, and compare.",
+              "minutes": 25,
+              "href": "../labs/D4_2_forecast_feeder_eight.ipynb",
+              "steps": [
+                {
+                  "text": "Meet the twelve feeders with eight weeks of history",
+                  "minutes": 3
+                },
+                {
+                  "text": "Forecast each from its own history",
+                  "minutes": 5
+                },
+                {
+                  "text": "Pool: borrow the profile of similar feeders",
+                  "minutes": 7
+                },
+                {
+                  "text": "Add the global model and the pretrained forecaster",
+                  "minutes": 6
+                },
+                {
+                  "text": "Compare, and say what to tell the planner",
+                  "minutes": 4
+                }
+              ],
+              "stretch": "Cut the history to four weeks and compare again"
+            }
+          },
+          {
+            "n": 3,
+            "label": "Session 3",
+            "title": "Combining forecasts",
+            "summary": "An average of different methods is hard to beat, and \"the best single method\" is only known afterwards",
+            "outcomes": [
+              "Average forecasts from different method families",
+              "Choose the best single method without looking at the test folds",
+              "Combine quantiles and check coverage"
+            ],
+            "lo": [
+              "LO3",
+              "LO4"
+            ],
+            "minutes": 50,
+            "lab": {
+              "id": "4.3",
+              "title": "Does the average beat the best?",
+              "summary": "Average three supplied backtests, choose the best single method on the early folds only, and test on the late folds whether the average beats it.",
+              "minutes": 25,
+              "href": "../labs/D4_3_test_whether_average.ipynb",
+              "steps": [
+                {
+                  "text": "Load three backtests and score each",
+                  "minutes": 4
+                },
+                {
+                  "text": "Average them and score the average",
+                  "minutes": 5
+                },
+                {
+                  "text": "Choose the best single method on early folds; test on late folds",
+                  "minutes": 7
+                },
+                {
+                  "text": "Average the quantiles and check coverage",
+                  "minutes": 5
+                },
+                {
+                  "text": "State the verdict with its numbers",
+                  "minutes": 4
+                }
+              ],
+              "stretch": "Weight the three methods by their early-fold errors"
+            }
+          },
+          {
+            "n": 4,
+            "label": "Session 4",
+            "title": "Fan charts and forecast notes",
+            "summary": "The planner reads a fan chart and a short note: the forecast, how often the bands held, and when not to use it",
+            "outcomes": [
+              "Draw a fan chart from quantile forecasts",
+              "State interval coverage in plain words",
+              "Write a forecast note that says when not to use the forecast"
+            ],
+            "lo": [
+              "LO5"
+            ],
+            "minutes": 50,
+            "lab": {
+              "id": "4.4",
+              "title": "Fan chart and planner's note",
+              "summary": "Draw the fan chart of the next 28 days for Al-Rimal, write the planner's note with its coverage statement and limits, and choose the capstone dataset.",
+              "minutes": 25,
+              "href": "../labs/D4_4_draw_fan_chart.ipynb",
+              "steps": [
+                {
+                  "text": "Draw the fan chart for the next 28 days",
+                  "minutes": 7
+                },
+                {
+                  "text": "State the backtest coverage in plain words",
+                  "minutes": 4
+                },
+                {
+                  "text": "Write the planner's note",
+                  "minutes": 8
+                },
+                {
+                  "text": "Check the note against its six required parts",
+                  "minutes": 3
+                },
+                {
+                  "text": "Choose the capstone dataset and three method families",
+                  "minutes": 3
+                }
+              ],
+              "stretch": "Write the note in Arabic with the same numbers"
+            }
+          }
+        ]
+      },
+      {
+        "id": "capstone",
+        "kind": "capstone",
+        "n": 5,
+        "number": null,
+        "label": "Capstone",
+        "title": "Capstone project presentations",
+        "subtitle": "An eight-minute defence each, then four minutes of questions in which the assessor moves the forecast origin or the horizon",
+        "shape": "",
+        "deck": "../slides/capstone.html",
+        "md": "../slides/capstone.md",
+        "url": "https://sdaiaacademy.github.io/ds-304/slides/capstone.html",
+        "sessions": []
+      }
+    ],
+    "capstone": {
+      "summary": "A forecasting analysis on a supplied or public dataset with three method families backtested against the floor, in a public repository whose README reports point and probabilistic accuracy, plus a two-page planner's note; eight-minute defence plus questions",
+      "submission": "A link to a public GitHub repository holding the analysis, a README that reports point and probabilistic accuracy against the floor, the run logs and the two-page planner's note",
+      "talk_minutes": 8,
+      "qa_minutes": 4,
+      "rubric": [
+        {
+          "criterion": "Framing and floor",
+          "weight": 15
+        },
+        {
+          "criterion": "Methods",
+          "weight": 25
+        },
+        {
+          "criterion": "Backtest design",
+          "weight": 25
+        },
+        {
+          "criterion": "Uncertainty and communication",
+          "weight": 25
+        },
+        {
+          "criterion": "Reproducibility",
+          "weight": 10
+        }
+      ]
+    },
+    "labs": {
+      "kind": "notebooks",
+      "base": "labs/"
+    },
+    "tools": [
+      {
+        "slot": "Analysis language and notebooks",
+        "examples": [
+          "Python with Jupyter or marimo",
+          "R with Quarto"
+        ]
+      },
+      {
+        "slot": "Statistical forecasting",
+        "examples": [
+          "statsforecast",
+          "fable for R",
+          "statsmodels"
+        ]
+      },
+      {
+        "slot": "Machine learning forecasting",
+        "examples": [
+          "LightGBM with lag features",
+          "sktime",
+          "Darts"
+        ]
+      },
+      {
+        "slot": "Pretrained forecaster as a baseline",
+        "examples": [
+          "the Chronos family of open-weight forecasters",
+          "TimesFM",
+          "AutoGluon time series"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "group": "Textbook",
+        "items": [
+          {
+            "title": "Hyndman and Athanasopoulos: Forecasting: Principles and Practice, 3rd edition",
+            "url": "https://otexts.com/fpp3/"
+          },
+          {
+            "title": "FPP3: evaluating point forecast accuracy (scaled errors)",
+            "url": "https://otexts.com/fpp3/accuracy.html"
+          },
+          {
+            "title": "FPP3: time series cross-validation",
+            "url": "https://otexts.com/fpp3/tscv.html"
+          },
+          {
+            "title": "FPP3: STL features (strength of trend and seasonality)",
+            "url": "https://otexts.com/fpp3/stlfeatures.html"
+          },
+          {
+            "title": "FPP3: dynamic regression models",
+            "url": "https://otexts.com/fpp3/dynamic.html"
+          },
+          {
+            "title": "FPP3: forecast reconciliation",
+            "url": "https://otexts.com/fpp3/reconciliation.html"
+          },
+          {
+            "title": "FPP3: forecast combinations",
+            "url": "https://otexts.com/fpp3/combinations.html"
+          }
+        ]
+      },
+      {
+        "group": "Libraries",
+        "items": [
+          {
+            "title": "statsforecast documentation",
+            "url": "https://nixtlaverse.nixtla.io/statsforecast/index.html"
+          },
+          {
+            "title": "statsmodels: MSTL decomposition",
+            "url": "https://www.statsmodels.org/stable/generated/statsmodels.tsa.seasonal.MSTL.html"
+          },
+          {
+            "title": "LightGBM parameters (quantile objective)",
+            "url": "https://lightgbm.readthedocs.io/en/stable/Parameters.html"
+          },
+          {
+            "title": "AutoGluon time series",
+            "url": "https://auto.gluon.ai/stable/tutorials/timeseries/index.html"
+          }
+        ]
+      },
+      {
+        "group": "Pretrained forecasters and their licences",
+        "items": [
+          {
+            "title": "Chronos-Bolt tiny: model card (Apache-2.0)",
+            "url": "https://huggingface.co/amazon/chronos-bolt-tiny"
+          },
+          {
+            "title": "Chronos-2: model card (Apache-2.0)",
+            "url": "https://huggingface.co/amazon/chronos-2"
+          },
+          {
+            "title": "TimesFM 2.5: model card (Apache-2.0)",
+            "url": "https://huggingface.co/google/timesfm-2.5-200m-pytorch"
+          },
+          {
+            "title": "Moirai 2.0 small: model card (CC-BY-NC-4.0)",
+            "url": "https://huggingface.co/Salesforce/moirai-2.0-R-small"
+          },
+          {
+            "title": "Ansari and others: Chronos: Learning the Language of Time Series",
+            "url": "https://arxiv.org/abs/2403.07815"
+          },
+          {
+            "title": "Ansari and others: Chronos-2: From Univariate to Universal Forecasting",
+            "url": "https://arxiv.org/abs/2510.15821"
+          },
+          {
+            "title": "Das and others: A decoder-only foundation model for time-series forecasting (TimesFM)",
+            "url": "https://arxiv.org/abs/2310.10688"
+          },
+          {
+            "title": "Woo and others: Unified Training of Universal Time Series Forecasting Transformers (Moirai)",
+            "url": "https://arxiv.org/abs/2402.02592"
+          }
+        ]
+      },
+      {
+        "group": "Research on evaluation, combination and communication",
+        "items": [
+          {
+            "title": "Bates and Granger (1969): The Combination of Forecasts",
+            "url": "https://doi.org/10.1057/jors.1969.103"
+          },
+          {
+            "title": "Kaufman, Rosset, Perlich and Stitelman (2012): Leakage in data mining",
+            "url": "https://doi.org/10.1145/2382577.2382579"
+          },
+          {
+            "title": "Wickramasuriya, Athanasopoulos and Hyndman (2019): Optimal forecast reconciliation through trace minimization",
+            "url": "https://doi.org/10.1080/01621459.2018.1448825"
+          },
+          {
+            "title": "Makridakis, Spiliotis and Assimakopoulos (2020): The M4 Competition",
+            "url": "https://doi.org/10.1016/j.ijforecast.2019.04.014"
+          },
+          {
+            "title": "Makridakis, Spiliotis and Assimakopoulos (2022): M5 accuracy competition",
+            "url": "https://doi.org/10.1016/j.ijforecast.2021.11.013"
+          },
+          {
+            "title": "Gigerenzer and Edwards (2003): Simple tools for understanding risks",
+            "url": "https://doi.org/10.1136/bmj.327.7417.741"
+          }
+        ]
+      },
+      {
+        "group": "National references",
+        "items": [
+          {
+            "title": "Personal Data Protection Law",
+            "url": "https://sdaia.gov.sa/en/SDAIA/about/Documents/PersonalDataProtectionLaw.pdf"
+          },
+          {
+            "title": "Implementing Regulation of the Personal Data Protection Law",
+            "url": "https://sdaia.gov.sa/en/SDAIA/about/Documents/ImplementingRegulationPersonalDataProtectionLaw.pdf"
+          },
+          {
+            "title": "Open Data Policy (National Data Management Office)",
+            "url": "https://sdaia.gov.sa/en/SDAIA/about/Documents/OpenDataPolicy.pdf"
+          },
+          {
+            "title": "Principles of AI Ethics",
+            "url": "https://sdaia.gov.sa/en/SDAIA/about/Documents/ai-principles.pdf"
+          }
+        ]
+      }
+    ]
+  }
+}
