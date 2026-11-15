@@ -109,7 +109,7 @@ def _plain(o):
     if isinstance(o, (list, tuple)):
         return [_plain(v) for v in o]
     if isinstance(o, (np.floating, float)):
-        return round(float(o), 4)
+        return None if np.isnan(o) else round(float(o), 4)  # NaN is not JSON: write null
     if isinstance(o, np.integer):
         return int(o)
     if isinstance(o, pd.Timestamp):

@@ -173,7 +173,7 @@ def planners_note(facts: dict, sentence: str) -> dict:
         "decision": (f"Daily energy demand of Al-Rimal for {facts['first_day']} to {facts['last_day']}, for the weekly purchase "
                      "nomination of energy purchasing and the reserve decision of load planning."),
         "forecast": (f"The middle forecast runs between {facts['median_low']:,} and {facts['median_high']:,} MWh a day. "
-                     f"For purchasing at the 9-in-10 level, plan for up to {facts['q90_peak']:,} MWh on the highest day, {facts['q90_peak_day']}."),
+                     f"The upper edge of the dark band, under which demand is expected on 9 days in 10, reaches {facts['q90_peak']:,} MWh on the highest day, {facts['q90_peak_day']}."),
         "uncertainty": (f"The dark band is where demand is expected on 8 days in 10, the light band on 19 in 20. The dark band is about "
                         f"{facts['band80_week1']:,} MWh wide in the first week and {facts['band80_week4']:,} MWh in the fourth. {sentence}"),
         "evidence": (f"Tested on every day of 2025, 28 days ahead: scaled error {facts['score']} against {facts['floor']} for repeating the same "

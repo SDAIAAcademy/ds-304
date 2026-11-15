@@ -2,20 +2,20 @@
  "table": {
   "last week repeated": {
    "mase": 1.103,
-   "pinball": NaN,
-   "cover80": NaN,
+   "pinball": null,
+   "cover80": null,
    "measured": true
   },
   "ETS, weekly, own history": {
    "mase": 0.949,
-   "pinball": NaN,
-   "cover80": NaN,
+   "pinball": null,
+   "cover80": null,
    "measured": true
   },
   "pooled shape of similar feeders": {
    "mase": 0.919,
-   "pinball": NaN,
-   "cover80": NaN,
+   "pinball": null,
+   "cover80": null,
    "measured": true
   },
   "global boosted model": {

@@ -145,7 +145,7 @@ least_sq = feeders_fc.add(gap / (n + 1), axis=0)</code></pre>
 </section>
 
 <section class="slide lab" id="lab-3-1" data-auto="lab" data-lab="3.1">
-  <aside class="notes"><p>Walk the room. The 37 fits take a few seconds. Usual problems: summing over the wrong axis (a forecast per feeder instead of per day); dividing the gap by n, which makes the feeders add up to the regional forecast exactly and is top-down by another name; forgetting that the reconciled region is the sum of the reconciled feeders. The lab starts from the data files only.</p></aside>
+  <aside class="notes"><p>Walk the room. The 37 fits take a few seconds. Usual problems: summing over the wrong axis (a forecast per feeder instead of per day); dividing the gap by n, which makes the feeders add up to the regional forecast exactly: it trusts the region completely, like top-down, but hands every feeder the same correction in MWh; forgetting that the reconciled region is the sum of the reconciled feeders. The lab starts from the data files only.</p></aside>
 </section>
 
 <!-- ======================= SESSION 2 ======================= -->

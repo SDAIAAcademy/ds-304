@@ -534,7 +534,7 @@
             "id": "3.3",
             "title": "A pretrained forecaster, zero-shot",
             "minutes": 25,
-            "summary": "Run a small pretrained forecaster zero-shot on the feeders, time it, score it on the eight held-out weeks, and record the licence of four model families from their model cards.",
+            "summary": "Run a small pretrained forecaster zero-shot on the feeders, time it, score it on the eight held-out weeks, and record the licence of four models from three families, from their model cards.",
             "href": "D3_3_run_pretrained_forecaster.ipynb",
             "steps": [
               {
@@ -550,7 +550,7 @@
                 "minutes": 6
               },
               {
-                "text": "Record the licence of four model families",
+                "text": "Record the licence of four models from three families",
                 "minutes": 5
               },
               {
@@ -940,6 +940,43 @@
         {
           "title": "Ansari and others: Chronos-2: From Univariate to Universal Forecasting",
           "url": "https://arxiv.org/abs/2510.15821"
+        },
+        {
+          "title": "Das and others: A decoder-only foundation model for time-series forecasting (TimesFM)",
+          "url": "https://arxiv.org/abs/2310.10688"
+        },
+        {
+          "title": "Woo and others: Unified Training of Universal Time Series Forecasting Transformers (Moirai)",
+          "url": "https://arxiv.org/abs/2402.02592"
+        }
+      ]
+    },
+    {
+      "group": "Research on evaluation, combination and communication",
+      "items": [
+        {
+          "title": "Bates and Granger (1969): The Combination of Forecasts",
+          "url": "https://doi.org/10.1057/jors.1969.103"
+        },
+        {
+          "title": "Kaufman, Rosset, Perlich and Stitelman (2012): Leakage in data mining",
+          "url": "https://doi.org/10.1145/2382577.2382579"
+        },
+        {
+          "title": "Wickramasuriya, Athanasopoulos and Hyndman (2019): Optimal forecast reconciliation through trace minimization",
+          "url": "https://doi.org/10.1080/01621459.2018.1448825"
+        },
+        {
+          "title": "Makridakis, Spiliotis and Assimakopoulos (2020): The M4 Competition",
+          "url": "https://doi.org/10.1016/j.ijforecast.2019.04.014"
+        },
+        {
+          "title": "Makridakis, Spiliotis and Assimakopoulos (2022): M5 accuracy competition",
+          "url": "https://doi.org/10.1016/j.ijforecast.2021.11.013"
+        },
+        {
+          "title": "Gigerenzer and Edwards (2003): Simple tools for understanding risks",
+          "url": "https://doi.org/10.1136/bmj.327.7417.741"
         }
       ]
     },

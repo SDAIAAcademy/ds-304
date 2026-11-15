@@ -140,6 +140,17 @@ Each line is a capability; the examples are interchangeable.
 - [Moirai 2.0 small: model card (CC-BY-NC-4.0)](https://huggingface.co/Salesforce/moirai-2.0-R-small)
 - [Ansari and others: Chronos: Learning the Language of Time Series](https://arxiv.org/abs/2403.07815)
 - [Ansari and others: Chronos-2: From Univariate to Universal Forecasting](https://arxiv.org/abs/2510.15821)
+- [Das and others: A decoder-only foundation model for time-series forecasting (TimesFM)](https://arxiv.org/abs/2310.10688)
+- [Woo and others: Unified Training of Universal Time Series Forecasting Transformers (Moirai)](https://arxiv.org/abs/2402.02592)
+
+### Research on evaluation, combination and communication
+
+- [Bates and Granger (1969): The Combination of Forecasts](https://doi.org/10.1057/jors.1969.103)
+- [Kaufman, Rosset, Perlich and Stitelman (2012): Leakage in data mining](https://doi.org/10.1145/2382577.2382579)
+- [Wickramasuriya, Athanasopoulos and Hyndman (2019): Optimal forecast reconciliation through trace minimization](https://doi.org/10.1080/01621459.2018.1448825)
+- [Makridakis, Spiliotis and Assimakopoulos (2020): The M4 Competition](https://doi.org/10.1016/j.ijforecast.2019.04.014)
+- [Makridakis, Spiliotis and Assimakopoulos (2022): M5 accuracy competition](https://doi.org/10.1016/j.ijforecast.2021.11.013)
+- [Gigerenzer and Edwards (2003): Simple tools for understanding risks](https://doi.org/10.1136/bmj.327.7417.741)
 
 ### National references
 

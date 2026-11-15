@@ -6,7 +6,7 @@
 # A pretrained forecaster was trained on a large collection of other people's series. You give it the history
 # of a feeder it has never seen and it returns quantiles: no training on your data. You run a small one on the
 # feeders, time it, score it on the eight held-out weeks like any other method, and read the licences of four
-# model families.
+# models from three families.
 #
 # **Where to run it.** In Google Colab: the cell below installs the package and the weights (about nine
 # million parameters) download into the Colab runtime. Nothing is downloaded to your laptop. Outside Colab,
@@ -22,7 +22,7 @@
 # - [ ] 1 · Load the forecaster and forecast one feeder (5')
 # - [ ] 2 · Forecast the feeders zero-shot and time the run (6')
 # - [ ] 3 · Score point, quantile and coverage on the held-out weeks (6')
-# - [ ] 4 · Record the licence of four model families (5')
+# - [ ] 4 · Record the licence of four models from three families (5')
 # - [ ] 5 · Write the scorecard row (3')
 # - [ ] ✱ Stretch · Shorten the context to eight weeks and score again
 
@@ -175,7 +175,7 @@ U.check(np.isfinite(sc["mase"]) and 0 <= sc["cover80"] <= 1, "scaled error, pinb
 # ## 4 · Licences (5')
 #
 # Weights you can download are not weights you may use for anything. The model card states the licence.
-# `data/model_cards.json` records four families as read from their cards on the date in the file.
+# `data/model_cards.json` records four models of three families as read from their cards on the date in the file.
 #
 # ✏️ **Exercise** · Shams Power is a company and would use the forecasts in its operations. Return True when
 # a licence allows that. Among these four cards the licences are `apache-2.0` (permissive: commercial use

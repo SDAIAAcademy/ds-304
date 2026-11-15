@@ -1,6 +1,6 @@
 {
  "decision": "Daily energy demand of Al-Rimal for 01 January 2026 to 28 January 2026, for the weekly purchase nomination of energy purchasing and the reserve decision of load planning.",
- "forecast": "The middle forecast runs between 2,257 and 2,554 MWh a day. For purchasing at the 9-in-10 level, plan for up to 3,025 MWh on the highest day, 25 January.",
+ "forecast": "The middle forecast runs between 2,257 and 2,554 MWh a day. The upper edge of the dark band, under which demand is expected on 9 days in 10, reaches 3,025 MWh on the highest day, 25 January.",
  "uncertainty": "The dark band is where demand is expected on 8 days in 10, the light band on 19 in 20. The dark band is about 525 MWh wide in the first week and 869 MWh in the fourth. In the 2025 backtest the dark band held on 78 of 100 days and the light band on 95 of 100.",
  "evidence": "Tested on every day of 2025, 28 days ahead: scaled error 0.77 against 1.06 for repeating the same weekday of last year, 28% better.",
  "limits": "Do not use it for a single feeder, for hours within the day, or beyond 28 days. It assumes ordinary weather around the seasonal normal: in a declared heat wave or dust storm, ask for a rerun. It knows the announced calendar: if a holiday date moves, ask for a rerun. Outages are not forecast.",

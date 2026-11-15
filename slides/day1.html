@@ -137,7 +137,7 @@ target_quantile(2.0, 0.5)   # Omar: 0.8</code></pre>
     <ul class="bullets small">
       <li>Regional meter data reaches the desk <b>two days late</b>.</li>
       <li>The origin is the last day the model has seen, not the day the forecast is sent.</li>
-      <li>A delay costs most at short horizons: from 1 day to 3 days the change doubles.</li>
+      <li>A delay costs most at short horizons: tomorrow becomes step 3, and the change after 2 steps is already 6.2%, against 4.3% after 1.</li>
     </ul>
   </div>
   <aside class="notes"><p>The table is from Lab 1.1 step 4: the mean absolute change of Al-Rimal's demand after h days, as a share of mean demand. It is a rough measure of how fast today's value stops describing the future. For the labs we keep the origin as the last day of data and a horizon of 28; in the capstone, participants must state the delay of their own data.</p></aside>
@@ -498,7 +498,7 @@ def seasonal_naive(train, h, m):
     <tr class="hl"><td>Same weekday last year (m = 364)</td><td class="num">1.06</td><td class="num">0.92</td><td class="num">0.96</td><td class="num">1.08</td><td class="num">1.28</td></tr>
   </table>
   <div class="callout tip small mt-s"><b>Report by horizon.</b> One average hides that "last week" is close in week 1 and twice as bad in week 4.</div>
-  <aside class="notes"><p>This table is LO1's evidence: scaled errors by horizon. Read it by column, then by row. "Last week" loses because the temperature four weeks ahead is closer to the same weeks last year than to last week. Note that the floor's own error also grows over the horizon, from 0.92 to 1.28: last year's values are shifted by a level estimated at the origin in better methods, which is where Day 2 starts.</p></aside>
+  <aside class="notes"><p>This table is LO1's evidence: scaled errors by horizon. Read it by column, then by row. "Last week" loses because the temperature four weeks ahead is closer to the same weeks last year than to last week. Note that the floor's error also differs by week, from 0.92 to 1.28, although "the same weekday last year" does not age with the horizon: each week of the horizon covers other calendar days, and the four weeks differ in how far this year has moved from last year. Methods that see the temperature and the level at the origin are where Day 2 starts.</p></aside>
 </section>
 
 <section class="slide" data-label="Where it fails" id="where-the-floor-fails" data-lo="LO1">

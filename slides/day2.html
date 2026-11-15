@@ -441,7 +441,7 @@ pinball([10], [12], 0.9)   # 0.2</code></pre>
       <li>Averaged over several quantiles it scores the whole forecast distribution.</li>
     </ul>
   </div>
-  <aside class="notes"><p>Pinball loss is also called quantile loss. It rewards a quantile that is both calibrated and sharp: a very wide interval has perfect coverage and a poor pinball loss. That is why the course reports both. In the scorecard of Day 3 pinball loss is averaged over the five quantiles and divided by the same scale as the point error.</p><p>Sources: Forecasting: Principles and Practice, 3rd edition, evaluating distributional forecast accuracy.</p></aside>
+  <aside class="notes"><p>Pinball loss is also called quantile loss. It rewards a quantile that is both calibrated and sharp: a very wide interval has perfect coverage and a poor pinball loss. That is why the course reports both. On Days 2 and 4 pinball loss is averaged over five quantiles; on Day 3 over three (0.1, 0.5, 0.9), because the pretrained model delivers nothing further out. Either way it is divided by the same scale as the point error.</p><p>Sources: Forecasting: Principles and Practice, 3rd edition, evaluating distributional forecast accuracy.</p></aside>
 </section>
 
 <section class="slide" data-label="Ranking changes" id="pinball-changes-the-ranking" data-lo="LO2 LO3">

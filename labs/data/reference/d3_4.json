@@ -2,8 +2,8 @@
  "card": {
   "floor: same weekday last year": {
    "mase": 0.753,
-   "pinball": NaN,
-   "cover80": NaN,
+   "pinball": null,
+   "cover80": null,
    "seconds": 0.0,
    "fits": 776,
    "measured": true,

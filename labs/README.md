@@ -44,5 +44,6 @@ The notebooks are generated from the percent-format sources in `labs/_src/` by `
 - Every lab runs on a laptop processor or on a free Colab runtime. No lab calls a language model and none needs an API key.
 - `SHAMS_QUICK=1` runs every notebook with fewer folds and regions, for a fast check that the code works. The numbers in the slides and in the answer key come from full runs.
 - **Lab 3.3** uses a small open-weight pretrained forecaster. In Colab its setup cell installs the package and the weights load into the Colab runtime. Anywhere the package is absent, a stand-in answers and labels every output `STAND-IN`: its numbers are not a pretrained model's result and are left out of the scorecard of Lab 3.4 and the comparison of Lab 4.2.
+- Locally the labs use Python 3.12 (the file `.python-version`; `uv sync` installs it). The statsforecast version in `uv.lock` (2.0.1) has no prebuilt package for Python 3.13, and building it from source needs a C++ compiler.
 - On Windows, keep the repository in a short path and run `git config core.longpaths true` before cloning into a deep folder.
 - Lab outputs are written to `labs/out/`, which is not committed.

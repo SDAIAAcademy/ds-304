@@ -2,7 +2,7 @@
 name = "forecasting-labs"
 version = "2027.1.0"
 description = "Lab notebooks for the SDAIA Academy course Forecasting and Time Series"
-requires-python = ">=3.11,<3.14"
+requires-python = ">=3.11,<3.13"
 dependencies = [
     "numpy>=2.0",
     "pandas>=2.2",
