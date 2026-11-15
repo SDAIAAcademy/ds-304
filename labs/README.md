@@ -25,3 +25,24 @@
 | Day 4 | Session 4 · Fan charts and forecast notes | [`D4_4_draw_fan_chart.ipynb`](https://colab.research.google.com/github/SDAIAAcademy/forecasting/blob/main/labs/D4_4_draw_fan_chart.ipynb) |
 
 The notebooks are generated from the percent-format sources in `labs/_src/` by `labs/_tools/py2nb.py` (`uv run python _tools/py2nb.py` from `labs/`), which also writes the solutions to `labs/solutions/`. Edit the sources, not the notebooks.
+
+## What else is in this folder
+
+| Path | What it is |
+|---|---|
+| `00_setup_check.ipynb` | Run once before Day 1: packages, data, one fitted model, one boosted model. |
+| `shams.py` | The course helper, imported as `U`: loading the data, the backtest, the scores, the plots. Read it; nothing in it is hidden. |
+| `prepare_data.py` | Writes every data file from a fixed seed. The files are committed, so participants do not run it. |
+| `data/` | Regions, feeders, the calendar, the three requests, and the model cards read for Lab 3.3. |
+| `data/reference/` | The reference state: the results each lab starts from, so that no lab depends on a participant's earlier run. |
+| `_tools/make_reference.py` | Writes the reference results that no single lab produces (about half an hour on a laptop). The other reference files are written by the solution runs with `SHAMS_WRITE_REF=1`. |
+| `capstone/` | The capstone brief and its two datasets. |
+| `solutions/` | The solution notebooks and `answer_key.md`, the trainer's key. |
+
+## Running the labs
+
+- Every lab runs on a laptop processor or on a free Colab runtime. No lab calls a language model and none needs an API key.
+- `SHAMS_QUICK=1` runs every notebook with fewer folds and regions, for a fast check that the code works. The numbers in the slides and in the answer key come from full runs.
+- **Lab 3.3** uses a small open-weight pretrained forecaster. In Colab its setup cell installs the package and the weights load into the Colab runtime. Anywhere the package is absent, a stand-in answers and labels every output `STAND-IN`: its numbers are not a pretrained model's result and are left out of the scorecard of Lab 3.4 and the comparison of Lab 4.2.
+- On Windows, keep the repository in a short path and run `git config core.longpaths true` before cloning into a deep folder.
+- Lab outputs are written to `labs/out/`, which is not committed.

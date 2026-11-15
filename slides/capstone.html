@@ -1,19 +1,20 @@
 <section class="slide title" id="title" data-auto="title">
-  <aside class="notes">Today is theirs: keep your own talking to the opening and the closing. Confirm the running order and the demo setup (screen sharing, accounts, a recorded backup) first.</aside>
+  <aside class="notes"><p>Today is theirs: keep your own talking to the opening and the closing. Before the first defence, confirm the running order, that every repository link opens, and that each presenter can share a screen and run their backtest from it.</p></aside>
 </section>
 
 <section class="slide" id="agenda" data-label="Agenda">
   <div class="kicker">Capstone</div>
-  <h2>How the presentations run</h2>
+  <h2>How the day runs</h2>
   <div class="agenda">
-    <div class="item now"><div><b>Expectations and final prep</b><small>the rubric, a last rehearsal, then the first presentations</small></div></div>
-    <div class="item"><div><b>Presentations</b><small>each one timed, with questions after it</small></div></div>
-    <div class="item"><div><b>Review and closing</b><small>peer feedback, the trainer's review, what next</small></div></div>
+    <div class="item now"><div><b>Expectations and final prep</b><small>the rubric, the format of the defence, a last run from a clean copy</small></div></div>
+    <div class="item"><div><b>Defences</b><small>eight minutes each, then four minutes of questions</small></div></div>
+    <div class="item"><div><b>Review and closing</b><small>peer feedback, the trainer's review, the follow-up task</small></div></div>
   </div>
+  <aside class="notes"><p>The defences are individual. With a full room, split into two parallel rooms with one assessor each and bring everyone together for the review.</p></aside>
 </section>
 
 <section class="slide" id="rubric" data-label="The rubric">
-  <div class="kicker">How presentations are scored</div>
+  <div class="kicker">How the work is scored</div>
   <h2>The rubric</h2>
   <div class="bars">
     <div class="row"><span>Framing and floor</span><div class="bar c-teal" style="--w:60%"></div><span class="val">15%</span></div>
@@ -22,77 +23,96 @@
     <div class="row"><span>Uncertainty and communication</span><div class="bar c-purple" style="--w:100%"></div><span class="val">25%</span></div>
     <div class="row"><span>Reproducibility</span><div class="bar c-amber" style="--w:40%"></div><span class="val">10%</span></div>
   </div>
-  <div class="callout tip mt"><b>Show results from at least two measured runs.</b> A claim without a number is a plan, not a result.</div>
-  <aside class="notes">Walk through each criterion with one example of what full marks look like.</aside>
+  <div class="callout tip mt"><b>Every claim is read against the floor.</b> A score without the floor beside it, or an interval without its measured coverage, earns nothing.</div>
+  <aside class="notes"><p>Full marks, criterion by criterion. Framing and floor: the decision, the horizon and the cost of each kind of error are stated, and the floor is the strongest naive method for the data. Methods: three families that differ in what they can see. Backtest design: rolling origins, an argument or a test that nothing after the origin is used, no selection on the test folds. Uncertainty and communication: coverage in counts, a note with limits. Reproducibility: runs from a clean copy, numbers traceable to files, licences stated.</p></aside>
 </section>
 
 <section class="slide" id="format" data-label="Format">
-  <div class="kicker">Format</div>
-  <h2>8 minutes for each presentation</h2>
-  <div class="cols cols-3">
-    <div class="card c-teal"><h4>1 · The problem</h4><p class="small mb0">Who, what, why now. One slide.</p></div>
-    <div class="card c-cyan"><h4>2 · What you built</h4><p class="small mb0">Design, decisions, trade-offs. Then the live demo.</p></div>
-    <div class="card c-coral"><h4>3 · What you measured</h4><p class="small mb0">Baseline, improvement, failures found, what comes next.</p></div>
+  <div class="kicker">Format of the defence</div>
+  <h2>Eight minutes to present, four minutes of questions</h2>
+  <div class="cols cols-4 gap-s">
+    <div class="card c-navy"><h4>1 · The decision</h4><p class="small mb0">Who reads the forecast, what they decide, the horizon, the floor.</p></div>
+    <div class="card c-teal"><h4>2 · What you built</h4><p class="small mb0">The backtest and three method families: what each can see.</p></div>
+    <div class="card c-cyan"><h4>3 · What you measured</h4><p class="small mb0">The scorecard: point and probabilistic accuracy against the floor.</p></div>
+    <div class="card c-coral"><h4>4 · The note</h4><p class="small mb0">The fan chart, coverage in counts, when not to use it.</p></div>
   </div>
-  <div class="callout note mt"><b>Peer feedback.</b> After each talk, everyone writes one strength, one question and one suggestion.</div>
+  <div class="callout note mt"><b>Peer feedback.</b> After each defence, everyone writes one strength, one question and one suggestion.</div>
+  <aside class="notes"><p>Two minutes for each part is a fair guide. Stop a presenter who spends four minutes on model internals: the rubric gives methods a quarter of the marks and the planner none of their attention.</p></aside>
+</section>
+
+<section class="slide" id="the-question" data-label="The question">
+  <div class="kicker">The four minutes of questions</div>
+  <h2>The assessor moves the origin or the horizon: predict, then show</h2>
+  <div class="cols cols-3">
+    <div class="card c-teal"><h4>The origin moves</h4><p class="small mb0">"Forecast from the day before the last holiday. What happens to the error and to the note?"</p></div>
+    <div class="card c-coral"><h4>The horizon moves</h4><p class="small mb0">"The planner needs twice the horizon. What changes in the features, the floor and the bands?"</p></div>
+    <div class="card c-purple"><h4>The history shrinks</h4><p class="small mb0">"This series is six weeks old. Which of your families still works?"</p></div>
+  </div>
+  <div class="callout tip mt"><b>First say what you expect and why. Then run it.</b> A prediction that turns out wrong and is explained scores above a run without a prediction.</div>
+  <aside class="notes"><p>This is the authenticity check of the course: the participant predicts the effect, then shows it from their own repository. Ask one question per participant and let them run the backtest live; a backtest written as a function of the origin and the horizon answers in under a minute. If the run cannot be made, ask for the reasoning and note it under reproducibility.</p></aside>
 </section>
 
 <section class="slide order" id="running-order" data-label="Running order">
   <div class="kicker">Running order</div>
   <h2>Who presents when</h2>
   <table class="t small">
-    <tr><th>#</th><th>Presenter</th><th>Project</th></tr>
-    <tr><td>1</td><td><input placeholder="name"></td><td><input placeholder="Project"></td></tr>
-    <tr><td>2</td><td><input placeholder="name"></td><td><input placeholder="Project"></td></tr>
-    <tr><td>3</td><td><input placeholder="name"></td><td><input placeholder="Project"></td></tr>
-    <tr><td>4</td><td><input placeholder="name"></td><td><input placeholder="Project"></td></tr>
-    <tr><td>5</td><td><input placeholder="name"></td><td><input placeholder="Project"></td></tr>
-    <tr><td>6</td><td><input placeholder="name"></td><td><input placeholder="Project"></td></tr>
-    <tr><td>7</td><td><input placeholder="name"></td><td><input placeholder="Project"></td></tr>
-    <tr><td>8</td><td><input placeholder="name"></td><td><input placeholder="Project"></td></tr>
+    <tr><th>#</th><th>Presenter</th><th>Dataset and decision</th></tr>
+    <tr><td>1</td><td><input placeholder="name"></td><td><input placeholder="dataset · decision"></td></tr>
+    <tr><td>2</td><td><input placeholder="name"></td><td><input placeholder="dataset · decision"></td></tr>
+    <tr><td>3</td><td><input placeholder="name"></td><td><input placeholder="dataset · decision"></td></tr>
+    <tr><td>4</td><td><input placeholder="name"></td><td><input placeholder="dataset · decision"></td></tr>
+    <tr><td>5</td><td><input placeholder="name"></td><td><input placeholder="dataset · decision"></td></tr>
+    <tr><td>6</td><td><input placeholder="name"></td><td><input placeholder="dataset · decision"></td></tr>
+    <tr><td>7</td><td><input placeholder="name"></td><td><input placeholder="dataset · decision"></td></tr>
+    <tr><td>8</td><td><input placeholder="name"></td><td><input placeholder="dataset · decision"></td></tr>
   </table>
-  <aside class="notes">Type the names in at the start; the fields can be edited live and are not saved, so keep the list in your notes too.</aside>
+  <aside class="notes"><p>Type the names in at the start; the fields can be edited live and are not saved, so keep the list in your notes too. The dataset and decision come from step 5 of Lab 4.4.</p></aside>
 </section>
 
-<section class="slide dark" id="final-prep" data-label="Before the first presentation">
-  <div class="kicker">Before the first presentation</div>
+<section class="slide dark" id="final-prep" data-label="Before the first defence">
+  <div class="kicker">Before the first defence</div>
   <h1>Final prep · 20 minutes</h1>
   <div class="timer" data-minutes="20"></div>
-  <p class="lead">Rehearse once, record a backup, try the demo on this screen.</p>
-  <aside class="notes">Press T to start the timer. Breaks are not slides: press B when the room needs one.</aside>
+  <p class="lead">Run your analysis once from a clean copy. Open the note. Try one other origin.</p>
+  <aside class="notes"><p>Press T to start the timer. Breaks are not slides: press B when the room needs one. Walk the room and check that each repository is public and that its README shows the table of results.</p></aside>
 </section>
 
 <section class="slide dark presenting" id="now-presenting" data-label="Now presenting">
   <div class="kicker center">Now presenting</div>
-  <div class="center"><input placeholder="Presenter · project"></div>
+  <div class="center"><input placeholder="Presenter · dataset"></div>
   <div class="timers mt">
-    <div><h3>Talk and demo</h3><div class="timer" data-minutes="8"></div></div>
+    <div><h3>Defence</h3><div class="timer" data-minutes="8"></div></div>
+    <div><h3>Questions</h3><div class="timer" data-minutes="4"></div></div>
   </div>
-  <aside class="notes">Type the presenter's name and press T to start the timer. Reuse this slide for every presenter.</aside>
+  <aside class="notes"><p>Type the presenter's name and press T to start the timer. Reuse this slide for every presenter. Score the rubric during the defence and the live question straight after it, before the next presenter starts.</p></aside>
 </section>
 
 <section class="slide" id="review" data-label="Trainer review">
   <div class="kicker">Trainer review</div>
-  <h2>What the presentations showed</h2>
+  <h2>What the defences showed</h2>
   <div class="cols cols-3">
-    <div class="card c-teal"><h4>Strongest patterns</h4><p class="small mb0">What several projects got right.</p></div>
-    <div class="card c-coral"><h4>Common gaps</h4><p class="small mb0">What most projects would fix next.</p></div>
-    <div class="card c-purple"><h4>One surprise</h4><p class="small mb0">Something nobody expected.</p></div>
+    <div class="card c-teal"><h4>Strongest patterns</h4><p class="small mb0">What several analyses got right: floors, backtests, notes.</p></div>
+    <div class="card c-coral"><h4>Common gaps</h4><p class="small mb0">What most would fix next. Usual ones: coverage never measured, a choice made on the test folds.</p></div>
+    <div class="card c-purple"><h4>One surprise</h4><p class="small mb0">A result nobody expected, and what explained it.</p></div>
   </div>
-  <aside class="notes">Fill these in from your scoring notes during the last break. Name projects for strengths; keep gaps anonymous.</aside>
+  <aside class="notes"><p>Fill these in from your scoring notes during the last break. Name analyses for strengths; keep gaps anonymous. If a floor won somewhere, say so with respect: reporting that honestly is full marks for framing.</p></aside>
 </section>
 
 <section class="slide" id="what-next" data-label="After the course">
   <div class="kicker">After the course</div>
   <h2>Keep going</h2>
   <ul class="bullets">
-    <li><b>Your project stays yours:</b> keep it reproducible and add the next improvement you named today</li>
-    <li><b>Next Academy course:</b> REPLACE: the course that follows this one</li>
+    <li><b>The follow-up task:</b> backtest one forecast from your workplace, or a public one, against a seasonal-naive floor, and send the table.</li>
+    <li><b>Your repository stays yours:</b> keep it running from a clean copy and add the next family you named today.</li>
+    <li><b>At work:</b> archive what was known on each origin day, starting now. An honest backtest next year depends on it.</li>
+    <li><b>Read on:</b> Forecasting: Principles and Practice, chapters 11 and 13, for weighted reconciliation and practical issues.</li>
   </ul>
+  <aside class="notes"><p>The follow-up task is tracked: say how and by when the table is sent, as your delivery team has set it. If the forecast is from the workplace, remind participants that the data stay inside their entity: the table of scores is what is shared, never the series.</p><p>Source: Hyndman and Athanasopoulos, Forecasting: Principles and Practice, 3rd edition.</p></aside>
 </section>
 
 <section class="slide dark" id="thanks" data-label="Thank you">
   <div class="kicker">SDAIA Academy</div>
   <h1>Thank you</h1>
   <p class="lead">Forecasting and Time Series</p>
+  <aside class="notes"><p>Thank the room, and thank the participants who showed a floor that won or a fault they found in their own backtest: that is the habit the course is for.</p></aside>
 </section>
