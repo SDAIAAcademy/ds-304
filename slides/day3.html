@@ -388,7 +388,7 @@ print(info["model"], info["seconds"])</code></pre>
     <div class="card c-coral"><h4>Upkeep</h4><p class="small mb0">What must be kept working: fits, a feature pipeline, a pinned model.</p></div>
     <div class="card c-purple"><h4>Licence</h4><p class="small mb0">Of the software and of the weights, with the date it was read.</p></div>
   </div>
-  <div class="callout note mt"><b>The question of this session.</b> Which family would you run every week for a year, and what would make you change your mind?</div>
+  <div class="callout note mt"><b>This session's question.</b> Which family would you run weekly for a year, and what would change your mind?</div>
   <aside class="notes"><p>Five families, the same 388 feeders and eight weeks. A method nobody can keep running has an accuracy of nothing: the scorecard puts costs beside scores so the choice can be argued and revisited.</p></aside>
 </section>
 
@@ -479,7 +479,7 @@ print(info["model"], info["seconds"])</code></pre>
     <div class="step c-coral"><b>Pair by origin</b>its error less that of a model trained the same week</div>
   </div>
   <div class="callout note mt"><b>Why pair.</b> Old models forecast late in the year, new ones early. Comparing on the same origins removes the season from the gap.</div>
-  <aside class="notes"><p>Every backtest so far trained once and forecast. In operation the desk forecasts every week and must decide how often to train again: every run, every month, every quarter, or once. More training costs run time and a job to keep working; less training risks a model that has gone stale. The script labs/_tools/retrain_schedules.py replays this for the boosted model of Lab 3.2, with the same recipe, on all 388 feeders. The model it trains on 5 November reproduces Lab 3.2's two folds exactly.</p></aside>
+  <aside class="notes"><p>The regional backtests of Days 1 and 2 refit at every origin; the boosted model of Lab 3.2 was trained once and served both folds. In operation the desk forecasts every week and must decide how often to train again: every run, every month, every quarter, or once. More training costs run time and a job to keep working; less training risks a model that has gone stale. The script labs/_tools/retrain_schedules.py replays this for the boosted model of Lab 3.2, with the same recipe, on all 388 feeders. The model it trains on 5 November reproduces Lab 3.2's two folds exactly.</p></aside>
 </section>
 
 <section class="slide" data-label="Schedules" id="retraining-schedules" data-lo="LO3">
@@ -493,7 +493,7 @@ print(info["model"], info["seconds"])</code></pre>
     <tr><td>Once, in January</td><td class="num">1</td><td class="num">0.797</td><td class="num">0.068</td></tr>
   </table>
   <div class="callout tip small mt-s"><b>Read it against the noise.</b> Across origins the weekly model's error has a standard deviation of 0.20; the four schedules' errors differ by at most 0.004.</div>
-  <aside class="notes"><p>Choose: every 13 weeks. It matches the weekly error with a twelfth of the trainings, at 4.3 seconds each, and its worst week is smaller than the once-a-year model's. Weekly retraining is not wrong here, only paid for without a return. Ask the room what in their own data would make a model age faster before showing the next slide.</p><p>Source: labs/data/reference/retrain_schedules.json, written by labs/_tools/retrain_schedules.py.</p></aside>
+  <aside class="notes"><p>The replay does not separate the schedules: every difference, worst weeks included, is inside the noise. Weekly retraining is not wrong here, only paid for without a return. One defensible choice: every 13 weeks, four trainings of 4.3 seconds a year, as cheap insurance against a change this year did not have, together with the watch rule of the next slide. Ask the room what in their own data would make a model age faster before showing the next slide.</p><p>Source: labs/data/reference/retrain_schedules.json, written by labs/_tools/retrain_schedules.py.</p></aside>
 </section>
 
 <section class="slide" data-label="Going stale" id="when-models-go-stale" data-lo="LO3">
@@ -507,7 +507,7 @@ print(info["model"], info["seconds"])</code></pre>
     <tr><td>26 weeks or more</td><td class="num">-0.013</td><td class="num">1.957</td></tr>
   </table>
   <div class="callout warn small mt-s"><b>The rule.</b> Measure the gap by age before choosing a schedule, then keep watching it: retrain early when the live error leaves the band of the backtest.</div>
-  <aside class="notes"><p>Left: the model of the last slide. Every feature, and the level the forecast is multiplied by, is recomputed from the 28 days before each origin, so age costs nothing measurable. Right: the same trained models, but each feeder's level kept from the training day, as a regression that learns its level when it is fitted would keep it. Within a month the gap is 0.175; from 4 weeks on it is larger than the fresh model's whole error of 0.801. Kept that way, retraining every 4 weeks would cost 0.136 against weekly, and once a year 1.972. How often to retrain depends on the model's inputs, not on its family. The gap shrinks after 26 weeks only because the season turns back towards the level the model was trained on.</p><p>Source: labs/data/reference/retrain_schedules.json, written by labs/_tools/retrain_schedules.py.</p></aside>
+  <aside class="notes"><p>Left: the model of the last slide. Every feature, and the level the forecast is multiplied by, is recomputed from the 28 days before each origin, so age costs nothing measurable. Right: the same forecasts, multiplied by each feeder's level on the training day instead of on the origin. That is what any model does that fixes its level when it is fitted and is not given the recent level as an input. Most of this gap is the season: a level read in winter is applied to summer. Within a month the gap is 0.175; from 4 weeks on it is larger than the fresh model's whole error of 0.801. Kept that way, retraining every 4 weeks would cost 0.136 against weekly, and once a year 1.972. How often to retrain depends on the model's inputs, not on its family. The gap shrinks after 26 weeks only because the season turns back towards the level the model was trained on.</p><p>Source: labs/data/reference/retrain_schedules.json, written by labs/_tools/retrain_schedules.py.</p></aside>
 </section>
 
 <section class="slide" id="check-scorecard-choice" data-lo="LO3">

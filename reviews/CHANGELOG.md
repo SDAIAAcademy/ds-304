@@ -6,4 +6,4 @@
 - Added: `labs/_tools/retrain_schedules.py`, which replays the boosted model of Lab 3.2 over 48 weekly origins of 2025 under four schedules, and its result `labs/data/reference/retrain_schedules.json`.
 - Added: a stretch exercise in Lab 3.2, retraining at the second origin and comparing the second fold, with its reference solution and check.
 - Added: practice question `q-retraining-schedule-01`.
-- Tightened: the notes of `accuracy-is-one-column` and `run-time-upkeep-licence` (day 3).
+- Tightened: the callout and notes of `accuracy-is-one-column` and the notes of `run-time-upkeep-licence` (day 3).
