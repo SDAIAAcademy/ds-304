@@ -1,7 +1,7 @@
 ---
 course: "Forecasting and Time Series"
 code: "DS-304"
-version: "2027.1.0"
+version: "2027.2.0"
 language: "en"
 view: "trainee"
 source: "https://sdaiaacademy.github.io/ds-304/index.html"
@@ -100,6 +100,7 @@ Slides: https://sdaiaacademy.github.io/ds-304/slides/day3.md
   - Compute skill against the floor for every method
   - Weigh accuracy against run time, upkeep and licence
   - Defend the simplest method within noise of the best
+  - Compare how forecast error grows under different retraining schedules and choose one
   - [Lab 3.4: The scorecard (25 min)](https://sdaiaacademy.github.io/ds-304/labs/D3_4_fill_scorecard_accuracy.ipynb)
 
 ### Day 4: Review and communicate
@@ -216,4 +217,4 @@ A forecasting analysis on a supplied or public dataset with three method familie
 
 SDAIA Academy · Data Science Track · Forecasting and Time Series
 
-Course version 2027.1.0 · engine 1.0.0 · built 2026-11-15 · commit 7561300
+Course version 2027.2.0 · engine 1.0.0 · built 2026-11-24 · commit 6daea74

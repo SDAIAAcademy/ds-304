@@ -1,7 +1,7 @@
 ---
 course: "Forecasting and Time Series"
 code: "DS-304"
-version: "2027.1.0"
+version: "2027.2.0"
 scope: "course"
 language: "en"
 view: "trainee"
@@ -1506,6 +1506,7 @@ Run a small pretrained forecaster zero-shot on the feeders, time it, score it on
 - Compute skill against the floor for every method
 - Weigh accuracy against run time, upkeep and licence
 - Defend the simplest method within noise of the best
+- Compare how forecast error grows under different retraining schedules and choose one
 
 #### [day3#accuracy-is-one-column] Accuracy is one column of the decision
 
@@ -1516,7 +1517,7 @@ Run a small pretrained forecaster zero-shot on the feeders, time it, score it on
 - **Upkeep.** What must be kept working: fits, a feature pipeline, a pinned model.
 - **Licence.** Of the software and of the weights, with the date it was read.
 
-> **The question of this session.** Which family would you run every week for a year, and what would make you change your mind?
+> **This session's question.** Which family would you run weekly for a year, and what would change your mind?
 
 #### [day3#skill-against-the-floor] 388 fitted models can lose to a table lookup
 
@@ -1583,6 +1584,42 @@ Run a small pretrained forecaster zero-shot on the feeders, time it, score it on
   - **Simplest within noise:** is a simpler method inside the fold-to-fold spread of the winner?
   - **Would change it:** one result or one change of terms.
 - **One defensible answer.** The desk runs one method for both readers: the boosted model, ahead of the floor in both folds by more than a tenth, with the floor kept as the fallback. If operations were the only reader, the floor would stay.
+
+#### [day3#model-age] A model ages from the day it is trained: measure what each week of age costs
+
+*Running it for a year*
+
+1. **Replay a year** 48 weekly origins of 2025; a model trained at every one
+2. **Apply a schedule** each origin is forecast by the newest model the schedule allows
+3. **Pair by origin** its error less that of a model trained the same week
+
+> **Why pair.** Old models forecast late in the year, new ones early. Comparing on the same origins removes the season from the gap.
+
+#### [day3#retraining-schedules] Retraining every week bought nothing this model needed
+
+*Four schedules · 388 feeders · 48 weekly origins of 2025*
+
+| Schedule | Trainings a year | Scaled error | Worst weekly gap to a fresh model |
+| --- | --- | --- | --- |
+| Every week | 48 | 0.801 | 0 |
+| Every 4 weeks | 12 | 0.801 | 0.065 |
+| Every 13 weeks | 4 | 0.799 | 0.037 |
+| Once, in January | 1 | 0.797 | 0.068 |
+
+> **Read it against the noise.** Across origins the weekly model's error has a standard deviation of 0.20; the four schedules' errors differ by at most 0.004.
+
+#### [day3#when-models-go-stale] How fast a model ages depends on what it reads at the origin
+
+*Same models, two ways to rescale · gap to a model trained that week*
+
+| Age of the model | Level read at the origin | Level kept from training |
+| --- | --- | --- |
+| 1 to 3 weeks | -0.001 | 0.175 |
+| 4 to 12 weeks | -0.005 | 1.235 |
+| 13 to 25 weeks | -0.007 | 2.724 |
+| 26 weeks or more | -0.013 | 1.957 |
+
+> **The rule.** Measure the gap by age before choosing a schedule, then keep watching it: retrain early when the live error leaves the band of the backtest.
 
 #### [day3#check-scorecard-choice] Which choice can be defended?
 

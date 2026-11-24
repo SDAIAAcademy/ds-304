@@ -6,7 +6,7 @@
     "code": "DS-304",
     "title": "Forecasting and Time Series",
     "lang": "en",
-    "version": "2027.1.0"
+    "version": "2027.2.0"
   },
   "questions": [
     {
@@ -1316,6 +1316,37 @@
       "session": 3,
       "slide": "read-the-model-card",
       "level": "analyze",
+      "pool": "practice",
+      "weight": 1,
+      "timer": 30
+    },
+    {
+      "id": "q-retraining-schedule-01",
+      "type": "single",
+      "prompt": "A global model forecasts the industrial feeders 28 days ahead every week. A replay of one year, scored on the same 48 origins: retrained weekly (48 trainings) 0.719; every 4 weeks (12) 0.720; every 13 weeks (4) 0.719; once (1) 0.719. The worst single week against a model trained that week: 0.032 every 4 weeks, 0.032 every 13 weeks, 0.114 once. The planner accepts no week more than 0.05 worse than a fresh model. Which schedule is the defensible choice?",
+      "options": [
+        "Every week, because the newest model has seen the most recent data",
+        "Every 13 weeks, because it meets the limit with fewest trainings",
+        "Once, because its yearly error equals that of every other schedule",
+        "Every 4 weeks, because monthly retraining is the usual practice"
+      ],
+      "correct": [
+        1
+      ],
+      "explanation": "Mean errors that differ by 0.001 are a tie. Of the schedules whose worst week stays within the planner's 0.05, every 13 weeks needs the fewest trainings; the once-a-year model has one week 0.114 worse than a fresh model.",
+      "misconceptions": [
+        "Assumes fresher is always better: 48 trainings bought no lower error in this replay",
+        "",
+        "Reads the yearly mean only: one week of the frozen model breaks the planner's limit",
+        "Follows a habit instead of the replay: the same worst week costs three times the trainings"
+      ],
+      "lo": [
+        "LO3"
+      ],
+      "day": 3,
+      "session": 4,
+      "slide": "retraining-schedules",
+      "level": "evaluate",
       "pool": "practice",
       "weight": 1,
       "timer": 30

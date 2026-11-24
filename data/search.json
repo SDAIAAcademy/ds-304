@@ -2,9 +2,9 @@
   "v": 1,
   "engine": "1.0.0",
   "build": {
-    "at": "2026-11-15T03:25:22Z",
-    "version": "2027.1.0",
-    "commit": "7561300"
+    "at": "2026-11-24T17:56:03Z",
+    "version": "2027.2.0",
+    "commit": "6daea74"
   },
   "lang": "en",
   "dir": "ltr",
@@ -1086,7 +1086,7 @@
       "n": 33,
       "session": 4,
       "title": "Choosing among families",
-      "text": "Session 4 Choosing among families Compute skill against the floor for every method Weigh accuracy against run time, upkeep and licence Defend the simplest method within noise of the best 04",
+      "text": "Session 4 Choosing among families Compute skill against the floor for every method Weigh accuracy against run time, upkeep and licence Defend the simplest method within noise of the best Compare how forecast error grows under different retraining schedules and choose one 04",
       "href": "../slides/day3.html#s4"
     },
     {
@@ -1095,7 +1095,7 @@
       "n": 34,
       "session": 4,
       "title": "Accuracy is one column of the decision",
-      "text": "Choosing among families Accuracy is one column of the decision Accuracy Skill against the floor, pinball loss, coverage. On the same series and days. Run time Seconds per 1,000 forecasts. Every week, for 400 feeders. Upkeep What must be kept working: fits, a feature pipeline, a pinned model. Licence Of the software and of the weights, with the date it was read. The question of this session. Which family would you run every week for a year, and what would make you change your mind?",
+      "text": "Choosing among families Accuracy is one column of the decision Accuracy Skill against the floor, pinball loss, coverage. On the same series and days. Run time Seconds per 1,000 forecasts. Every week, for 400 feeders. Upkeep What must be kept working: fits, a feature pipeline, a pinned model. Licence Of the software and of the weights, with the date it was read. This session's question. Which family would you run weekly for a year, and what would change your mind?",
       "href": "../slides/day3.html#accuracy-is-one-column"
     },
     {
@@ -1145,8 +1145,35 @@
     },
     {
       "deck": "day3",
-      "id": "check-scorecard-choice",
+      "id": "model-age",
       "n": 40,
+      "session": 4,
+      "title": "A model ages from the day it is trained: measure what each week of age costs",
+      "text": "Running it for a year A model ages from the day it is trained: measure what each week of age costs Replay a year 48 weekly origins of 2025; a model trained at every one → Apply a schedule each origin is forecast by the newest model the schedule allows → Pair by origin its error less that of a model trained the same week Why pair. Old models forecast late in the year, new ones early. Comparing on the same origins removes the season from the gap.",
+      "href": "../slides/day3.html#model-age"
+    },
+    {
+      "deck": "day3",
+      "id": "retraining-schedules",
+      "n": 41,
+      "session": 4,
+      "title": "Retraining every week bought nothing this model needed",
+      "text": "Four schedules · 388 feeders · 48 weekly origins of 2025 Retraining every week bought nothing this model needed Schedule Trainings a year Scaled error Worst weekly gap to a fresh model Every week 48 0.801 0 Every 4 weeks 12 0.801 0.065 Every 13 weeks 4 0.799 0.037 Once, in January 1 0.797 0.068 Read it against the noise. Across origins the weekly model's error has a standard deviation of 0.20; the four schedules' errors differ by at most 0.004.",
+      "href": "../slides/day3.html#retraining-schedules"
+    },
+    {
+      "deck": "day3",
+      "id": "when-models-go-stale",
+      "n": 42,
+      "session": 4,
+      "title": "How fast a model ages depends on what it reads at the origin",
+      "text": "Same models, two ways to rescale · gap to a model trained that week How fast a model ages depends on what it reads at the origin Age of the model Level read at the origin Level kept from training 1 to 3 weeks -0.001 0.175 4 to 12 weeks -0.005 1.235 13 to 25 weeks -0.007 2.724 26 weeks or more -0.013 1.957 The rule. Measure the gap by age before choosing a schedule, then keep watching it: retrain early when the live error leaves the band of the backtest.",
+      "href": "../slides/day3.html#when-models-go-stale"
+    },
+    {
+      "deck": "day3",
+      "id": "check-scorecard-choice",
+      "n": 43,
       "session": 4,
       "title": "Which choice can be defended?",
       "text": "Checkpoint Which choice can be defended? Skill against the floor on 200 series: X 0.21, Y 0.20, Z 0.05. X is a pretrained model under a non-commercial licence. Y is a boosted model under a permissive licence. Z is the fastest. The forecasts will run a utility's weekly purchasing. Which family? X: it has the highest skill Z: it is the fastest of the three Y: within 0.01 of the best, and its licence permits the use X now, and ask about the licence after the pilot",
@@ -1155,7 +1182,7 @@
     {
       "deck": "day3",
       "id": "lab-3-4",
-      "n": 41,
+      "n": 44,
       "session": 4,
       "title": "The scorecard",
       "text": "Lab 3.4 · 25 min The scorecard Fill a scorecard of accuracy, cost and licence for five method families from the measured results, rank them under two planners' weightings and write the choice. D3_4_fill_scorecard_accuracy.ipynb Load the measured results of five methods 3 min Compute skill against the floor 5 min Add run time, upkeep and licence 5 min Rank under two planners' weightings 7 min Write the choice and what would change it 5 min ✱ Stretch: Change one weight until the ranking flips, and say what that weight would mean",
@@ -1164,7 +1191,7 @@
     {
       "deck": "day3",
       "id": "wrap-up",
-      "n": 42,
+      "n": 45,
       "session": 4,
       "title": "Three things to keep",
       "text": "Day 3 · wrap-up Three things to keep Coherent, then better Reconciling passed the regional model's knowledge to the feeders: 0.72 to 0.65 in Al-Dana. It helped in 8 regions of 12, where the trusted level was the better one. One model, many series One boosted model on features known at the origin: skill 0.17 on 388 feeders. Split by the date of the target. A baseline and a gate A pretrained forecaster is one more row, scored like the others. Its licence is read before its score.",
@@ -1173,7 +1200,7 @@
     {
       "deck": "day3",
       "id": "next",
-      "n": 43,
+      "n": 46,
       "session": 4,
       "title": "Day 4: Review and communicate",
       "text": "Next Day 4: Review and communicate A backtest with a score that is too good and three faults to find. Twelve feeders with eight weeks of history. Whether an average of methods beats the best one, chosen honestly. And the fan chart and note that a planner reads. The capstone dataset is chosen in the last lab.",

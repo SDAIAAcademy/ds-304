@@ -36,6 +36,7 @@ The notebooks are generated from the percent-format sources in `labs/_src/` by `
 | `data/` | Regions, feeders, the calendar, the three requests, and the model cards read for Lab 3.3. |
 | `data/reference/` | The reference state: the results each lab starts from, so that no lab depends on a participant's earlier run. |
 | `_tools/make_reference.py` | Writes the reference results that no single lab produces (about half an hour on a laptop). The other reference files are written by the solution runs with `SHAMS_WRITE_REF=1`. |
+| `_tools/retrain_schedules.py` | The boosted model of Lab 3.2 retrained on four schedules over 48 weekly origins of 2025: how the error grows with the age of the model. Writes `data/reference/retrain_schedules.json`, which the Day 3 slides on retraining quote (about a quarter of an hour on a laptop). |
 | `capstone/` | The capstone brief and its two datasets. |
 | `solutions/` | The solution notebooks and `answer_key.md`, the trainer's key. |
 

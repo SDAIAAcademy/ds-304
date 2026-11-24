@@ -2,9 +2,9 @@
   "v": 1,
   "engine": "1.0.0",
   "build": {
-    "at": "2026-11-15T03:25:22Z",
-    "version": "2027.1.0",
-    "commit": "7561300"
+    "at": "2026-11-24T17:56:03Z",
+    "version": "2027.2.0",
+    "commit": "6daea74"
   },
   "lang": "en",
   "dir": "ltr",
@@ -15,7 +15,7 @@
   "course": {
     "id": "ds-304",
     "code": "DS-304",
-    "version": "2027.1.0",
+    "version": "2027.2.0",
     "title": "Forecasting and Time Series",
     "tagline": "Forecast daily demand with a backtest behind every number, and hand the planner a fan chart they can act on",
     "description": "Participants forecast with the discipline of a backtest. On synthetic daily electricity demand from Shams Power, a fictional distributor with 12 regions and 400 feeders, they decompose series, set a seasonal-naive benchmark floor, fit exponential smoothing and ARIMA-family models with weather and Hijri holidays, train one boosted model across many series, reconcile feeder and regional forecasts and run pretrained zero-shot forecasters as baselines. Every method is scored by rolling-origin cross-validation with point and probabilistic measures and reaches the planner as a fan chart.",
@@ -632,7 +632,8 @@
             "outcomes": [
               "Compute skill against the floor for every method",
               "Weigh accuracy against run time, upkeep and licence",
-              "Defend the simplest method within noise of the best"
+              "Defend the simplest method within noise of the best",
+              "Compare how forecast error grows under different retraining schedules and choose one"
             ],
             "lo": [
               "LO3"
