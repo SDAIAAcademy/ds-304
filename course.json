@@ -3,7 +3,7 @@
   "engine": "1",
   "id": "ds-304",
   "code": "DS-304",
-  "version": "2027.1.0",
+  "version": "2027.2.0",
   "lang": "en",
   "title": {
     "en": "Forecasting and Time Series",
@@ -567,7 +567,8 @@
           "outcomes": [
             "Compute skill against the floor for every method",
             "Weigh accuracy against run time, upkeep and licence",
-            "Defend the simplest method within noise of the best"
+            "Defend the simplest method within noise of the best",
+            "Compare how forecast error grows under different retraining schedules and choose one"
           ],
           "lo": [
             "LO3"

@@ -389,7 +389,7 @@ print(info["model"], info["seconds"])</code></pre>
     <div class="card c-purple"><h4>Licence</h4><p class="small mb0">Of the software and of the weights, with the date it was read.</p></div>
   </div>
   <div class="callout note mt"><b>The question of this session.</b> Which family would you run every week for a year, and what would make you change your mind?</div>
-  <aside class="notes"><p>Three days of labs produced numbers for five families on the same 388 feeders and the same eight weeks. A forecasting method that nobody can keep running has an accuracy of nothing. The scorecard puts the costs beside the scores so that the choice can be argued, written down and revisited.</p></aside>
+  <aside class="notes"><p>Five families, the same 388 feeders and eight weeks. A method nobody can keep running has an accuracy of nothing: the scorecard puts costs beside scores so the choice can be argued and revisited.</p></aside>
 </section>
 
 <section class="slide" data-label="Skill" id="skill-against-the-floor" data-lo="LO3">
@@ -419,7 +419,7 @@ print(info["model"], info["seconds"])</code></pre>
     <tr><td>Pretrained, zero-shot</td><td class="num">your run</td><td>a pinned model version and its runtime</td><td>Apache-2.0</td></tr>
   </table>
   <div class="callout warn small mt-s"><b>One machine's seconds.</b> Read the ratios: the per-feeder decomposition costs 30 times the one boosted model, for a skill of 0.04 against 0.17.</div>
-  <aside class="notes"><p>Run times were measured on the laptop that built the course: 776 forecasts of 28 days each. The boosted model's time includes building the frame and training three quantile models. Upkeep is the course's judgment on a scale from 1 to 4, printed in the lab; participants may change it and must say why. Licences: statsforecast is Apache-2.0, LightGBM is MIT, the Chronos-Bolt weights are Apache-2.0 on the card read for Lab 3.3.</p><p>Sources: the licence files of the statsforecast and LightGBM repositories; the model card of amazon/chronos-bolt-tiny.</p></aside>
+  <aside class="notes"><p>Run times: the laptop that built the course, 776 forecasts of 28 days, the boosted model's frame and three quantile models included. Upkeep is the course's judgment on a scale from 1 to 4, printed in the lab; participants may change it and must say why. Licences: statsforecast is Apache-2.0, LightGBM is MIT, the Chronos-Bolt weights are Apache-2.0 on the card read for Lab 3.3.</p><p>Sources: the licence files of the statsforecast and LightGBM repositories; the model card of amazon/chronos-bolt-tiny.</p></aside>
 </section>
 
 <section class="slide" data-label="Weights" id="two-planners-two-weightings" data-lo="LO3">
@@ -466,6 +466,48 @@ print(info["model"], info["seconds"])</code></pre>
     <div class="card c-coral"><h4>One defensible answer</h4><p class="small mb0">The desk runs one method for both readers: the boosted model, ahead of the floor in both folds by more than a tenth, with the floor kept as the fallback. If operations were the only reader, the floor would stay.</p></div>
   </div>
   <aside class="notes"><p>The solution notebook holds this answer and labels it as one of several. An entry that chooses the floor for operations and the boosted model for purchasing is as defensible if it says who pays for two methods. What is not defensible: an entry without numbers, or one that does not say what would reopen the choice. The capstone README needs the same table for the participant's three families.</p></aside>
+</section>
+
+<section class="slide" data-label="Model age" id="model-age" data-lo="LO3">
+  <div class="kicker">Running it for a year</div>
+  <h2>A model ages from the day it is trained: measure what each week of age costs</h2>
+  <div class="flow">
+    <div class="step c-navy"><b>Replay a year</b>48 weekly origins of 2025; a model trained at every one</div>
+    <div class="arrow">→</div>
+    <div class="step c-teal"><b>Apply a schedule</b>each origin is forecast by the newest model the schedule allows</div>
+    <div class="arrow">→</div>
+    <div class="step c-coral"><b>Pair by origin</b>its error less that of a model trained the same week</div>
+  </div>
+  <div class="callout note mt"><b>Why pair.</b> Old models forecast late in the year, new ones early. Comparing on the same origins removes the season from the gap.</div>
+  <aside class="notes"><p>Every backtest so far trained once and forecast. In operation the desk forecasts every week and must decide how often to train again: every run, every month, every quarter, or once. More training costs run time and a job to keep working; less training risks a model that has gone stale. The script labs/_tools/retrain_schedules.py replays this for the boosted model of Lab 3.2, with the same recipe, on all 388 feeders. The model it trains on 5 November reproduces Lab 3.2's two folds exactly.</p></aside>
+</section>
+
+<section class="slide" data-label="Schedules" id="retraining-schedules" data-lo="LO3">
+  <div class="kicker">Four schedules · 388 feeders · 48 weekly origins of 2025</div>
+  <h2>Retraining every week bought nothing this model needed</h2>
+  <table class="t small">
+    <tr><th>Schedule</th><th class="num">Trainings a year</th><th class="num">Scaled error</th><th class="num">Worst weekly gap to a fresh model</th></tr>
+    <tr><td>Every week</td><td class="num">48</td><td class="num">0.801</td><td class="num">0</td></tr>
+    <tr><td>Every 4 weeks</td><td class="num">12</td><td class="num">0.801</td><td class="num">0.065</td></tr>
+    <tr class="hl"><td>Every 13 weeks</td><td class="num">4</td><td class="num">0.799</td><td class="num">0.037</td></tr>
+    <tr><td>Once, in January</td><td class="num">1</td><td class="num">0.797</td><td class="num">0.068</td></tr>
+  </table>
+  <div class="callout tip small mt-s"><b>Read it against the noise.</b> Across origins the weekly model's error has a standard deviation of 0.20; the four schedules' errors differ by at most 0.004.</div>
+  <aside class="notes"><p>Choose: every 13 weeks. It matches the weekly error with a twelfth of the trainings, at 4.3 seconds each, and its worst week is smaller than the once-a-year model's. Weekly retraining is not wrong here, only paid for without a return. Ask the room what in their own data would make a model age faster before showing the next slide.</p><p>Source: labs/data/reference/retrain_schedules.json, written by labs/_tools/retrain_schedules.py.</p></aside>
+</section>
+
+<section class="slide" data-label="Going stale" id="when-models-go-stale" data-lo="LO3">
+  <div class="kicker">Same models, two ways to rescale · gap to a model trained that week</div>
+  <h2>How fast a model ages depends on what it reads at the origin</h2>
+  <table class="t small">
+    <tr><th>Age of the model</th><th class="num">Level read at the origin</th><th class="num">Level kept from training</th></tr>
+    <tr><td>1 to 3 weeks</td><td class="num">-0.001</td><td class="num">0.175</td></tr>
+    <tr><td>4 to 12 weeks</td><td class="num">-0.005</td><td class="num">1.235</td></tr>
+    <tr><td>13 to 25 weeks</td><td class="num">-0.007</td><td class="num">2.724</td></tr>
+    <tr><td>26 weeks or more</td><td class="num">-0.013</td><td class="num">1.957</td></tr>
+  </table>
+  <div class="callout warn small mt-s"><b>The rule.</b> Measure the gap by age before choosing a schedule, then keep watching it: retrain early when the live error leaves the band of the backtest.</div>
+  <aside class="notes"><p>Left: the model of the last slide. Every feature, and the level the forecast is multiplied by, is recomputed from the 28 days before each origin, so age costs nothing measurable. Right: the same trained models, but each feeder's level kept from the training day, as a regression that learns its level when it is fitted would keep it. Within a month the gap is 0.175; from 4 weeks on it is larger than the fresh model's whole error of 0.801. Kept that way, retraining every 4 weeks would cost 0.136 against weekly, and once a year 1.972. How often to retrain depends on the model's inputs, not on its family. The gap shrinks after 26 weeks only because the season turns back towards the level the model was trained on.</p><p>Source: labs/data/reference/retrain_schedules.json, written by labs/_tools/retrain_schedules.py.</p></aside>
 </section>
 
 <section class="slide" id="check-scorecard-choice" data-lo="LO3">

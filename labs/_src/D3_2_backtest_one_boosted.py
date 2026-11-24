@@ -19,6 +19,7 @@
 # - [ ] 4 · Train quantile models and measure coverage (6')
 # - [ ] 5 · Read the feature importances (3')
 # - [ ] ✱ Stretch · Train without scaling the target and compare
+# - [ ] ✱ Stretch · Retrain at the second origin and compare the second fold
 
 # %%
 import os, sys, subprocess
@@ -238,6 +239,42 @@ U.keep("d3_2", dict(scores=sc, by_fold=by_fold, floor=round(U.mase(floor), 3), s
 # %% [markdown]
 # **Look at.** Without scaling, none of the features tells the model how large a feeder is, and one tree
 # cannot serve 20 MWh and 200 MWh at once. Scaling the target is what makes a global model possible.
+
+# %% [markdown]
+# ## ✱ Stretch · Retrain at the second origin
+#
+# Step 3 forecast the second fold with a model trained 28 days earlier. On the second origin, the 28 days of
+# the first fold are observed and could be training rows.
+#
+# ✏️ **Exercise** · Train a new point model on the rows known at the second origin (`TEST[1]`), forecast the
+# second fold with it, and return its scaled error. Reuse `training_rows`, `train_model` and `predict_mwh`.
+
+# %%
+def second_fold_retrained(frame: pd.DataFrame, test: pd.DataFrame) -> float:
+    # BEGIN SOLUTION
+    fresh = train_model(training_rows(frame, TEST[1]))
+    fold2 = test[test.origin == TEST[1]]
+    b = fold2[["feeder", "origin", "date", "h", "scale"]].assign(y=fold2.y * fold2.level, yhat=predict_mwh(fresh, fold2))
+    return U.mase(b)
+    # END SOLUTION
+
+# %%
+try:
+    fold2_fresh = second_fold_retrained(frame, test)
+except NotImplementedError:
+    fresh_rows = frame[frame.date <= TEST[1]]
+    fold2 = test[test.origin == TEST[1]]
+    fold2_fresh = U.mase(fold2[["feeder", "origin", "date", "h", "scale"]].assign(
+        y=fold2.y * fold2.level, yhat=ref_train_model(fresh_rows).predict(fold2[U.FEATURES]) * fold2.level.to_numpy()))
+fold2_old = U.mase(bt[bt.origin == TEST[1]])
+print(f"second fold: model 28 days old {fold2_old:.3f}, model retrained at the second origin {fold2_fresh:.3f}")
+U.check(abs(fold2_fresh - fold2_old) < 0.5, "both models scored on the same 388 feeders and 28 days")
+U.keep("d3_2_retrain", dict(old=round(fold2_old, 3), fresh=round(fold2_fresh, 3)))
+
+# %% [markdown]
+# **Look at.** One fold is one comparison, inside the spread between folds that step 3 showed. Whether a
+# retraining schedule pays is measured over many origins and set against what each training costs:
+# Session 4 does that for a whole year.
 
 # %% [markdown]
 # ## Checkpoint

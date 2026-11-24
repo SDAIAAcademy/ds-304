@@ -1,0 +1,287 @@
+{
+ "origins": [
+  "2025-01-08",
+  "2025-12-03"
+ ],
+ "n_origins": 48,
+ "feeders": 388,
+ "seconds_per_training": 4.3,
+ "spread_between_origins": 0.201,
+ "all": {
+  "schedules": {
+   "weekly": {
+    "trainings": 48,
+    "mase": 0.801,
+    "gap_to_weekly": 0.0,
+    "worst_gap": 0.0
+   },
+   "every 4 weeks": {
+    "trainings": 12,
+    "mase": 0.801,
+    "gap_to_weekly": -0.0,
+    "worst_gap": 0.065
+   },
+   "every 13 weeks": {
+    "trainings": 4,
+    "mase": 0.799,
+    "gap_to_weekly": -0.002,
+    "worst_gap": 0.037
+   },
+   "once": {
+    "trainings": 1,
+    "mase": 0.797,
+    "gap_to_weekly": -0.004,
+    "worst_gap": 0.068
+   }
+  },
+  "gap_by_age": {
+   "same week": {
+    "gap": 0.0,
+    "share_worse": 0.0,
+    "n": 48
+   },
+   "1 to 3 weeks": {
+    "gap": -0.001,
+    "share_worse": 0.41,
+    "n": 138
+   },
+   "4 to 12 weeks": {
+    "gap": -0.005,
+    "share_worse": 0.38,
+    "n": 360
+   },
+   "13 to 25 weeks": {
+    "gap": -0.007,
+    "share_worse": 0.33,
+    "n": 377
+   },
+   "26 weeks or more": {
+    "gap": -0.013,
+    "share_worse": 0.21,
+    "n": 253
+   }
+  }
+ },
+ "by_kind": {
+  "residential": {
+   "schedules": {
+    "weekly": {
+     "trainings": 48,
+     "mase": 0.839,
+     "gap_to_weekly": 0.0,
+     "worst_gap": 0.0
+    },
+    "every 4 weeks": {
+     "trainings": 12,
+     "mase": 0.838,
+     "gap_to_weekly": -0.001,
+     "worst_gap": 0.079
+    },
+    "every 13 weeks": {
+     "trainings": 4,
+     "mase": 0.834,
+     "gap_to_weekly": -0.005,
+     "worst_gap": 0.041
+    },
+    "once": {
+     "trainings": 1,
+     "mase": 0.833,
+     "gap_to_weekly": -0.006,
+     "worst_gap": 0.083
+    }
+   },
+   "gap_by_age": {
+    "same week": {
+     "gap": 0.0,
+     "share_worse": 0.0,
+     "n": 48
+    },
+    "1 to 3 weeks": {
+     "gap": -0.002,
+     "share_worse": 0.43,
+     "n": 138
+    },
+    "4 to 12 weeks": {
+     "gap": -0.008,
+     "share_worse": 0.39,
+     "n": 360
+    },
+    "13 to 25 weeks": {
+     "gap": -0.01,
+     "share_worse": 0.34,
+     "n": 377
+    },
+    "26 weeks or more": {
+     "gap": -0.02,
+     "share_worse": 0.21,
+     "n": 253
+    }
+   }
+  },
+  "commercial": {
+   "schedules": {
+    "weekly": {
+     "trainings": 48,
+     "mase": 0.778,
+     "gap_to_weekly": 0.0,
+     "worst_gap": 0.0
+    },
+    "every 4 weeks": {
+     "trainings": 12,
+     "mase": 0.778,
+     "gap_to_weekly": 0.0,
+     "worst_gap": 0.092
+    },
+    "every 13 weeks": {
+     "trainings": 4,
+     "mase": 0.78,
+     "gap_to_weekly": 0.002,
+     "worst_gap": 0.056
+    },
+    "once": {
+     "trainings": 1,
+     "mase": 0.775,
+     "gap_to_weekly": -0.003,
+     "worst_gap": 0.096
+    }
+   },
+   "gap_by_age": {
+    "same week": {
+     "gap": 0.0,
+     "share_worse": 0.0,
+     "n": 48
+    },
+    "1 to 3 weeks": {
+     "gap": 0.0,
+     "share_worse": 0.43,
+     "n": 138
+    },
+    "4 to 12 weeks": {
+     "gap": -0.002,
+     "share_worse": 0.42,
+     "n": 360
+    },
+    "13 to 25 weeks": {
+     "gap": -0.006,
+     "share_worse": 0.38,
+     "n": 377
+    },
+    "26 weeks or more": {
+     "gap": -0.007,
+     "share_worse": 0.32,
+     "n": 253
+    }
+   }
+  },
+  "industrial": {
+   "schedules": {
+    "weekly": {
+     "trainings": 48,
+     "mase": 0.719,
+     "gap_to_weekly": 0.0,
+     "worst_gap": 0.0
+    },
+    "every 4 weeks": {
+     "trainings": 12,
+     "mase": 0.72,
+     "gap_to_weekly": 0.001,
+     "worst_gap": 0.032
+    },
+    "every 13 weeks": {
+     "trainings": 4,
+     "mase": 0.719,
+     "gap_to_weekly": -0.0,
+     "worst_gap": 0.032
+    },
+    "once": {
+     "trainings": 1,
+     "mase": 0.719,
+     "gap_to_weekly": -0.001,
+     "worst_gap": 0.114
+    }
+   },
+   "gap_by_age": {
+    "same week": {
+     "gap": 0.0,
+     "share_worse": 0.0,
+     "n": 48
+    },
+    "1 to 3 weeks": {
+     "gap": 0.0,
+     "share_worse": 0.54,
+     "n": 138
+    },
+    "4 to 12 weeks": {
+     "gap": -0.002,
+     "share_worse": 0.45,
+     "n": 360
+    },
+    "13 to 25 weeks": {
+     "gap": 0.001,
+     "share_worse": 0.49,
+     "n": 377
+    },
+    "26 weeks or more": {
+     "gap": -0.001,
+     "share_worse": 0.45,
+     "n": 253
+    }
+   }
+  }
+ },
+ "level_fixed_at_training": {
+  "schedules": {
+   "weekly": {
+    "trainings": 48,
+    "mase": 0.801,
+    "gap_to_weekly": 0.0,
+    "worst_gap": 0.0
+   },
+   "every 4 weeks": {
+    "trainings": 12,
+    "mase": 0.937,
+    "gap_to_weekly": 0.136,
+    "worst_gap": 0.76
+   },
+   "every 13 weeks": {
+    "trainings": 4,
+    "mase": 1.541,
+    "gap_to_weekly": 0.74,
+    "worst_gap": 4.094
+   },
+   "once": {
+    "trainings": 1,
+    "mase": 2.773,
+    "gap_to_weekly": 1.972,
+    "worst_gap": 4.801
+   }
+  },
+  "gap_by_age": {
+   "same week": {
+    "gap": 0.0,
+    "share_worse": 0.0,
+    "n": 48
+   },
+   "1 to 3 weeks": {
+    "gap": 0.175,
+    "share_worse": 0.84,
+    "n": 138
+   },
+   "4 to 12 weeks": {
+    "gap": 1.235,
+    "share_worse": 0.97,
+    "n": 360
+   },
+   "13 to 25 weeks": {
+    "gap": 2.724,
+    "share_worse": 1.0,
+    "n": 377
+   },
+   "26 weeks or more": {
+    "gap": 1.957,
+    "share_worse": 1.0,
+    "n": 253
+   }
+  }
+ }
+}
